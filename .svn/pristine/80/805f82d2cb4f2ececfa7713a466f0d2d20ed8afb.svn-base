@@ -1,0 +1,78 @@
+<?php
+//print_r($_REQUEST);
+include "mysale_conexao.php"; 
+include "constantes.php";
+
+$json = file_get_contents('php://input'); 
+$parsed = json_decode($json,true);
+//file_put_contents("ff100.txt",">>>> ".$parsed['tipoSincronizacao']." valor".$parsed['valor'],FILE_APPEND);
+
+	$resultado = verificaQuestao($empresa, $parsed['tipoSincronizacao'], $parsed['valor']);
+	
+    print_r($resultado);
+    
+function verificaQuestao($idempresa, $tipoSincronizacao,$valor) {
+	mysql_query('SET CHARACTER SET utf8');
+	$query_empresa_usuario = "";
+	if (strcmp($tipoSincronizacao, "ANO") == 0) {
+	//	file_put_contents("file100.txt","ITEM ENTROU TIPO: ".$tipoSincronizacao." Valor: ".$valor,FILE_APPEND);
+		
+		$query_empresa_usuario = "select i.* from tb_item i inner join tb_questao q on q.id_questao = i.id_questao
+where (q.ano_questao = ".$valor." && q.id_dono = 82) || q.id_dono != 82";
+		
+	} else if (strcmp($tipoSincronizacao, "EMAIL") == 0) {
+	//	file_put_contents("file100.txt","ITENS ENTROU EMAIL: ".$tipoSincronizacao." Valor: ".$valor,FILE_APPEND);
+		
+		$query_empresa_usuario = "select distinct(i.id_item) ID_ITEM_IDENTIFICADOR, i.* from tb_item i inner join tb_questao q on q.id_questao = i.id_questao
+INNER JOIN questao_lista ql ON ql.idquestao = q.id_questao
+inner join lista_questoes l on l.idlistaquestoes = ql.idlistaquestao
+inner join tb_lista_grupo lg on lg.idlista = l.idlistaquestoes
+inner join tb_grupo g on g.idgrupo = lg.idgrupo
+inner join tb_aluno_grupo ag on ag.idgrupo = g.idgrupo
+inner join usuario u on u.id = ag.idusuario
+where u.email = '".$valor."' group by i.id_item ";
+		
+	} else {
+		
+		$query_empresa_usuario = "select * from tb_item";
+		
+	}
+	
+$tipo= mysql_query(strtolower($query_empresa_usuario)) or die(mysql_error());
+ 
+
+
+while ($row_tipo = mysql_fetch_array($tipo))  
+{
+ 
+    $i=0;
+                 
+    foreach($row_tipo as $key => $value)    
+    {
+ 
+        if (is_string($key)) 
+        {
+         $fields[mysql_field_name($tipo,$i++)] = $value;
+        }
+ 
+    }
+ 
+    $json_result [ ] =  $fields;
+	}
+	
+//$JSON = json_encode($json_result, JSON_UNESCAPED_UNICODE);
+
+$JSON = json_encode($json_result);
+	
+return $JSON;
+
+			  }
+
+
+?>
+
+
+
+
+ 
+	

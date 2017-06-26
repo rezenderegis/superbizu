@@ -1,0 +1,79 @@
+<?php
+class Lista_model extends CI_Model {
+	
+		
+		public function trazListasPorUsuarioEescla ($idUsuario,$empresa) {
+	
+			$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+			$idUsuarioLogado = $dadosUsuarioLogado['id'];
+				
+			$idEmpresa = $this->session->userdata('idempresa');
+			
+			$this->db->select("lista_questoes.*");
+			$this->db->from("lista_questoes");
+			if ($idUsuario == true) {
+				$this->db->where("lista_questoes.idResponsavel", $idUsuarioLogado);
+			}
+			if ($empresa == true) {
+				$this->db->where("lista_questoes.idempresa", $idEmpresa);				
+			}
+			return $this->db->get()->result_array();
+		}
+		
+	
+		public function salvaLista($descricao) {
+			
+			$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+			$idUsuarioLogado = $dadosUsuarioLogado['id'];
+			
+			$idEmpresa = $this->session->userdata('idempresa');
+			
+			
+			$dados = array( "descricao" => $descricao,
+						"idEmpresa" => $idEmpresa,
+						"idResponsavel" => $idUsuarioLogado);
+				
+				$this->db->insert("lista_questoes", $dados);
+				
+		}
+		
+		
+		public function buscaUltimaListaQuestaoInserida() {
+		
+			$this->db->select("max(l.idListaQuestoes) as idListaQuestoes");
+			$this->db->from("lista_questoes l");
+			return $this->db->get()->row_array(0);
+		}
+		
+		public function salvaQuestaoLista($idUltimaListaInserida, $idQuestaoLista) {
+				
+				
+		
+			$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+			$idUsuarioLogado = $dadosUsuarioLogado['id'];
+				
+			$idEmpresa = $this->session->userdata('idempresa');
+				
+			$qtdIdQuestaoNaLista = count($idQuestaoLista);
+				
+			for ($i=0; $i<$qtdIdQuestaoNaLista; $i++) {
+					
+				$dados = array("idListaQuestao" => $idUltimaListaInserida,
+						
+						"idQuestao" => $idQuestaoLista[$i]
+					);
+		
+				$this->db->insert("questao_lista", $dados);
+					
+			}
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	

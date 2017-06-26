@@ -1,0 +1,242 @@
+<?php 
+
+class Usuarios_model extends CI_Model {
+
+	public function salva($usuario) {
+	
+		$this->db->insert("usuario", $usuario);
+	
+	}
+	
+	public function edita_usuario($dados, $id_usuario) {
+		$this->db->where("usuario.id", $id_usuario);
+		$this->db->update("usuario", $dados);
+	}
+
+	/*
+	public function buscaPorEmailESenha($email, $senha) {
+		$this->db->where("email", $email);
+		$this->db->where("senha", $senha);
+
+		$usuario = $this->db->get("usuario")->row_array();
+		
+		return $usuario;
+	}
+*/
+
+	public function buscaPorEmailESenha($email, $senha) {
+	
+	
+		$this->db->select("usuario.email as email, usuario.senha as senha, usuario.nome as nome, usuario.id as id");
+		$this->db->from("usuario");
+		$this->db->join("usuario_empresa", "usuario_empresa.idusuario = usuario.id");
+		$this->db->where("usuario.email",  $email);
+		$this->db->where("usuario.senha",  $senha);
+		$this->db->where("usuario_empresa.loginsistema", 'S');
+
+		$usuario = $this->db->get()->row_array();
+		
+		return $usuario;
+	}
+	
+	public function buscaEmpresasUsuario ($idusuario) {
+		
+		$this->db->select("usuario_empresa.idempresa, empresa.nome_empresa");
+		$this->db->from("usuario");
+		$this->db->join("usuario_empresa", "usuario.id = usuario_empresa.idusuario");
+		$this->db->join("empresa", "empresa.idempresa = usuario_empresa.idempresa");
+		$this->db->where("usuario.id", $idusuario);
+		$this->db->where("usuario_empresa.loginsistema", 'S');
+		
+		return $this->db->get()->result_array();
+		
+		
+	}
+	
+	
+	
+	/**
+	 * O método bucaUltimoUsuarioInseridoEmpresa traz o último usuário inserido para uma determinada empresa. 
+	 * Como ele é utilizado, também, para usuários novos, se for novo, o $idempresa é igual a 0, como é o último usuáiro
+	 * inserido, retornará sempre esse último usuário.
+	 * 
+	 */
+	public function bucaUltimoUsuarioInseridoEmpresa ($idempresa) {
+		
+		
+		$this->db->select("max(usuario.id) as id");
+		$this->db->from("usuario");
+		$this->db->where("usuario.idempresa", $idempresa);
+		
+		return $this->db->get()->row_array(0);
+			
+	}
+	
+	public function insereUsuarioEmpresa($idusuarioempresa) {
+	
+				$this->db->insert("usuario_empresa", $idusuarioempresa);
+
+	}
+	
+	
+	public function buscaUsuariosEmpresa($idempresa, $id_usuario, $tipo_busca=0, $complemento=0) {
+	
+		//$complemento = 1 -> traz somente usuarios que podem logar no aplicativo
+		
+		$this->db->select("usuario.*,usuario_empresa.loginapp, usuario_empresa.loginsistema, usuario_empresa.usuario_master");
+		$this->db->from("usuario");
+		$this->db->join("usuario_empresa", "usuario_empresa.idusuario = usuario.id");
+		
+		if ($tipo_busca == 1) {
+		
+			$this->db->where("usuario.id", $id_usuario);			
+			return $this->db->get()->row_array();
+				
+		} else if ($idempresa && $complemento == 1) {
+			$this->db->where("usuario_empresa.idempresa", $idempresa);
+			$this->db->where("usuario_empresa.loginapp", 'S');
+				
+			return $this->db->get()->result_array();
+		} else {
+			$this->db->where("usuario_empresa.idempresa", $idempresa);
+				
+			return $this->db->get()->result_array();
+		}
+		
+		
+	
+	}
+	//Parei aqui. verificando o erro ao abrir a tela de usuÃ¡rio
+	public function verificaExisteUsuario($usuario) {
+	
+			$this->db->select("usuario.id as id");
+			$this->db->from("usuario");
+			$this->db->where("usuario.email", $usuario);
+			
+			$idusuario = $this->db->get()->result_array();
+			if ($idusuario != null) {
+			
+				return $idusuarioExiste = $idusuario[0]["id"];
+					
+			} else {
+				
+				return false;
+				
+			}
+			
+			
+		
+	}
+	
+	
+	public function usuarioPossuiAcessoAppOutraEmpresa($id) {
+		$this->db->select("usuario.id as id");
+		$this->db->from("usuario");
+		$this->db->join("usuario_empresa", "usuario.id = usuario_empresa.idusuario");
+		$this->db->where("usuario.id", $id);
+		$this->db->where("usuario_empresa.loginapp", 'S');	
+		$this->db->where("usuario_empresa.idempresa != 0");
+		$idusuario = $this->db->get()->result_array();
+		
+		if ($idusuario == null) {
+				
+			return 'N';
+				
+		} else {
+		
+			return 'S';
+		
+		}
+		
+	}
+	
+	
+	public function buscaPerfilUsuario($idusuario, $idempresa) {
+	
+		//echo "empresa".$idempresa;
+		//echo "usuario".$idusuario;
+		
+		$this->db->select("perfil_usuario.idperfil");
+		$this->db->from("perfil_usuario");
+		$this->db->join("usuario_empresa", "usuario_empresa.idusuarioempresa = perfil_usuario.idusuarioempresa");
+		$this->db->where("usuario_empresa.idusuario", $idusuario);
+		$this->db->where("usuario_empresa.idempresa", $idempresa);
+		//print_r($this->db->get()->result_array());
+		
+		return $this->db->get()->result_array();
+		
+	}
+		
+	
+	/*
+	 * Método quantidadeEmpresaUsuario()
+	 * Traz a quantidade empresas por usuário. 
+	 * É utilizado como um dos parâmetros para mostrar ou não a tela de pedidos como primeiro da tela.
+	 * */
+	public function quantidadeEmpresaUsuario($idusuario) {
+	
+		$this->db->select("count(idusuario) as idusuario, idempresa");
+		$this->db->from("usuario_empresa");
+		$this->db->where("idusuario", $idusuario);
+		return $this->db->get()->row_array();
+	}
+	
+	
+	
+	/*
+	 * Método quantidadePerfisUsuario
+	 * Traz a quantidade de perfis de usuario para cada usuário
+	 * 
+	 * */
+	
+	public function quantidadePerfisUsuario($idusuario) {
+		
+		$this->db->select("count(perfil_usuario.idusuarioempresa) as qtd");
+		$this->db->from("perfil_usuario");
+		$this->db->join("usuario_empresa", "usuario_empresa.idusuarioempresa = perfil_usuario.idusuarioempresa");
+		$this->db->where("usuario_empresa.idusuario", 204);
+		return $this->db->get()->row_array()['qtd'];
+	}
+	
+	public function atualizaUsuarioEmpresa($dados, $id_usuario, $id_empresa) {
+		
+		$this->db->where("usuario_empresa.idusuario", $id_usuario);
+		$this->db->where("usuario_empresa.idempresa", $id_empresa);
+		$this->db->update("usuario_empresa", $dados);
+	
+	
+	}
+	
+	public function buscaPorEmail($email='',$id='') {
+	
+		$email = trim($email);
+
+		$this->db->select("usuario.email as email, usuario.nome as nome, usuario.id as id");
+		$this->db->from("usuario");
+	;
+
+		
+		if ($email != '') {
+		
+			$this->db->where("usuario.email",  $email);
+		} 
+		
+		if ($id != '') {
+			$this->db->where("usuario.id",  $id);
+				
+		}
+	
+		$usuario = $this->db->get()->row_array();
+		
+		return $usuario;
+	}
+	
+	public function mudar_senha($dados, $id_usuario) {
+		$this->db->where("usuario.id", $id_usuario);
+		$this->db->update("usuario", $dados);
+		
+	}
+	
+	
+}
+

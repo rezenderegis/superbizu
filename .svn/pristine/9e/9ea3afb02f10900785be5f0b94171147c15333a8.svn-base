@@ -1,0 +1,58 @@
+
+<?php 
+
+if ($idempresa == 0) {
+
+	?>
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Minhas Empresas</b></td></tr>
+</table>
+
+<table class="table table-condensed">
+<tr class="active"><td><b>Nome</b></td><td><b>Detalhes</b></td></tr>
+
+	<?php
+
+	if($this->session->userdata("usuario_logado")) :
+	
+	foreach ($empresa as $produto) : ?>
+	<tr>
+		<td>
+		
+		<?=anchor("geral/home/{$produto['idempresa']}", $produto["nome_empresa"])?>
+	
+		</td>
+		<td>
+		
+		<?=anchor("empresa/empresaFormulario/{$produto['idempresa']}", 'Editar')?>
+	
+		</td>
+	</tr>
+<?php endforeach ?>
+</table>
+
+<p><?=anchor("empresa/empresaFormulario", 'Cadastrar Empresa', array("class" => "btn btn-primary"))?></p>
+
+
+<?php endif?>
+
+<?php 
+} else {
+//$this->session->set_userdata("idempresa", $idempresa);
+
+
+//print_r($empresa);
+$idempresa = $this->session->userdata("idempresa");
+//$empresaData = $empresa["idempresa"];
+foreach ($empresa as $empresaUsuario) {
+if ($empresaUsuario["idempresa"] == $idempresa) {
+//echo "aqui";
+echo "<h4>".$empresaUsuario["nome_empresa"]."</h4>";
+//echo $empresaUsuario["idempresa"];
+}
+}
+}
+?>
+
+

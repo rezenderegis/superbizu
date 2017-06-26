@@ -1,0 +1,112 @@
+<script>
+
+
+
+
+	  $(document).ready(function() {
+			oTable = $('#questoes').dataTable({
+				"order": [[ 3, "desc" ]],
+				 'iDisplayLength': 100,
+				"language":{
+				    "emptyTable":     "Sem dados disponíveis",
+				    "info":           "Mostrando _START_ to _END_ of _TOTAL_ registros",
+				    "infoEmpty":      "Mostrando 0 to 0 of 0 registros",
+				    "infoFiltered":   "(filtrado de _MAX_ total registros)",
+				    "infoPostFix":    "",
+				    "thousands":      ",",
+				    "lengthMenu":     "Mostrar _MENU_ registros por página",
+				    "loadingRecords": "Lendo...",
+				    "processing":     "Processando...",
+				    "search":         "Procurar:",
+				    "zeroRecords":    "Não foram encontrados registros",
+				    "paginate": {
+				        "first":      "Primeiro",
+				        "last":       "Último",
+				        "next":       "Próximo",
+				        "previous":   "Anterior"
+				    },
+				    "aria": {
+				        "sortAscending":  ": activate to sort column ascending",
+				        "sortDescending": ": activate to sort column descending"
+				    }
+				}
+			});
+		});
+
+
+
+
+
+		
+</script>
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Questões Cadastradas</b></td></tr>
+</table>
+
+<table id="questoes" class="display" cellspacing="0" width="100%">
+		<thead>
+<tr class="info"><th><b>Ano</b></th><th><b>Número</b></th><th><b>Questão</b></th><th><b>Comando</b></th><th><b>Comentário</b></th><th><b>Ações</b></th><th><b>Itens</b></th><th>Imagem</th><th>Img</th></tr>
+</thead>
+	<?php 
+	
+
+	
+	
+	$atts = array(
+			'width'      => '500',
+			'height'     => '250',
+			'scrollbars' => 'yes',
+			'status'     => 'yes',
+			'resizable'  => 'yes',
+			'screenx'    => '0',
+			'screeny'    => '0'
+	
+	            );
+	
+	if($this->session->userdata("usuario_logado")) :
+	foreach ($questoes as $questao) : 
+	
+	?>
+	<tr>
+			<td><?=$questao["ANO_QUESTAO"] ?></td>	
+				<td><?=$questao["NUMERO_QUESTAO"] ?></td>	
+	
+		<td>
+		<?=$questao["DESCRICAO_QUESTAO"]?>
+		<?//=anchor("questoes/mostra/{$produto['id']}", $produto["nomeproduto"]) //NÃƒO PRECISEI CHAMAR O CONTROLER NO EXEMPLO ACIMA POR CONTA DO ROUTER QUE FOI CONFIGURADO NO ROUTES.PHP?>
+		</td>
+		<td><?= $questao["COMANDO_QUESTAO"] ?></td>	
+		<td><?= character_limiter($questao["COMENTARIO_QUESTAO"],30) ?></td>	
+
+		
+		<td>
+		<?=anchor("questoes/formulario/{$questao['ID_QUESTAO']}", 'Editar')?>
+		</td>
+		<td>
+		<?=anchor("questoes/listaItens/{$questao['ID_QUESTAO']}", 'Itens')?>
+		</td>
+		<td>
+			<?=anchor_popup("arquivo/novaEvidencia/{$questao['ID_QUESTAO']}", "Img", $atts)?>	
+			
+		</td>
+		<td>
+					<?php
+
+					if (!empty($questao['NOME_IMAGEM_QUESTAO_SISTEMA'])) {?>
+										<?=anchor(base_url("uploads/{$questao['NOME_IMAGEM_QUESTAO_SISTEMA']}"), "Ver");?>
+						
+			<?php } else {echo "";}?>
+					
+			
+		</td>
+	</tr>
+<?php endforeach ?>
+</table>
+
+
+<?=anchor('questoes/formulario', 'Cadastrar Questão', array("class" => "btn btn-primary"))?>
+
+
+
+<?php endif?>

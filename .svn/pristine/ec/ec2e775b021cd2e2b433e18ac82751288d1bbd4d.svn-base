@@ -1,0 +1,32 @@
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Usu�rios Cadastrados</b></td></tr>
+</table>
+		<table class="table table-condensed">
+		<tr class="active"><td><b>Nome</b></td><td><b>E-mail</b></td><td><b>Acesso no Aplicativo</b></td><td><b>Acesso no Sistema</b></td><td><b>Usu�rio Master</b></td><td><b>Editar</b></td></tr>
+			<?php foreach ($usuarios as $usuario) : ?>
+				<?php if ($usuario["loginapp"] == 'S') { $loginapp = 'Sim'; } else { $loginapp = 'N�o'; }
+				if ($usuario["loginsistema"] == 'S') { $loginsistema = 'Sim'; } else { $loginsistema = 'N�o'; } ?>
+				<tr>
+				<td><?=$usuario["nome"]?> </td>
+				<td>
+				<?= $usuario["email"]?>	
+				</td>
+				<td>
+				<?= $loginapp?>	
+				</td>
+					<td>
+				<?= $loginsistema?>	
+				</td>
+				<td>
+				<?= $usuario["usuario_master"]?>	
+				</td>
+			<td>
+				<?=anchor("usuarios/novoUsuario/{$usuario['id']}", 'Editar');?>
+			</td>
+			</tr>
+					<?php endforeach ?>
+					
+			</table>
+
+<?=anchor('usuarios/formularioUsuarioNoSite/', 'Cadastrar Novo Usuario', array("class" => "btn btn-primary"))?>
+

@@ -1,0 +1,8 @@
+05-07-2014
+	Atualização de pedidos a cada 7 segundos
+	Os novos pedidos ficam no fim da fila
+	Quando clicar em preparar a situação já muda para fazendo
+	Quando clica em concluir, o pedido sai da fila
+	A cada click as requisições são ajax
+	Todas as funcionalidades estão funcionando
+	

@@ -1,0 +1,135 @@
+<script>
+
+
+
+
+	  $(document).ready(function() {
+			oTable = $('#questoes').dataTable({
+				"order": [[ 3, "desc" ]],
+				 'iDisplayLength': 5,
+				"language":{
+				    "emptyTable":     "Sem dados disponíveis",
+				    "info":           "Mostrando _START_ to _END_ of _TOTAL_ registros",
+				    "infoEmpty":      "Mostrando 0 to 0 of 0 registros",
+				    "infoFiltered":   "(filtrado de _MAX_ total registros)",
+				    "infoPostFix":    "",
+				    "thousands":      ",",
+				    "lengthMenu":     "Mostrar _MENU_ registros por página",
+				    "loadingRecords": "Lendo...",
+				    "processing":     "Processando...",
+				    "search":         "Procurar:",
+				    "zeroRecords":    "Não foram encontrados registros",
+				    "paginate": {
+				        "first":      "Primeiro",
+				        "last":       "Último",
+				        "next":       "Próximo",
+				        "previous":   "Anterior"
+				    },
+				    "aria": {
+				        "sortAscending":  ": activate to sort column ascending",
+				        "sortDescending": ": activate to sort column descending"
+				    }
+				}
+			});
+		});
+
+
+
+
+
+		
+</script>
+
+<?php 
+$attributes = array (
+		'class' => 'col-sm-1 control-label',
+		'style' => 'color: #000;'
+);
+
+
+echo form_open ( "grupos_alunos/incluirGrupoParaAcessoLista", array (
+		'id' => 'grupoAcessoLista',
+		'class' => 'form-horizontal',
+		'role' => 'form' 
+) );
+
+echo "<div class='form-group'>";
+echo form_label ( "Grupo para Acesso à Lista:", "aluno_grupo", $attributes );
+echo "<div class='col-sm-8'>";
+echo "<select name='grupoAcessoLista' id='grupoAcessoLista' class='form-control'>";
+// echo "<select name='state_id' id='state_id'>";
+
+echo "<option></option>";
+if (count ( $gruposMostrarComboInclusao )) {
+	
+	foreach ( $gruposMostrarComboInclusao as $key => $list ) {
+		// echo $categoria.$list['idcategoriaproduto'];
+		
+		echo "<option value='" . $list ['idGrupo'] . "'>" . $list ['nomeGrupo'] . "</option>";
+	}
+}
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
+echo form_hidden ( array (
+		"idListaQuestao" => $idListaQuestao 
+) );
+echo form_button ( array (
+		"class" => "btn btn-primary",
+		"content" => "Cadastrar",
+		"type" => "submit" 
+) );
+
+echo form_close ();
+
+?>
+
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Grupos Cadastrados</b></td></tr>
+</table>
+
+<table id="questoes" class="display" cellspacing="0" width="100%">
+		<thead>
+<tr class="info"><th><b>Descrição da Lista</b></th><th>Desabilitar Acesso Grupo</th></tr>
+</thead>
+	<?php 
+	
+
+	
+	
+	$atts = array(
+			'width'      => '500',
+			'height'     => '250',
+			'scrollbars' => 'yes',
+			'status'     => 'yes',
+			'resizable'  => 'yes',
+			'screenx'    => '0',
+			'screeny'    => '0'
+	
+	            );
+	
+	if($this->session->userdata("usuario_logado")) :
+	foreach ($grupos as $grupo) : 
+	
+	?>
+	<tr>
+	
+				<td><?=$grupo["nomeGrupo"] ?></td>	
+
+		<td>
+				<?=anchor("grupos_alunos/excluirGrupoAcessoLista/{$grupo['idListaGrupo']}/{$grupo['idLista']}",  '<img src="'.base_url().'imagens/delete.png" alt="Delete" />')?>
+		
+		</td>
+	</tr>
+<?php endforeach ?>
+</table>
+
+
+
+
+
+<?php endif?>
+
+

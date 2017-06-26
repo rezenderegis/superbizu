@@ -1,0 +1,184 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class Produtos extends CI_Controller {
+	
+	
+	public function index($idempresa = 0){
+	autoriza();
+	//UTILIZADO PARA DEBUGAR
+	//$this->output->enable_profiler(TRUE);
+	
+	//CARREGA O BANCO DE DADOS
+	//$this->load->database();
+	
+	
+	//CARREGAR O MODELO PARA USÁL-LO
+	$this->load->model("produtos_model");
+	//$empresa = $this->session->userdata("idempresa");
+	$produtos = $this->produtos_model->buscaTodos($this->session->userdata("idempresa"));
+	
+	$this->load->helper(array("currency"));
+	//$this->load->helper("currency");
+	
+	//ADICIONA HELPER DE CRIAÇÃO DE FORMULÁRIO
+	//$this->load->helper("form");
+	
+	$dados = array("produtos" => $produtos);
+	//$this->load->view("cabecalho.php");
+	$this->load->template("produtos/index.php", $dados);
+	//$this->load->view("rodape.php");
+
+	}
+	
+	public function formulario($id_produto=0, $id_empresa=0){
+		autoriza();
+		
+		$this->load->model("produtos_model");
+		
+		$dados_produto = $this->produtos_model->traz_dados_edicao($id_produto, $id_empresa);
+		
+		$categoria_produto = $this->produtos_model->busca_categoria();
+		$dados_categoria = array("categoria_produto" => $categoria_produto, "dados_produto_edicao" => $dados_produto);
+		$this->load->template("produtos/formulario", $dados_categoria);
+		
+		
+	}
+	
+	public function novo() {
+	autoriza();
+	
+	//CARREGAR BIBLIOTECA DE VALIDAÇÃO
+	$this->load->library("form_validation");
+	
+	//ADICIONAR UMA REGRA DE VALIDAÇÃO
+		
+		$this->form_validation->set_rules("nome", "nome", "required|min_length[1]|callback_nao_melhor"); //REGRA PARA O CAMPO NOME LABEL NOME
+		//$this->form_validation->set_rules("descricao", "descricao", "trim|required|min_length[]");
+	
+	$this->form_validation->set_rules("preco", "preco", "trim|required");
+	//$this->form_validation->set_error_delimiters("<p class='alert alert-danger'>","</p>")
+	
+	//RODA A VALIDAÇÃO
+	$sucesso = $this->form_validation->run();
+		
+		
+		//SE PASSAR NAS REGRAS DE VALIDAÇÃO
+		if ($sucesso) {
+		$empresa = $this->session->userdata("idempresa");
+		$usuarioLogado = $this->session->userdata("usuario_logado");
+		$this->load->model("produtos_model");
+		$proximoIdProdutoEmpresa = $this->produtos_model->buscaProximoIdProdutoEmpresa($empresa);
+		
+		$id = $proximoIdProdutoEmpresa['id'];
+		if ($id == null) {
+			$id = 1;
+		}
+		$produto = array(
+			"id" => $id,
+			"nomeproduto" => $this->input->post("nome"),
+			"descricao" => $this->input->post("descricao"),
+			"preco" => $this->input->post("preco"),
+			"idusuario" => $usuarioLogado["id"],
+			"idempresa" => $empresa,
+			"categoria" => $this->input->post("categoria")
+		);
+	
+	$this->load->model("produtos_model");
+	$this->produtos_model->salva($produto);
+	$this->session->set_flashdata("success", "Produto salvo com sucesso");
+	redirect('produtos/index');
+	
+	} else {
+	
+		$this->load->template("produtos/formulario");
+	
+	
+		}
+	}
+	
+	public function mostra($id) {
+		//$id = $this->input->get("id");
+		
+		$this->load->model("produtos_model");
+		$produto = $this->produtos_model->busca($id);
+		$dados = array("produto" => $produto);
+		$this->load->helper("typography");
+		$this->load->template("produtos/mostra", $dados);
+
+	}
+	
+	public function nao_melhor($nome){
+	
+		$posicao = strpos($nome, "melhor");
+		if ($posicao == false) {
+			return TRUE;
+		} else {
+		$this->form_validation->set_message("nao_melhor", "O campo '%s' não pode conter a palavra
+		mellhor");
+		return FALSE;
+		}
+	
+	}
+	
+	public function formularioCategoria ($id_produto=0) {
+			autoriza();	
+		
+		$dados_categoria_edicao = 0;	
+		if ($id_produto != 0) {
+			$this->load->model("produtos_model");
+			$dados_categoria_edicao = $this->produtos_model->busca_categoria($id_produto);
+		}	
+		$dados = array("dados_categoria_edicao" => $dados_categoria_edicao);	
+		$this->load->template("produtos/formularioCategoria", $dados);
+		
+	}
+	
+	public function novaCategoria(){
+		autoriza();	
+
+		//CARREGAR BIBLIOTECA DE VALIDAÇÃO
+		$this->load->library("form_validation");
+	
+		//ADICIONAR UMA REGRA DE VALIDAÇÃO
+		
+		$this->form_validation->set_rules("nome_categoria", "nome_categoria", "required"); //REGRA PARA O CAMPO NOME LABEL NOME
+		$this->form_validation->set_rules("grupoproduto", "grupoproduto", "required"); //REGRA PARA O CAMPO NOME LABEL NOME
+		
+		
+		
+		$sucesso = $this->form_validation->run();
+		
+	
+	if ($sucesso) {
+	$categoria = array(
+			"nomecategoriaproduto" => $this->input->post("nome_categoria"),
+			"idempresa" => $this->session->userdata("idempresa"),
+			"codigogrupoproduto" => $this->input->post("grupoproduto"),
+				
+		);
+		$this->load->model("produtos_model");
+		
+		if (!$this->input->post("id_categoria_produto")) {
+			$this->produtos_model->salvaCategoria($categoria);
+		} else {
+			
+			$this->produtos_model->atualizar_categoria($categoria, $this->session->userdata("idempresa"), $this->input->post("id_categoria_produto"));
+		}
+		redirect("produtos/indexCategoria");
+		} else {
+
+			$this->load->template("produtos/formularioCategoria");
+			
+		}	
+	}
+	
+	public function indexCategoria() {
+	
+		$this->load->model("produtos_model");
+		$categoria = $this->produtos_model->busca_categoria();
+		$dadosCategoria = array("categoria" => $categoria);
+	
+		$this->load->template("produtos/indexCategoria", $dadosCategoria);
+	
+	}
+	
+}

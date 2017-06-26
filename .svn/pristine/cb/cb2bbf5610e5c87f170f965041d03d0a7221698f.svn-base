@@ -1,0 +1,70 @@
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Questões Cadastradas</b></td></tr>
+</table>
+
+<table class="table table-condensed">
+<tr class="active"><td><b>Ano</b></td><td><b>Número</b></td><td><b>Questão</b></td><td><b>Comando</b></td><td><b>Comentário</b></td><td><b>Ações</b></td><td><b>Itens</b></td><td>Imagem</td><td>Img</td></tr>
+
+	<?php 
+	
+
+	
+	
+	$atts = array(
+			'width'      => '500',
+			'height'     => '250',
+			'scrollbars' => 'yes',
+			'status'     => 'yes',
+			'resizable'  => 'yes',
+			'screenx'    => '0',
+			'screeny'    => '0'
+	
+	            );
+	
+	if($this->session->userdata("usuario_logado")) :
+	foreach ($questoes as $questao) : 
+	
+	?>
+	<tr>
+			<td><?=$questao["ANO_QUESTAO"] ?></td>	
+				<td><?=$questao["NUMERO_QUESTAO"] ?></td>	
+	
+		<td>
+		<?=$questao["DESCRICAO_QUESTAO"]?>
+		<?//=anchor("questoes/mostra/{$produto['id']}", $produto["nomeproduto"]) //NÃƒO PRECISEI CHAMAR O CONTROLER NO EXEMPLO ACIMA POR CONTA DO ROUTER QUE FOI CONFIGURADO NO ROUTES.PHP?>
+		</td>
+		<td><?= $questao["COMANDO_QUESTAO"] ?></td>	
+		<td><?= character_limiter($questao["COMENTARIO_QUESTAO"],30) ?></td>	
+
+		
+		<td>
+		<?=anchor("questoes/formulario/{$questao['ID_QUESTAO']}", 'Editar')?>
+		</td>
+		<td>
+		<?=anchor("questoes/listaItens/{$questao['ID_QUESTAO']}", 'Itens')?>
+		</td>
+		<td>
+			<?=anchor_popup("arquivo/novaEvidencia/{$questao['ID_QUESTAO']}", "Img", $atts)?>	
+			
+		</td>
+		<td>
+					<?php
+
+					if (!empty($questao['NOME_IMAGEM_QUESTAO_SISTEMA'])) {?>
+										<?=anchor(base_url("uploads/{$questao['NOME_IMAGEM_QUESTAO_SISTEMA']}"), "Ver");?>
+						
+			<?php } else {echo "";}?>
+					
+			
+		</td>
+	</tr>
+<?php endforeach ?>
+</table>
+
+
+<?=anchor('questoes/formulario', 'Cadastrar Questão', array("class" => "btn btn-primary"))?>
+
+
+
+<?php endif?>

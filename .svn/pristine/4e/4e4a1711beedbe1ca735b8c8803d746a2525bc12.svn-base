@@ -1,0 +1,30 @@
+<?php
+class MAutocomplete extends CI_Model{
+    function lookup($keyword){
+    	
+    	$idempresa = $this->session->userdata('idempresa');
+    	
+        $this->db->select('*')->from('produto');
+        $this->db->like('id',$keyword,'after');
+        $this->db->where("produto.idempresa", $idempresa);
+        
+        $query = $this->db->get();    
+         
+        return $query->result();
+    }
+    
+    
+    
+    function pessoa($keyword){
+    	
+    	$idempresa = $this->session->userdata('idempresa');
+    	
+        $this->db->select('*')->from('pessoa');
+        $this->db->like('idpessoa',$keyword,'after');
+        $this->db->where("pessoa.idempresa", $idempresa);
+        
+        $query = $this->db->get();    
+         
+        return $query->result();
+    }
+}

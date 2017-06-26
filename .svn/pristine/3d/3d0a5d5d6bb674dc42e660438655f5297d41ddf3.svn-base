@@ -1,0 +1,102 @@
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Cadastro Novo Assunto</b></td></tr>
+</table>
+
+
+<?= validation_errors("<p class='alert alert-danger'>", "</p>")?>
+
+
+
+<?php 
+
+$attributes = array (
+		'class' => 'col-sm-2 control-label',
+		'style' => 'color: #000;'
+);
+	
+	//$id = $assunto_informado['ID_ITEM'];
+	$id = $id_assunto;
+	echo form_open ( "assuntos/novo", array (
+			'id' => 'assunto',
+			'class' => 'form-horizontal',
+			'role' => 'form'
+	) );
+	
+	
+
+echo "<div class='form-group'>";
+echo form_label("Descrição", "descricao", $attributes);
+echo "<div class='col-sm-2'>";
+echo form_input(array("name" => "descricao",
+		"class" => "form-control",
+		"id" => "descricao",
+		"maxlength" => "255",
+		"value" => set_value("descricao", $assunto_informado['DESCRICAO_ASSUNTO'])));
+echo "</div>";
+echo "</div>";
+
+
+echo "<div class='form-group'>";
+echo form_label("Matéria", "materia", $attributes);
+echo "<div class='col-sm-2'>";
+echo "<select name='materia' id='materia' class='form-control'>";
+echo "<option></option>";
+$sel = '';
+if (count($materias)) {
+
+	foreach ($materias as $key => $list) {
+		//echo $categoria.$list['idcategoriaproduto'];
+		if ($list['ID_MATERIA'] != $assunto_informado['ID_MATERIA']) {
+
+			echo "<option value='".$list['ID_MATERIA']."'>".$list['NOME_MATERIA']."</option>";
+
+		}
+		//echo "<option value='".$list['idcategoriaproduto'].">".$list['nomecategoriaproduto']."</option>";
+	if ($list['ID_MATERIA'] == $assunto_informado['ID_MATERIA']) {
+			echo "<option value='".$list['ID_MATERIA']."' selected>".$list['NOME_MATERIA']."</option>";
+		}
+	}
+}
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
+echo "<div class='form-group'>";
+echo form_label("Assunto Pai:", "assunto_pai", $attributes);
+echo "<div class='col-sm-2'>";
+echo "<select name='assunto_pai' id='assunto_pai' class='form-control'>";
+//echo "<select name='state_id' id='state_id'>";
+echo "<option></option>";
+$sel = '';
+if (count($assuntos)) {
+	foreach ($assuntos as $key => $list) {
+		//echo $categoria.$list['idcategoriaproduto'];
+		if ($list['ID_ASSUNTO'] != $assunto_informado['ID_ASSUNTO']) {
+				
+			echo "<option value='".$list['ID_ASSUNTO']."'>".$list['DESCRICAO_ASSUNTO']."</option>";
+
+		}
+		//echo "<option value='".$list['idcategoriaproduto'].">".$list['nomecategoriaproduto']."</option>";
+		if ($list['ID_ASSUNTO'] == $assunto_informado['ID_ASSUNTO']) {
+			echo "<option value='".$list['ID_ASSUNTO']."' selected>".$list['DESCRICAO_ASSUNTO']."</option>";
+		}
+	}
+}
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
+
+echo form_hidden(array("id_assunto_alterar" => $id));
+echo form_button(array(
+"class" => "btn btn-primary",
+"content" => "Cadastrar",
+"type" => "submit"
+));
+
+echo form_close();
+
+
+?>
+
+

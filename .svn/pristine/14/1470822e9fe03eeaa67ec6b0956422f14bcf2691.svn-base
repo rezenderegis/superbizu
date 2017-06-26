@@ -1,0 +1,61 @@
+<?php
+include "mysale_conexao.php"; 
+
+
+
+
+$resultado = verificaClienteEmpresa(40);
+
+print_r($resultado);
+function verificaClienteEmpresa($idempresa) {
+	mysql_query('SET CHARACTER SET utf8');
+$query_empresa_usuario = "select idpessoa, nome, endereco, telefone, email,site from PESSOA WHERE idempresa = '".$idempresa."'";
+$tipo= mysql_query(strtolower($query_empresa_usuario)) or die(mysql_error());
+ 
+ 
+ 
+
+ 
+while ($row_tipo = mysql_fetch_array($tipo))  
+{
+ 
+    $i=0;
+                 
+    foreach($row_tipo as $key => $value)    
+    {
+ 
+        if (is_string($key)) 
+        {
+         $fields[mysql_field_name($tipo,$i++)] = $value;
+        }
+ 
+    }
+    
+ 
+    $json_result["produtos"] [ ] =  $fields;
+
+}
+	
+	//header ('Content-type: text/html; charset=ISO-8859-1');
+	print_r($json_result);
+//	iconv("utf-8", "iso-8859-1",$json_result);
+
+	
+$JSON = json_encode($json_result, JSON_UNESCAPED_UNICODE );
+echo "<br/>";
+echo "<br/>";echo "<br/>";echo "<br/>";echo "<br/>";echo "<br/>";echo "<br/>";
+echo "JSON CODIFICADO";
+echo "<br/>";
+//header ('Content-type: text/html; charset=ISO-8859-1');
+print_r($JSON);
+//	iconv("utf-8", "iso-8859-1",$json_result);
+return $JSON;
+			  }
+
+?>
+
+
+
+
+ 
+	

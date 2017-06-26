@@ -1,0 +1,90 @@
+<?php
+
+// print_r($_REQUEST);
+include "mysale_conexao.php";
+//$endereco = "http://www.superbizu.com/bizuNewLayout/";
+
+
+
+
+$json = file_get_contents ( 'php://input' );
+$parsed = json_decode ( $json, true );
+
+if (array_key_exists ( "usuario", $parsed )) {
+	
+	foreach ( $parsed ['usuario'] as $key => $values ) {
+		
+		$email = $values ['email'];
+		
+		$senha = md5 ( $values ['password'] );
+		$nome = $values ['nome_usuario'];
+		
+		$usuarioExiste = verificaUsuario ( $email );
+		
+		if ($usuarioExiste != null) {
+				
+			// OBJETO JSON FUNCIONANDO
+			$encode = array (
+					"userdetails" => array (
+							array (
+									"acesso" => "F",
+									"email" => $email
+							) 
+					) 
+			);
+			$json_encode = json_encode ( $encode );
+			print_r ( $json_encode );
+		} else {
+				
+			$url = "http://www.superbizu.com/index.php/usuariosAplicativo/novoUsuarioDoAplicativo/" . $nome . "/" . $email . "/" . $senha;
+			
+			
+			
+			
+			
+			//file_get_contents ( $url );
+			
+			
+			
+			/*  file_get_contents ( $url );
+			 *  A Locaweb desabilitou o uso desse método. 
+			 *  Utilizar o curl_setop
+			 * */
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_exec($ch);
+			curl_close($ch);
+			
+			
+			
+			$encode = array (
+					"userdetails" => array (
+							array (
+									"acesso" => "T",
+									"email" => $email 
+							) 
+					) 
+			);
+			
+			$json_encode = json_encode ( $encode );
+			print_r ( $json_encode );
+		}
+	}
+}
+
+// TESTE COM LOGIN COMUNICAï¿½ï¿½O NORMAL
+//
+
+// $encode = array("userdetails" => array(array("acesso" => $acesso,"idempresa" => $idempresa)), "workdetails" => array(array("company_name" => "My Company", "role" => "web application developer", "employees" => "91")));
+
+// print_r(gettype($idstring));
+function verificaUsuario($email) {
+	$query_usuario = "SELECT email FROM usuario WHERE EMAIL = '" . $email . "'";
+	$usuario_consulta = mysql_query ( strtolower ( $query_usuario ) ) or die ( mysql_error () );
+	$verifica_usuario = mysql_fetch_array ( $usuario_consulta );
+	
+	return $verifica_usuario [0];
+}
+
+?>

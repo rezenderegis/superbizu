@@ -1,0 +1,34 @@
+<?php
+
+class Assuntos_model extends CI_Model {
+
+	public function traz_itens($id_assunto=0) {
+	
+		$this->db->select("tb_assunto.*");
+		$this->db->from("tb_assunto");
+		if ($id_assunto != 0) {
+			$this->db->where("tb_assunto.id_item", $id_assunto);
+			return $this->db->get()->row_array();
+				
+		} else {
+		return $this->db->get()->result_array();
+		}
+	}
+	
+	public function traz_materias () {
+		
+		$this->db->select("tb_materia.*");
+		$this->db->from("tb_materia");
+		return $this->db->get()->result_array();
+		
+	}
+	
+	public function salva($dados) {
+		
+		$this->db->insert("tb_assunto", $dados);
+		
+	}
+	
+	
+	
+}

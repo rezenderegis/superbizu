@@ -1,0 +1,76 @@
+<?php
+
+
+ if ( !defined('BASEPATH')) exit ('N�o � permitido acesso direto ao site!');
+
+
+
+class Lista extends CI_Controller {
+	
+	public function novaLista() {
+		
+		
+		$this->load->template("lista/nova_lista");
+		
+	}
+	
+	public function listaQuestoes() {
+		autoriza ();
+	
+		$this->load->model("lista_model");
+		$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+		$idUsuarioLogado = $dadosUsuarioLogado['id'];
+		$lista_questao = $this->lista_model->trazListasPorUsuario($idUsuarioLogado);
+		
+		$dados = array("listaQuestao" => $lista_questao);
+		
+		$this->load->template("lista/index", $dados);
+	
+	}
+	
+	public function criarLista($idempresa = 0, $id_questao=0) {
+		autoriza ();
+		// UTILIZADO PARA DEBUGAR
+		// $this->output->enable_profiler(TRUE);
+	
+		// CARREGA O BANCO DE DADOS
+		// $this->load->database();
+	
+		// CARREGAR O MODELO PARA US�L-LO
+		$this->load->model ( "questoes_model" );
+		// $empresa = $this->session->userdata("idempresa");
+		$questoes = $this->questoes_model->buscaTodos ($id_questao);
+	
+		$this->load->helper ( array (
+				"currency"
+		) );
+		// $this->load->helper("currency");
+	
+		// ADICIONA HELPER DE CRIA��O DE FORMUL�RIO
+		// $this->load->helper("form");
+	
+		$dados = array (
+				"questoes" => $questoes
+		);
+		// $this->load->view("cabecalho.php");
+		$this->load->template ( "lista/novaLista.php", $dados );
+		// $this->load->view("rodape.php");
+	}
+	
+	
+	public function CadastrarNovaLista () {
+	//	print_r($this->input->post("idQuestaoLista"));
+		
+	$this->load->model("lista_model");
+	$this->lista_model->salvaLista($this->input->post("descricao"));
+	
+	$idUltimaListaInserida = $this->lista_model->buscaUltimaListaQuestaoInserida();
+	
+	
+	$this->lista_model->salvaQuestaoLista($idUltimaListaInserida['idListaQuestoes'], $this->input->post("idQuestaoLista"));
+		
+	redirect ( 'lista/listaQuestoes');
+	
+	}
+	
+}

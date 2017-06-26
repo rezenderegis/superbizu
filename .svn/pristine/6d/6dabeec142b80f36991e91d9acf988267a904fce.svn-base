@@ -1,0 +1,65 @@
+<?php
+//print_r($_REQUEST);
+include "mysale_conexao.php"; 
+include "constantes.php";
+
+$json = file_get_contents('php://input'); 
+$parsed = json_decode($json,true);
+/*$parsed = json_decode(utf8_encode($json),true);
+
+file_put_contents("file92.txt",">>>> ".$parsed['emailUsuario']."novo vvv>>>>".print_r($_REQUEST)." POST".print_r($_POST, true)."\n",FILE_APPEND);
+print_r($parsed);
+*/
+//file_put_contents("file93.txt",">>>> ".$parsed['emailUsuario']."novo vvv>>>>".print_r($_REQUEST)." POST".print_r($_POST, true)."\n",FILE_APPEND);
+file_put_contents("fileDadosUsuario", $parsed['emailUsuario']);
+	$resultado = verificaQuestao($empresa,$parsed['emailUsuario']);
+	
+    print_r($resultado);
+    //select * from lista_questoes
+function verificaQuestao($idempresa,$emailAlunoProcurar) {
+	
+	mysql_query('SET CHARACTER SET utf8');
+$query_empresa_usuario = "select u.id,u.nome,e.idempresa,e.nome_empresa,pu.idperfil from usuario u inner join usuario_empresa ue on ue.idusuario = u.id
+inner join empresa e on e.idempresa = ue.idempresa
+inner join perfil_usuario pu on pu.idusuarioempresa = ue.idusuarioempresa
+where u.email = '".$emailAlunoProcurar."'
+and pu.idperfil = 3";
+//echo $query_empresa_usuario;
+$tipo= mysql_query(strtolower($query_empresa_usuario)) or die(mysql_error());
+ 
+
+
+while ($row_tipo = mysql_fetch_array($tipo))  
+{
+ 
+    $i=0;
+                 
+    foreach($row_tipo as $key => $value)    
+    {
+ 
+        if (is_string($key)) 
+        {
+         $fields[mysql_field_name($tipo,$i++)] = $value;
+        }
+ 
+    }
+ 
+    $json_result [ ] =  $fields;
+	}
+	
+//$JSON = json_encode($json_result, JSON_UNESCAPED_UNICODE);
+
+$JSON = json_encode($json_result);
+	
+return $JSON;
+
+			  }
+
+
+?>
+
+
+
+
+ 
+	

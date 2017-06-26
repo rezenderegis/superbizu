@@ -1,0 +1,44 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class assuntos extends CI_Controller {
+	
+	public function index() {
+		
+		$this->load->model("assuntos_model");
+		$assuntos = $this->assuntos_model->traz_itens();
+		$dados = array("assuntos" => $assuntos);
+		$this->load->template("assuntos/index", $dados);
+	}
+	
+	public function formulario($id_assunto=0) {
+	
+		$this->load->model("assuntos_model");
+		
+		$assunto_editar = 0;
+		if ($id_assunto != 0) {
+			$assunto_editar = $this->assuntos_model->traz_itens($id_assunto);
+				
+		} 
+
+		$materias = $this->assuntos_model->traz_materias();
+		$assuntos = $this->assuntos_model->traz_itens();
+		
+		$dados = array("assuntos" => $assuntos, "assunto_informado" => $assunto_editar, "materias" => $materias);
+		
+		$this->load->template("assuntos/formulario", $dados);
+	}
+	
+	public function novo() {
+		
+		$dados = array ("descricao_assunto" => $this->input->post("descricao"),
+		"id_materia" => $this->input->post("materia"),
+		"id_assunto" => $this->input->post("assunto_pai"));
+		
+		
+		$this->load->model("assuntos_model");
+		$this->assuntos_model->salva($dados);
+		redirect("assuntos/index");
+		
+		
+	}
+	
+}

@@ -1,0 +1,163 @@
+<script>
+
+
+
+
+	  $(document).ready(function() {
+			oTable = $('#questoes').dataTable({
+				"order": [[ 3, "desc" ]],
+				 'iDisplayLength': 5,
+				"language":{
+				    "emptyTable":     "Sem dados disponíveis",
+				    "info":           "Mostrando _START_ to _END_ of _TOTAL_ registros",
+				    "infoEmpty":      "Mostrando 0 to 0 of 0 registros",
+				    "infoFiltered":   "(filtrado de _MAX_ total registros)",
+				    "infoPostFix":    "",
+				    "thousands":      ",",
+				    "lengthMenu":     "Mostrar _MENU_ registros por página",
+				    "loadingRecords": "Lendo...",
+				    "processing":     "Processando...",
+				    "search":         "Procurar:",
+				    "zeroRecords":    "Não foram encontrados registros",
+				    "paginate": {
+				        "first":      "Primeiro",
+				        "last":       "Último",
+				        "next":       "Próximo",
+				        "previous":   "Anterior"
+				    },
+				    "aria": {
+				        "sortAscending":  ": activate to sort column ascending",
+				        "sortDescending": ": activate to sort column descending"
+				    }
+				}
+			});
+		});
+
+
+
+
+
+		
+</script>
+
+<?php 
+$attributes = array (
+		'class' => 'col-sm-1 control-label',
+		'style' => 'color: #000;'
+);
+echo form_open("lista/CadastrarNovaLista", array (
+		'id' => 'novaLista',
+		'class' => 'form-horizontal',
+		'role' => 'form'
+) );
+
+
+echo "<div class='form-group'>";
+echo form_label("Descricao", "descricao", $attributes);
+echo "<div class='col-sm-2'>";
+echo form_input(array("name" => "descricao",
+		"class" => "form-control",
+		"id" => "descricao",
+		"maxlength" => "255",
+		"type" => "text",
+		"value" => set_value("descricao")
+));
+//echo form_error("preco");
+echo "</div>";
+echo "</div>";
+
+
+
+echo form_button(array(
+		"class" => "btn btn-primary",
+		"content" => "Gravar Lista",
+		"type" => "submit"
+));
+
+?>
+<br/> <br/> <br/>
+
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Selecione as Questões para Incluir na Lista</b></td></tr>
+</table>
+
+<table id="questoes" class="display" cellspacing="0" width="100%">
+		<thead>
+<tr class="info"><th><b></b></th><th><b>ID</b></th><th><b>Matéria</b></th><th><b>Assunto</b></th><th><b>Questão</b></th><th><b>Itens</b></th><th>Ver Img</th></tr>
+</thead>
+	<?php 
+	
+
+	
+	
+	$atts = array(
+			'width'      => '500',
+			'height'     => '250',
+			'scrollbars' => 'yes',
+			'status'     => 'yes',
+			'resizable'  => 'yes',
+			'screenx'    => '0',
+			'screeny'    => '0'
+	
+	            );
+	
+	if($this->session->userdata("usuario_logado")) :
+	foreach ($questoes as $questao) : 
+	
+	?>
+	<tr>
+	<td><?php
+	$data = array(
+			'name'        => 'idQuestaoLista[]',
+			'value'       => $questao["ID_QUESTAO"],
+			'checked'     => FALSE,
+			'style'       => 'margin:10px',
+	);
+	echo form_checkbox($data) ; ?></td>
+				<td><?=$questao["ID_QUESTAO"] ?></td>	
+					<td><?=$questao["nome_materia"] ?></td>	
+					<td><?=$questao["descricao_assunto"] ?></td>	
+	
+		
+	
+		<td>
+		<?=word_limiter($questao["DESCRICAO_QUESTAO"], 20)?>
+		<?//=anchor("questoes/mostra/{$produto['id']}", $produto["nomeproduto"]) //NÃO PRECISEI CHAMAR O CONTROLER NO EXEMPLO ACIMA POR CONTA DO ROUTER QUE FOI CONFIGURADO NO ROUTES.PHP?>
+		</td>
+	
+
+		
+		
+		<td> 
+		<?=anchor("questoes/listaItens/{$questao['ID_QUESTAO']}",  '<img src="'.base_url().'imagens/ic_add_box.png" alt="Delete" />')?>
+		</td>
+		
+		<td>
+					<?php
+
+					if (!empty($questao['NOME_IMAGEM_QUESTAO_SISTEMA'])) {?>
+										<?=anchor(base_url("uploads/{$questao['NOME_IMAGEM_QUESTAO_SISTEMA']}"),  '<img src="'.base_url().'imagens/ic_zoom_in.png" alt="Delete" />');?>
+						
+			<?php } else {echo "";}?>
+					
+			
+		</td>
+	</tr>
+<?php endforeach ?>
+</table>
+
+
+
+
+
+<?php endif?>
+
+<?php 
+
+
+
+
+
+echo form_close(); 
+?>

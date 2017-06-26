@@ -1,0 +1,49 @@
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Assuntos Cadastrados</b></td></tr>
+</table>
+
+<table class="table table-condensed">
+<tr class="active"><td><b>ID</b></td><td><b>ASSUNTO</b></td><td><b>MATÉRIA</b></td><td><b>PAI</b></td></tr>
+
+	<?php 
+	
+
+	
+	
+	$atts = array(
+			'width'      => '500',
+			'height'     => '250',
+			'scrollbars' => 'yes',
+			'status'     => 'yes',
+			'resizable'  => 'yes',
+			'screenx'    => '0',
+			'screeny'    => '0'
+	
+	            );
+	
+	if($this->session->userdata("usuario_logado")) :
+	foreach ($assuntos as $assunto) : 
+	
+	?>
+	<tr>
+			<td><?=$assunto["ID_ITEM"] ?></td>	
+				<td><?=$assunto["DESCRICAO_ASSUNTO"] ?></td>	
+	
+		<td>
+		<?=$assunto["ID_MATERIA"]?>
+		<?//=anchor("questoes/mostra/{$produto['id']}", $produto["nomeproduto"]) //NÃƒO PRECISEI CHAMAR O CONTROLER NO EXEMPLO ACIMA POR CONTA DO ROUTER QUE FOI CONFIGURADO NO ROUTES.PHP?>
+		</td>
+		<td><?= $assunto["ID_ASSUNTO"] ?></td>	
+	
+			
+	</tr>
+<?php endforeach ?>
+</table>
+
+
+<?=anchor('assuntos/formulario', 'Cadastrar Assunto', array("class" => "btn btn-primary"))?>
+
+
+
+<?php endif?>

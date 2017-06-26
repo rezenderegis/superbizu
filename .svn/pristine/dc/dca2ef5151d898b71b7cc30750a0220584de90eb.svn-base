@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head lang="<?php echo $str_language; ?>" xml:lang="<?php echo $str_language; ?>">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>MAMP PRO</title>
+</head>
+
+<body>
+    <p><img src="http://bysale.com.br/mysale/app/bysale_site_index.png" id="logo" alt="MAMP PRO Logo" width="220" height="61" /></p>
+
+
+
+    <p class="text"><strong>Prezado (a) &lt;&lt;Nome&gt;&gt;,</strong></p>
+    <p class="text">Você fez uma solicitação para recuperar o acesso ao aplicativo BySale. </p>
+    <p class="text">Clique no link abaixo para alterar sua senha.    </p>
+    <p class="text">Atenciosamente, </p>
+    <p align="center" class="text"><strong>Equipe Bysale</strong></p>
+    <p align="center" class="text"><strong>Transforme a gestão das suas vendas!</strong></p>
+<hr />
+    <p class="text">&nbsp;</p>
+
+</body>
+</html>

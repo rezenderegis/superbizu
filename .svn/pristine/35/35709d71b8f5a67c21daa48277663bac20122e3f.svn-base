@@ -1,0 +1,67 @@
+<!-- 11. $EXAMPLE_ACCOUNT_OVERVIEW =================================================================
+
+				Account overview example
+-->
+				<div class="stat-panel">
+					<div class="stat-row">
+						<!-- Success darker background -->
+						<div class="stat-cell bg-success darker">
+							<!-- Stat panel bg icon -->
+							<i class="fa fa-lightbulb-o bg-icon" style="font-size:60px;line-height:80px;height:80px;"></i>
+							<!-- Big text -->
+							<span class="text-bg">Overview</span><br>
+							<!-- Small text -->
+							<span class="text-sm">Your account statistics</span>
+						</div>
+					</div> <!-- /.stat-row -->
+					<div class="stat-row">
+						<!-- Success background, without bottom border, without padding, horizontally centered text -->
+						<div class="stat-counters bg-success no-border-b no-padding text-center">
+							<!-- Small padding, without horizontal padding -->
+							<div class="stat-cell col-xs-4 padding-sm no-padding-hr">
+								<!-- Big text -->
+								<span class="text-bg"><strong>12</strong></span><br>
+								<!-- Extra small text -->
+								<span class="text-xs">PURCHASES</span>
+							</div>
+							<!-- Small padding, without horizontal padding -->
+							<div class="stat-cell col-xs-4 padding-sm no-padding-hr">
+								<!-- Big text -->
+								<span class="text-bg"><strong>17</strong></span><br>
+								<!-- Extra small text -->
+								<span class="text-xs">REVIEWS</span>
+							</div>
+							<!-- Small padding, without horizontal padding -->
+							<div class="stat-cell col-xs-4 padding-sm no-padding-hr">
+								<!-- Big text -->
+								<span class="text-bg"><strong>49</strong></span><br>
+								<!-- Extra small text -->
+								<span class="text-xs">LIKES</span>
+							</div>
+						</div> <!-- /.stat-counters -->
+					</div> <!-- /.stat-row -->
+					<div class="stat-row">
+						<!-- Success background, without bottom border, without padding, horizontally centered text -->
+						<div class="stat-counters bg-success no-border-b no-padding text-center">
+							<!-- Small padding, without horizontal padding -->
+							<div class="stat-cell col-xs-4 padding-sm no-padding-hr">
+								<!-- Big text -->
+								<span class="text-bg"><strong>203</strong></span><br>
+								<!-- Extra small text -->
+								<span class="text-xs">FRIENDS</span>
+							</div>
+							<div class="stat-cell col-xs-4 padding-sm no-padding-hr">
+								<!-- Big text -->
+								<span class="text-bg"><strong>1056</strong></span><br>
+								<!-- Extra small text -->
+								<span class="text-xs">POINTS</span>
+							</div>
+							<!-- Success background, small padding, without left and right padding, vertically centered text -->
+							<a href="#" class="stat-cell col-xs-4 bg-success padding-sm no-padding-hr valign-middle">
+								<!-- Extra small text -->
+								<span class="text-xs">MORE&nbsp;&nbsp;<i class="fa fa-caret-right"></i></span>
+							</a>
+						</div> <!-- /.stat-counters -->
+					</div> <!-- /.stat-row -->
+				</div> <!-- /.stat-panel -->
+<!-- /11. $EXAMPLE_ACCOUNT_OVERVIEW -->

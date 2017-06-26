@@ -1,0 +1,178 @@
+<?php include("application/views/usuarios/constantes.php");?>
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Cadastro de Empresa</b></td></tr>
+</table>
+
+<?= validation_errors("<p class='alert alert-danger'>", "</p>")?>
+
+<?php 
+$nome = '';
+$telefone = '';
+$sincronizacaoEntradaAplicativo = '';
+$idempresa = 0;
+$cnpj = '';
+$tipo_formulario = 'novo_cadastro';
+if ($dados_empresa_editar != 0) {
+foreach ($dados_empresa_editar as $dados) :
+//print_r($dados_empresa_editar);
+	$nome = $dados['nome_empresa'];
+	$telefone = $dados['telefone'];
+	$sincronizacaoEntradaAplicativo = $dados['sincronizacaoEntradaAplicativo'];
+	$cnpj = $dados['cnpj'];
+	$tipo_formulario = 'edicao';
+	$idempresa = $dados['idempresa'];	
+endforeach;
+}
+
+	
+$attributes = array(
+		'class' => 'col-sm-2 control-label',
+		'style' => 'color: #000;',
+);
+
+echo form_open("empresa/novaEmpresa",  array (
+		'id' => 'novaEmpresa', 'class' => 'form-horizontal', 'role' => 'form'
+) );
+echo  "<div class='form-group'>";
+echo form_label("Nome", "nomeempresa", $attributes);
+echo "<div class='col-sm-5'>";
+echo form_input(array("name" => "nomeempresa",
+"class" => "form-control", 
+"id" => "nomeempresa",
+"maxlength" => "255",
+"value" => $nome));
+//echo form_error("nome");
+echo "</div>";
+echo "</div>";
+
+echo  "<div class='form-group'>";
+echo form_label("Telefone", "telefone", $attributes);
+echo "<div class='col-sm-5'>";
+echo form_input(array("name" => "telefone",
+"class" => "form-control", 
+"id" => "telefone",
+"maxlength" => "10",
+"value" => $telefone));
+echo "</div>";
+echo "</div>";
+
+//echo form_error("preco");
+echo  "<div class='form-group'>";
+echo form_label("CNPJ", "cnpj", $attributes);
+echo "<div class='col-sm-5'>";
+echo form_input(array(
+"name" => "cnpj",
+"class" => "form-control",
+"id" => "cnpj",
+"value" => $cnpj));
+echo "</div>";
+echo "</div>";
+
+
+//echo form_error("descricao");
+
+//Somente mostra essa pergunta se o usuário não acessar outra empresa no aplicativo. 
+if ($acesso_outra_empresa == 'N') {
+
+echo  "<div class='form-group'>";	
+echo form_label("Deseja acessar esta empresa no aplicativo?", "acessar_aplicativo", $attributes);
+echo "<div class='col-sm-10'>";
+
+echo form_checkbox(array(
+
+	'name'        => 'acessar_aplicativo',
+    'id'          => 'acessar_aplicativo',
+    'value'       => 'S',
+    'checked'     => TRUE,
+    'style'       => 'margin:10px'
+));
+echo "</div>";
+echo "</div>";
+} else {
+echo "Você já acessa uma empresa do aplicativo. Cada usuário só pode acessar uma.";
+}
+
+echo  "<div class='form-group'>";
+
+echo form_label ( "Usuário Master", "usuario_master", $attributes );
+echo "<div class='col-sm-2'>";
+echo "<select name='usuario_master' id='usuario_master' class='form-control'>";
+echo "<option></option>";
+if (count ( $dados_usuario )) {
+	foreach ( $dados_usuario as $key => $list ) {
+		$selected = '';
+		if ($list['usuario_master'] == 'S') { $selected = ' selected';}
+		echo "<option value=".$list['id']." ".$selected.">".$list['nome']."</option>";
+	}
+}
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
+
+/*
+echo  "<div class='form-group'>";
+echo form_label("Tipo da Empresa: ","tipoempresa",$attributes);
+echo "<div class='col-sm-5'>";
+echo "<select name='tipoempresa' id='tipoempresa' class='form-control'>"; 
+echo "<option value=1>Bar</option>";
+echo "<option value=2>Restaurante</option>";
+echo "<option value=3>Empresa Convencional</option>";
+echo "</select>"; 
+echo "</div>";
+echo "</div>";
+
+
+
+echo  "<div class='form-group'>";
+echo form_label("Tipo Conta Empresa: ", "tipocontaempresa", $attributes);
+echo "<div class='col-sm-10'>";
+echo "<select name='tipocontaempresa' id='tipocontaempresa' class='form-control'>"; 
+echo "<option value=1>Single</option>";
+echo "<option value=2>Mullti</option>";
+echo "</select>";
+echo "</div>";
+echo "</div>";
+*/
+
+//if ($sincronizacaoEntradaAplicativo == 'S') {}
+echo "<div class='form-group'>";
+echo form_label ( "Sincronização Entrada Aplicativo", "sincronizacaoEntradaAplicativo", $attributes );
+echo "<div class='col-sm-2'>";
+echo "<select name='sincronizacaoEntradaAplicativo' id='sincronizacaoEntradaAplicativo' class='form-control'>";
+echo "<option></option>";
+foreach ($combo_sim_nao as $key => $dados) {
+	$selected = '';
+	if (($sincronizacaoEntradaAplicativo == $dados['codigo']) || ($this->input->post("sincronizacaoEntradaAplicativo") == $dados['codigo'])) {
+		$selected = ' selected';
+	}
+	echo "<option value=".$dados['codigo']." ".$selected.">".$dados['descricao']."</option>";
+
+}
+
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
+
+
+
+
+echo form_hidden(array("idempresa" => $idempresa, "tipo_formulario" => $tipo_formulario));	
+echo form_button(array(
+
+"class" => "btn btn-primary",
+"content" => "Cadastrar",
+"type" => "submit"
+));
+
+echo form_close();
+
+
+
+
+
+
+
+?>

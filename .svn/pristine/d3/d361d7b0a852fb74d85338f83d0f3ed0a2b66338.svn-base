@@ -1,0 +1,100 @@
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Cadastro Nova Questão</b></td></tr>
+</table>
+
+
+<?= validation_errors("<p class='alert alert-danger'>", "</p>")?>
+
+
+
+<?php 
+print_r($categoria_produto);
+$attributes = array (
+		'class' => 'col-sm-2 control-label',
+		'style' => 'color: #000;'
+);
+	$id = $dados_produto_edicao['ID_QUESTAO'];
+	
+	echo "assss".$assunto_questao;
+	
+
+echo form_open("assuntos/novo");
+
+echo form_label("Descrição", "descricao");
+echo form_input(array("name" => "descricao",
+		"class" => "form-control",
+		"id" => "descricao",
+		"maxlength" => "255",
+		"value" => set_value("descricao", $dados_produto_edicao['DESCRICAO_ASSUNTO'])));
+
+
+echo "<div class='form-group'>";
+echo form_label("Matéria:", "materia", $attributes);
+echo "<div class='col-sm-2'>";
+echo "<select name='materia' id='materia'> class='form-control'"; 
+//echo "<select name='state_id' id='state_id'>";
+
+print_r($categoria_produto);
+$sel = '';
+if (count($categoria_produto)) {
+	
+	foreach ($categoria_produto as $key => $list) {
+		//echo $categoria.$list['idcategoriaproduto'];
+		if ($list['id_item'] != $assunto_questao) {
+			
+			echo "<option value='".$list['id_item']."'>".$list['assunto']."</option>";
+				
+		}
+			//echo "<option value='".$list['idcategoriaproduto'].">".$list['nomecategoriaproduto']."</option>";
+		if ($list['id_item'] == $assunto_questao) {
+			echo "<option value='".$list['id_item']."' selected>".$list['assunto']."</option>";
+		}
+		}		
+}	
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
+
+echo "<div class='form-group'>";
+echo form_label("Assunto:", "assunto", $attributes);
+echo "<div class='col-sm-2'>";
+echo "<select name='assunto' id='assunto'> class='form-control'";
+//echo "<select name='state_id' id='state_id'>";
+
+print_r($categoria_produto);
+$sel = '';
+if (count($categoria_produto)) {
+
+	foreach ($categoria_produto as $key => $list) {
+		//echo $categoria.$list['idcategoriaproduto'];
+		if ($list['id_item'] != $assunto_questao) {
+				
+			echo "<option value='".$list['id_item']."'>".$list['assunto']."</option>";
+
+		}
+		//echo "<option value='".$list['idcategoriaproduto'].">".$list['nomecategoriaproduto']."</option>";
+		if ($list['id_item'] == $assunto_questao) {
+			echo "<option value='".$list['id_item']."' selected>".$list['assunto']."</option>";
+		}
+	}
+}
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
+
+echo form_hidden(array("id_produto_alterar" => $id));
+echo form_button(array(
+"class" => "btn btn-primary",
+"content" => "Cadastrar",
+"type" => "submit"
+));
+
+echo form_close();
+
+
+?>
+
+

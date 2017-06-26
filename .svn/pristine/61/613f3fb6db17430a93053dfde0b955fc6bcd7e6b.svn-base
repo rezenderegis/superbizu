@@ -1,0 +1,138 @@
+<?php
+class Lista_model extends CI_Model {
+	
+		
+		public function trazListasPorUsuarioEescla ($idUsuario,$empresa) {
+	
+			$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+			$idUsuarioLogado = $dadosUsuarioLogado['id'];
+				
+			$idEmpresa = $this->session->userdata('idempresa');
+			
+			$this->db->select("lista_questoes.*");
+			$this->db->from("lista_questoes");
+			if ($idUsuario == true) {
+				$this->db->where("lista_questoes.idResponsavel", $idUsuarioLogado);
+			}
+			if ($empresa == true) {
+				$this->db->where("lista_questoes.idempresa", $idEmpresa);				
+			}
+			return $this->db->get()->result_array();
+		}
+		
+		public function trazListasPorAluno ($idUsuario,$empresa) {
+		
+			$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+			$idUsuarioLogado = $dadosUsuarioLogado['id'];
+		
+			$idEmpresa = $this->session->userdata('idempresa');
+			$sql = "SELECT lq.*, professor.nome nome_professor, 
+case  when (select max(idresolucao) from TB_RESOLUCAO where id_usuario = ".$idUsuarioLogado." and id_lista = lq.idlistaquestoes) is null then 'Não Resolvida' else 'Resolvida' end as SITUACAO_LISTA
+ FROM (usuario u) JOIN tb_aluno_grupo ag ON ag.idUsuario = u.id 
+ JOIN tb_grupo g ON g.idGrupo = ag.idGrupo JOIN tb_lista_grupo lg ON lg.idGrupo = g.idGrupo
+ JOIN lista_questoes lq ON lq.idlistaquestoes = lg.idLista 
+ JOIN usuario professor ON professor.id = lq.idresponsavel 
+ WHERE u.id = ".$idUsuarioLogado."";	
+			
+			
+			/* $this->db->select("lq.*, professor.nome nome_professor");
+			$this->db->from("usuario u");
+			$this->db->join("tb_aluno_grupo ag", "ag.idUsuario = u.id");
+			$this->db->join("tb_grupo g", "g.idGrupo = ag.idGrupo");
+			$this->db->join("tb_lista_grupo lg", "lg.idGrupo = g.idGrupo");
+			$this->db->join("lista_questoes lq", "lq.idlistaquestoes = lg.idLista");
+			$this->db->join("usuario professor", "professor.id = lq.idresponsavel");
+			//$this->db->join("TB_RESOLUCAO r", "r.id_lista = lq.idlistaquestoes", "left");
+			$this->db->where("u.id", $idUsuarioLogado); */
+			$query = $this->db->query($sql);
+			
+			
+			return $query->result_array();
+		}
+	
+		public function salvaLista($descricao) {
+			
+			$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+			
+			$idUsuarioLogado = $dadosUsuarioLogado['id'];
+			
+			$idEmpresa = $this->session->userdata('idempresa');
+			
+			$dados = array( "descricao" => $descricao,
+						"idEmpresa" => $idEmpresa,
+						"idResponsavel" => $idUsuarioLogado);
+				
+				$this->db->insert("lista_questoes", $dados);
+				
+		}
+		
+		
+		public function buscaUltimaListaQuestaoInserida() {
+		
+			$this->db->select("max(l.idListaQuestoes) as idListaQuestoes");
+			$this->db->from("lista_questoes l");
+			return $this->db->get()->row_array(0);
+		}
+		
+		public function salvaQuestaoLista($idUltimaListaInserida, $idQuestaoLista) {
+				
+				
+		
+			$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+			$idUsuarioLogado = $dadosUsuarioLogado['id'];
+				
+			$idEmpresa = $this->session->userdata('idempresa');
+				
+			$qtdIdQuestaoNaLista = count($idQuestaoLista);
+				
+			for ($i=0; $i<$qtdIdQuestaoNaLista; $i++) {
+					
+				$dados = array("idListaQuestao" => $idUltimaListaInserida,
+						
+						"idQuestao" => $idQuestaoLista[$i]
+					);
+		
+				$this->db->insert("questao_lista", $dados);
+					
+			}
+		}
+		
+		public function trazDadosLista($idLista) {
+			
+			$this->db->select("lista_questoes.*");
+			$this->db->from("lista_questoes");
+			$this->db->where("lista_questoes.idlistaquestoes", $idLista);
+			return $this->db->get()->row_array();
+			
+		}
+		
+		public function atualizarLista($dados, $idLista) {
+			
+			$this->db->where("lista_questoes.idlistaquestoes", $idLista);
+			$this->db->update("lista_questoes", $dados);
+			
+		}
+		
+		public function salvarResolucao($idLista, $respostas) {
+			
+			$dadosUsuarioLogado = $this->session->userdata("usuario_logado");
+				
+			$idUsuarioLogado = $dadosUsuarioLogado['id'];
+			$this->load->model("uuid_model");
+			$grupo_resolucao = $this->uuid_model->v4();
+			foreach ($this->input->post("resposta") as $questao => $itemMarcado) {
+				$dados = array("ID_QUESTAO" => $questao, "ID_ITEM" => $itemMarcado, "ID_LISTA" => $idLista, "ID_USUARIO" => $idUsuarioLogado, "ID_GRUPO_QUESTAO" => $grupo_resolucao);
+				$this->db->insert("TB_RESOLUCAO", $dados);
+			}
+			
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	

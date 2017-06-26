@@ -1,0 +1,260 @@
+<?php if ( !defined('BASEPATH')) exit ('Nï¿½o ï¿½ permitido acesso direto ao site!');
+
+class Usuarios extends CI_Controller {
+
+
+	public function index() {
+
+		$this->load->model("usuarios_model");
+
+		$usuariosEmpresa = $this->usuarios_model->buscaUsuariosEmpresa($this->session->userdata("idempresa"), 0,0);
+
+		$usuarios = array("usuarios" => $usuariosEmpresa);
+
+		$this->load->template("usuarios/index.php", $usuarios);
+
+
+	}
+
+	public function novo() {
+
+		//CARREGAR BIBLIOTECA DE VALIDAï¿½ï¿½O
+		$this->load->library("form_validation");
+
+		//ADICIONAR UMA REGRA DE VALIDAï¿½ï¿½O
+		
+		$this->form_validation->set_rules("nome", "nome", "required"); //REGRA PARA O CAMPO NOME LABEL NOME
+		
+		if (!$this->input->post("id_usuario")) {
+			//Não deve entrar aqui na edição de usuário
+			$this->form_validation->set_rules("email", "email", "required|callback_usuarioDuplicado"); //REGRA PARA O CAMPO NOME LABEL NOME
+		}
+		$this->form_validation->set_rules("senha", "senha", "required|min_length[3]"); //REGRA PARA O CAMPO NOME LABEL NOME
+
+		$sucesso = $this->form_validation->run();
+		
+		$this->load->model("usuarios_model");
+		
+
+		$idempresa = '';
+		if ($sucesso) {
+			
+					if ($this->session->userdata('idempresa') != null) {
+						
+						$idempresa = $this->session->userdata('idempresa');
+		
+					} else {
+						$idempresa = 0;
+					}
+			
+					
+						$usuario = array (
+					"nome" => $this->input->post("nome"),
+					"email" => $this->input->post("email"),
+					"senha" => md5($this->input->post("senha")),
+					"idempresa" => $idempresa);
+
+					//$this->load->database();
+		
+						
+					if ($this->input->post("id_usuario")) {
+						
+						$this->usuarios_model->edita_usuario($usuario, $this->input->post("id_usuario"));
+					} else {
+										$this->usuarios_model->salva($usuario);
+										
+										$this->load->model("empresa_model");
+								
+									//Busca ï¿½ltimo id do usuï¿½rio inserido para vincular a empresa
+						
+									$idusuarioBanco = $this->usuarios_model->bucaUltimoUsuarioInseridoEmpresa($idempresa);
+						
+									$idusuarioNovo = $idusuarioBanco['id'];
+															
+									
+									/*
+									 * Adicionado em 17-11-2014. Cadastra a empresa com o mesmo nome do usuário 
+									 * Se o usuário for novo, cadastra a empresa com o mesmo nome do usuário. 
+									 * No sistema o usuário deverá ser orientado a fazer a edição do nome da empresa
+									 * */
+									if ($this->session->userdata('idempresa') == '') {
+											
+									$empresa = array(
+											"idusuario" => $idusuarioNovo,
+											"nome_empresa" => $this->input->post("nome"),
+											"tipoempresa" => 3,
+											"tipocontaempresa" => 2
+									
+									);
+									//echo $idempresa;	
+									
+									$this->empresa_model->salva($empresa);
+									
+									//TODO
+									$ultimaEmpresaInserida = $this->empresa_model->buscaEmpresaInserida($idusuarioNovo);
+									$idempresa =  $ultimaEmpresaInserida['id'];
+										
+										
+									//Fim cadatro empresa com o mesmo nome do usuário
+														
+														
+									
+									
+									}
+									
+						
+									
+									
+									
+									
+									
+									
+									
+									/*
+									 * Se o usuário não estiver logado, ou seja, se for o primeiro cadastro, ele sempre deverá ter acesso ao sistema
+									 * e ao aplicativo.
+									 * */
+									$usuario_master = 'N';
+									if ($this->session->userdata("usuario_logado") == null){
+										
+										$acesso_sistema = 'S';
+										$acessar_aplicativo = 'S';
+										$usuario_master = 'S';
+										
+										/* Insere categoria padrão. Ela deve existir por que todo produto deve pertencer a uma categoria.
+										 Depois o usuário pode alterá-la, mas deve existir no mínimo uma.
+										*/
+										$categoria = array(
+												"nomecategoriaproduto" => "Padrão",
+												"idempresa" => $idempresa,
+												"codigogrupoproduto" => 1,
+													
+										);
+										
+										$this->load->model("produtos_model");
+										$this->produtos_model->salvaCategoria($categoria);
+										
+										
+									} 
+					}
+					
+				
+					if ($this->session->userdata("usuario_logado") != null){
+								/*
+								 *
+							 * Se o cadastro estiver sendo feito pelo sistema, essas opções são marcadas pelo usuário
+								 * */
+									if ($this->input->post("acessar_sistema") == 'S') {
+										$acesso_sistema = 'S';
+									} else {
+										$acesso_sistema = 'N';
+									}
+									
+									if ($this->input->post("acessar_aplicativo") == 'S') {
+										$acessar_aplicativo = 'S';
+									} else {
+										$acessar_aplicativo = 'N';
+									}
+					
+					}
+					
+					if ($this->input->post("id_usuario")) {
+						$idusuarioNovo = $this->input->post("id_usuario");
+						$usuario_master = $this->input->post("usuario_master");
+					}
+
+					
+					
+						$insereUsuarioEmpresa = array(
+					"idusuario" => $idusuarioNovo,
+					"idempresa" => $idempresa,
+					"loginapp" => $acessar_aplicativo,
+					"loginsistema" => $acesso_sistema,
+					"usuario_master" => $usuario_master);
+
+						
+					if ($this->input->post("id_usuario")) 
+							{				
+									
+							$this->usuarios_model->atualizaUsuarioEmpresa($insereUsuarioEmpresa, $this->input->post("id_usuario"),
+							$idempresa);
+			
+							} else {
+						
+									$this->usuarios_model->insereUsuarioEmpresa($insereUsuarioEmpresa);
+	
+									}
+		
+					$this->session->set_flashdata("success", "Usuario salvo com sucesso!");
+
+					
+					
+					
+					
+								/*
+								 * Esse trecho de cï¿½digo verifica se o usuï¿½rio estï¿½ logado. Se estiver logado, apï¿½s o cadastramento,
+								 * ï¿½ redirecionado para a tela de consulta de usuï¿½rios da sua empresa. Caso contrï¿½rio, ï¿½ redirecionado para a
+								 * tela de login.
+								 */
+					
+					
+					
+								if ($this->session->userdata('idempresa') != null) {
+									$usuariosEmpresa = $this->usuarios_model->buscaUsuariosEmpresa($this->session->userdata("idempresa"),0,0);
+										
+									$usuarios = array("usuarios" => $usuariosEmpresa);
+										
+									$this->load->template("usuarios/index", $usuarios);
+										
+										} else {
+											//$this->load->template("geral/index");
+											redirect('/');
+										
+									}
+					
+				} else {
+					
+											$this->novoUsuario();
+								
+										}
+
+	}
+	
+	public function novoUsuario($id_usuario=0) {
+
+		$this->load->model("usuarios_model");
+		
+		$dados_edicao = 0;
+		if ($id_usuario != 0) {
+			$dados_edicao = $this->usuarios_model->buscaUsuariosEmpresa(0,$id_usuario, 1);
+				
+		}
+		$usuario = array("usuario_edicao" => $dados_edicao);
+		
+		$this->load->template("usuarios/usuarioNovo", $usuario);
+
+
+	}
+
+	public function usuarioDuplicado($email){
+		
+		
+	//echo "sfalsdfasdfÃ§asdf: s".$email;
+		$this->load->model("usuarios_model");
+		$usuarioEmail = $this->usuarios_model->verificaExisteUsuario($email);
+	//echo "<br/>";
+		//print_r($usuarioEmail['id']);
+		//die();
+		if ($usuarioEmail) {
+		
+			$this->form_validation->set_message("usuarioDuplicado", "Ja existe um usuï¿½rio cadastrado com esse email");
+			
+			return FALSE;
+		} else {
+		//$this->form_validation->set_message("usuarioduplicado", "Jï¿½ existe um usuï¿½rio cadastrado com esse email");
+		return TRUE;
+		}
+	
+	}
+
+}

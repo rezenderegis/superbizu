@@ -1,0 +1,49 @@
+
+<?php 
+echo form_open("login/autenticar", array('id' => 'login'));
+
+echo "</br>";
+echo "</br>";
+
+echo form_label("Email", "email");
+echo form_input(array(
+"name" => "email",
+"id" =>"email",
+"size" => "20",
+"style" => "width:30%",
+"class" => "form-control",
+"maxlength" => "255"
+));
+
+echo form_label("Senha", "senha");
+echo form_password(array(
+"name" => "senha",
+"id" => "senha",
+"size" => "20",
+"style" => "width:30%",
+"class" => "form-control",
+"maxlength" => "255"
+));
+echo "</br>";
+echo form_button(array(
+"class" => "btn btn-primary",
+"content" => "Entrar",
+"type" => "submit"
+
+));
+
+echo "&nbsp;&nbsp;";
+echo anchor('usuarios/novoUsuario', 'Ainda não é cadastrado? Clique aqui para cadastrar', array("class" => "btn btn-primary")); 
+echo form_close();
+
+echo anchor('usuarios/formulario_esqueceu_senha', 'Esqueceu sua senha! Clique aqui');
+
+?>
+
+<!-- <H4> Transforme a gestão de vendas da sua empresa com o sistema BySale. Através da integração entre o aplicativo -->
+<!-- e o sistema, você terá um controle criterioso de estoque, vendas e clientes.  -->
+<!-- </H4> -->
+
+
+
+

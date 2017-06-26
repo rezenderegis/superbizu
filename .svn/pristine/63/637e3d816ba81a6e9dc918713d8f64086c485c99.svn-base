@@ -1,0 +1,281 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class Questoes extends CI_Controller {
+	
+	
+	public function index($idempresa = 0){
+	autoriza();
+	//UTILIZADO PARA DEBUGAR
+	//$this->output->enable_profiler(TRUE);
+	
+	//CARREGA O BANCO DE DADOS
+	//$this->load->database();
+	
+	
+	//CARREGAR O MODELO PARA USÁL-LO
+	$this->load->model("produtos_model");
+	//$empresa = $this->session->userdata("idempresa");
+	$questoes = $this->produtos_model->buscaTodos();
+
+	$this->load->helper(array("currency"));
+	//$this->load->helper("currency");
+	
+	//ADICIONA HELPER DE CRIAÇÃO DE FORMULÁRIO
+	//$this->load->helper("form");
+	
+	$dados = array("questoes" => $questoes);
+	//$this->load->view("cabecalho.php");
+	$this->load->template("questoes/index.php", $dados);
+	//$this->load->view("rodape.php");
+
+	}
+	
+	
+	public function listaItens($id_questao) {
+		
+		$this->load->model("produtos_model");
+		$dados_itens = $this->produtos_model->buscaItens($id_questao);
+		$dados = array("itens" => $dados_itens, "id_questao" => $id_questao);
+		$this->load->template("questoes/listaItens", $dados);
+	}
+	
+	
+	
+	public function formulario_item($id_questao=0, $id_item=0) {
+		//$this->load->model("produtos_model");
+		//$dados_item = $this->produtos_model->buscaItens();
+		
+		$dados_item = 0;
+
+		if ($id_item != 0) {
+			$this->load->model("produtos_model");
+			$dados_item = $this->produtos_model->traz_dados_item($id_item);
+		
+		}
+		
+		$dados = array("dados_item_edicao" => $dados_item, "id_questao" => $id_questao, "id_item" => $id_item,
+		);
+		
+		$this->load->template("questoes/formulario_item", $dados);
+	}
+	
+	public function formulario($id_questao=0){
+		autoriza();
+	
+		$this->load->model("produtos_model");
+		$assunto_questao = 0;
+		$dados_produto = 0;
+		if ($id_questao != 0) {
+			$dados_produto = $this->produtos_model->traz_dados_edicao($id_questao);
+			$assunto_questao = $this->produtos_model->busca_assunto_materia($id_questao);	
+		
+		}
+		
+		$categoria_produto = $this->produtos_model->busca_categoria();
+		//print_r($categoria_produto);
+		$dados_categoria = array("categoria_produto" => $categoria_produto, "dados_produto_edicao" => $dados_produto, "assunto_questao" => $assunto_questao);
+		$this->load->template("questoes/formulario", $dados_categoria);
+		
+		
+	}
+	
+	
+	
+	public function novo_item () {
+		
+	
+		$this->load->model("produtos_model");
+		
+		if (!$this->input->post("id_item")) {
+			$item = array(
+					"descricao" => $this->input->post("descricao"),
+					"id_questao" => $this->input->post("id_questao"),
+					"letra_item" => $this->input->post("letra_item")
+			);
+			
+			$this->produtos_model->salva_item($item);
+		
+		} else {
+			$item = array(
+					"descricao" => $this->input->post("descricao"),
+					"letra_item" => $this->input->post("letra_item")
+			);
+			
+			$this->produtos_model->atualiza_item($item, $this->input->post("id_item"));
+				
+			
+		}
+		
+		
+		redirect('questoes/listaItens/'.$this->input->post("id_questao"));
+	}
+	
+	public function novo() {
+	autoriza();
+	$dt_atual = date('Y-m-d H:i:s');
+	
+	//CARREGAR BIBLIOTECA DE VALIDAÇÃO
+	$this->load->library("form_validation");
+	
+	//ADICIONAR UMA REGRA DE VALIDAÇÃO
+		
+		$this->form_validation->set_rules("nome", "nome"); //REGRA PARA O CAMPO NOME LABEL NOME
+		//$this->form_validation->set_rules("descricao", "descricao", "trim|required|min_length[]");
+	
+	$this->form_validation->set_rules("ano", "ano");
+	//$this->form_validation->set_error_delimiters("<p class='alert alert-danger'>","</p>")
+	
+	//RODA A VALIDAÇÃO
+	$sucesso = $this->form_validation->run();
+		
+		
+		//SE PASSAR NAS REGRAS DE VALIDAÇÃO
+		if ($sucesso) {
+		$empresa = $this->session->userdata("idempresa");
+		$usuarioLogado = $this->session->userdata("usuario_logado");
+		$this->load->model("produtos_model");
+		
+		
+		
+	
+		$produto = array(
+			"descricao_questao" => $this->input->post("nome"),
+			"ano_questao" => $this->input->post("ano"),
+			"comando_questao" => $this->input->post("comando"),	
+				"comentario_questao" => $this->input->post("comentario_questao"),
+				"numero_questao" => $this->input->post("numero_questao")
+				
+		);
+	
+	$this->load->model("produtos_model");
+	
+	
+	if ($this->input->post("id_produto_alterar")) {
+		
+		//Alteração de produto
+	
+		$this->produtos_model->atualizar_produto($this->input->post("id_produto_alterar"),
+		$this->input->post("id_produto_alterar"), $produto);
+		
+		$this->produtos_model->deleta_assuntos_anteriores($this->input->post("id_produto_alterar"));
+		$dados_assunto = array("TB_QUESTAO_ID_QUESTAO" => $this->input->post("id_produto_alterar"),
+				"TB_ASSUNTO_ID_ITEM" => $this->input->post("assunto_questao"));
+		//print_r($dados_assunto);
+		
+		$this->produtos_model->salva_assunto_questao($dados_assunto);
+		
+	} else {
+		//Criação de novo produto
+		$this->produtos_model->salva($produto);
+		
+		
+		$ultimaQuestaoInserida = $this->produtos_model->buscaUltimaQuestaoInserida();
+			
+		$dados_assunto = array("TB_QUESTAO_ID_QUESTAO" => $ultimaQuestaoInserida['id_questao'],
+				"TB_ASSUNTO_ID_ITEM" => $this->input->post("assunto_questao"));
+		//print_r($dados_assunto);
+
+		$this->produtos_model->salva_assunto_questao($dados_assunto);
+		
+	}
+	
+	
+	$this->session->set_flashdata("success", "Questão salvo com sucesso");
+	redirect('questoes/index');
+	
+	} else {
+	
+		//$this->load->template("produtos/formulario");
+		$this->formulario();
+	
+		}
+	}
+	
+	public function mostra($id) {
+		//$id = $this->input->get("id");
+		
+		$this->load->model("produtos_model");
+		$produto = $this->produtos_model->busca($id);
+		$dados = array("produto" => $produto);
+		$this->load->helper("typography");
+		$this->load->template("produtos/mostra", $dados);
+
+	}
+	
+
+	
+public function formularioCategoria ($id_produto=0) {
+			autoriza();	
+		
+		$dados_categoria_edicao = 0;	
+		if ($id_produto != 0) {
+			$this->load->model("produtos_model");
+			$dados_categoria_edicao = $this->produtos_model->busca_categoria($id_produto);
+		}	
+		
+		
+		$dados = array("dados_categoria_edicao" => $dados_categoria_edicao);	
+		$this->load->template("produtos/formularioCategoria", $dados);
+		
+	}
+	
+	public function novaCategoria(){
+		autoriza();
+		$dt_atual = date('Y-m-d H:i:s');
+		
+		//CARREGAR BIBLIOTECA DE VALIDA‚ÌO
+		$this->load->library("form_validation");
+	
+		//ADICIONAR UMA REGRA DE VALIDA‚ÌO
+	
+		$this->form_validation->set_rules("nome_categoria", "nome_categoria", "required"); //REGRA PARA O CAMPO NOME LABEL NOME
+		$this->form_validation->set_rules("grupoproduto", "grupoproduto", "required"); //REGRA PARA O CAMPO NOME LABEL NOME
+	
+	
+	
+		$sucesso = $this->form_validation->run();
+	
+	
+		if ($sucesso) {
+		
+			$this->load->model("produtos_model");
+			//die();
+			if (!$this->input->post("id_categoria_produto")) {
+				$categoria = array(
+						"nomecategoriaproduto" => $this->input->post("nome_categoria"),
+						"idempresa" => $this->session->userdata("idempresa"),
+						"codigogrupoproduto" => $this->input->post("grupoproduto"),
+						"dt_criacao_site" => $dt_atual
+							
+				
+				);
+				$this->produtos_model->salvaCategoria($categoria);
+			} else {
+				$categoria = array(
+						"nomecategoriaproduto" => $this->input->post("nome_categoria"),
+						"idempresa" => $this->session->userdata("idempresa"),
+						"codigogrupoproduto" => $this->input->post("grupoproduto"),
+						"dt_alteracao_site" => $dt_atual
+							
+				
+				);
+				$this->produtos_model->atualizar_categoria($categoria, $this->session->userdata("idempresa"), $this->input->post("id_categoria_produto"));
+			}
+			redirect("produtos/indexCategoria");
+		} else {
+	
+			//$this->load->template("produtos/formularioCategoria");
+				$this->formularioCategoria();
+		}
+	}
+	
+	public function indexCategoria() {
+	
+		$this->load->model("produtos_model");
+		$categoria = $this->produtos_model->busca_categoria();
+		$dadosCategoria = array("categoria" => $categoria);
+	
+		$this->load->template("produtos/indexCategoria", $dadosCategoria);
+	
+	}
+	
+}

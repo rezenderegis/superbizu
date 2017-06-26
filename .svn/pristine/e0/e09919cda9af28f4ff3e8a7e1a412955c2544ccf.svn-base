@@ -1,0 +1,103 @@
+<?php
+//print_r($_REQUEST);
+
+include "mysale_conexao.php"; 
+
+
+$json = file_get_contents('php://input'); 
+$parsed = json_decode($json,true);
+
+
+if (array_key_exists("usuario", $parsed)) {
+foreach ($parsed['usuario'] as $key => $values){
+
+ 	$email = $values['email'];
+    $senha = md5($values['password']);
+
+	
+	$idempresa = "";
+	$idusuario = "";
+	$tipoContaEmpresa = 0;
+	$tipoEmpresa = 0;
+	$usuario_master = "S";
+	$sincronizacaoRegistroProduto = "";
+	$sincronizacaoFechamentoVenda = "";
+	$sincronizacaoEntradaAplicativo = "";
+	$fluxo_aprovacao_cadastro = "";
+	$usuarioExiste = verificaUsuario ($email, $senha);
+
+/*
+Sï¿½ pode logar no aplicativo o usuï¿½rio que possui usuï¿½rio e senha e possui uma empresa cadastrada.
+*/
+if ($usuarioExiste != null) {
+$acesso = 'T';
+//OBJETO JSON FUNCIONANDO
+$encode = array("userdetails" => array(array("acesso" => $acesso,"idempresa" => 0, "idusuario" => 0, 
+		"tipoContaEmpresa" => 0, "tipoEmpresa" => 0, "usuario_master" => "S",
+		"sincronizacaoRegistroProduto" => "S", "sincronizacaoFechamentoVenda" => "S",
+		"sincronizacaoEntradaAplicativo" => 0,
+		"fluxo_aprovacao_cadastro" => "N")));
+$json_encode = json_encode($encode);
+print_r($json_encode);
+} else {
+	//Caso o usuário não seja encontrado, o sistema retorna todas os parâmetros zerados para que a verificação no aplicativo seja igual. Só a variável acesso será F, de false.
+$acesso = 'F';
+$encode = array("userdetails" => array(array("acesso" => $acesso,"idempresa" => 0, "idusuario" => 0, "tipoContaEmpresa" => 0, "tipoEmpresa" => 0, "usuario_master" => $usuario_master,
+"sincronizacaoRegistroProduto" => 0, "sincronizacaoFechamentoVenda" => 0,
+		"sincronizacaoEntradaAplicativo" => 0, "fluxo_aprovacao_cadastro" => "N")));
+$json_encode = json_encode($encode);
+print_r($json_encode);
+}
+
+}
+}
+
+
+
+//TESTE COM LOGIN COMUNICAï¿½ï¿½O NORMAL
+//
+
+
+
+
+
+//$encode = array("userdetails" => array(array("acesso" => $acesso,"idempresa" => $idempresa)), "workdetails" => array(array("company_name" => "My Company", "role" => "web application developer", "employees" => "91")));
+
+
+
+
+
+//print_r(gettype($idstring));
+
+
+
+
+function verificaUsuario($email, $senha) {
+$query_usuario = "SELECT email FROM usuario WHERE EMAIL = '".$email."' AND SENHA = '".$senha."'";
+$usuario_consulta= mysql_query(strtolower($query_usuario)) or die(mysql_error());
+$verifica_usuario = mysql_fetch_array($usuario_consulta);
+
+return $verifica_usuario[0];
+}
+
+
+
+/*
+$email = 'fabricio';
+print_r(verificaEmpresa($email));
+
+
+$resultado = verificaEmpresa($email);
+
+echo "IDEMPRESA:   ".$resultado[0];
+*/
+
+
+/*
+Mï¿½todo verificaEmpresa
+Retorna a empresa que o usuï¿½rio pode efetuar login no sistema. O usuï¿½rio sï¿½ pode logar  no aplicativo com uma ï¿½nica empresa. 
+*/
+
+
+
+?>

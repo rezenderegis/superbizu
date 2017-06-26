@@ -1,0 +1,60 @@
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Itens da Questão</b></td></tr>
+</table>
+
+<table class="table table-condensed">
+<tr class="active"><td><b>Letra</b></td><td><b>Descricao</b></td><td><b>Ações</b></td><td><b>Img</b></td><td><b>I</b></td></tr>
+
+	<?php 
+	$atts = array(
+			'width'      => '500',
+			'height'     => '250',
+			'scrollbars' => 'yes',
+			'status'     => 'yes',
+			'resizable'  => 'yes',
+			'screenx'    => '0',
+			'screeny'    => '0'
+	
+	);
+	if($this->session->userdata("usuario_logado")) :
+	foreach ($itens as $itens) : 
+	
+	?>
+	<tr>
+	<td>
+		<?=$itens["LETRA_ITEM"]?>
+		<?//=anchor("produtos/mostra/{$produto['id']}", $produto["nomeproduto"]) //NÃƒO PRECISEI CHAMAR O CONTROLER NO EXEMPLO ACIMA POR CONTA DO ROUTER QUE FOI CONFIGURADO NO ROUTES.PHP?>
+		</td>
+		<td>
+		<?=$itens["DESCRICAO"]?>
+		<?//=anchor("produtos/mostra/{$produto['id']}", $produto["nomeproduto"]) //NÃƒO PRECISEI CHAMAR O CONTROLER NO EXEMPLO ACIMA POR CONTA DO ROUTER QUE FOI CONFIGURADO NO ROUTES.PHP?>
+		</td>
+		<td>
+		<?=anchor("questoes/formulario_item/{$id_questao}/{$itens["ID_ITEM"]}", 'Editar')?>
+		<?//=anchor("produtos/mostra/{$produto['id']}", $produto["nomeproduto"]) //NÃƒO PRECISEI CHAMAR O CONTROLER NO EXEMPLO ACIMA POR CONTA DO ROUTER QUE FOI CONFIGURADO NO ROUTES.PHP?>
+		</td>
+		
+		<td>
+			<?=anchor_popup("arquivo/novaImagemItem/{$itens['ID_ITEM']}", "Img", $atts)?>	
+			
+		</td>
+		<td>
+					<?php
+
+					if (!empty($itens['NOME_IMAGEM_ITEM_SISTEMA'])) {?>
+										<?=anchor(base_url("uploads/{$itens['NOME_IMAGEM_ITEM_SISTEMA']}"), "Ver");?>
+						
+			<?php } else {echo "";}?>
+					
+			
+		</td>
+	</tr>
+<?php endforeach ?>
+</table>
+
+<?=anchor('questoes/formulario_item/'.$id_questao, 'Incluir Item', array("class" => "btn btn-primary"))?>
+
+
+
+<?php endif?>

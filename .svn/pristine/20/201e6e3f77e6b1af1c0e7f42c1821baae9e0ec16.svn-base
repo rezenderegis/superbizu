@@ -1,0 +1,246 @@
+<?php
+class Email_model extends CI_Model {
+	
+	public function enviar ($email, $nome) {
+		
+		/*
+		 * $tipo_mensagem: � o tipo da mensagem que est� sendo enviada. Ser� mostrada no assunto.
+		* Sinaliza��o de problema, anota��o
+		*
+		*/
+		date_default_timezone_set("America/Sao_Paulo");
+		
+		
+		//print_r($acoes_sem_progresso);
+		$this->load->model("usuarios_model");
+		$email = trim($email);
+		
+		$dados_usuario = $this->usuarios_model->buscaPorEmail($email,'');
+	
+		$date = date('m/Y');
+		$codigo_senha = md5($dados_usuario['id'].$email);
+			/*
+			$inicio = "<br> <b>Altera��o de senha<br><br>
+					Informamos <a href='http://localhost/mysale/index.php/usuarios/alterar_senha/{$dados_usuario['id']}/{$codigo_senha}'>bysale.com.br/alterarSenha</a>. <br> <br>
+				*/
+
+		$endereco = "http://bysale.com.br/mysale//index.php/usuarios/alterar_senha";
+		//$endereco = "http://localhost/mysale/index.php/usuarios/alterar_senha";
+		$inicio = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'
+'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<meta http-equiv='content-type' content='text/html; charset=utf-8' />
+<title>BySale</title>
+</head>
+
+<body>
+    <p><img src='http://bysale.com.br/mysale/app/bysale_site_index.png' id='logo' alt='BySale' width='220' height='61' /></p>
+
+
+
+    <p class='text'><strong>Prezado (a) ".$dados_usuario['nome']."</strong></p>
+    <p class='text'>Voc� fez uma solicita��o para recuperar o acesso ao aplicativo BySale. </p>
+    <p class='text'>Clique no <a href='".$endereco."/{$dados_usuario['id']}/{$codigo_senha}'>link</a> para alterar sua senha.    </p>
+    <p class='text'>Atenciosamente, </p>
+    <p align='center' class='text'><strong>Equipe Bysale</strong></p>
+    <p align='center' class='text'><strong>Transforme a gest�o das suas vendas!</strong></p>
+<hr />
+    <p class='text'>&nbsp;</p>
+
+</body>
+</html>";
+		
+		
+			
+		
+			$meio = "";
+			
+			$rodape = "";
+			
+
+			$mensagem_completa = $inicio.$meio.$rodape;
+		
+			$this->load->library('email');
+			
+			$this->email->from('info@bysale.com.br','BySale ');
+			$this->email->to($email);
+			$this->email->cc('info@bysale.com.br');
+			
+			/*
+			$this->email->from('comercial@bysale.com.br','Bysale');
+			$this->email->to($email);
+			$this->email->cc('comercial@bysale.com.br');
+			*/
+			
+			$this->email->subject('Bysale - Altera��o de Senha');
+			$this->email->message($mensagem_completa);
+				
+			if ($this->email->send ()) {
+				
+			//$this->session->set_flashdata("success", "Solicita��o feita com sucesso!");
+				//echo 'E-mail para '.$acoes['email'].' enviado com sucesso!';
+			} else {
+				show_error ( $this->email->print_debugger () );
+			}
+		
+		
+		
+		
+		
+		
+	
+		
+	
+	
+		
+	}
+	
+	
+	public function enviar_email_criacao_conta ($email) {
+	
+		/*
+		 * $tipo_mensagem: � o tipo da mensagem que est� sendo enviada. Ser� mostrada no assunto.
+		* Sinaliza��o de problema, anota��o
+		*
+		*/
+		date_default_timezone_set("America/Sao_Paulo");
+	
+	
+		//print_r($acoes_sem_progresso);
+		$this->load->model("usuarios_model");
+		$email = trim($email);
+	
+		$dados_usuario = $this->usuarios_model->buscaPorEmail($email,'');
+	
+		$date = date('m/Y');
+		$codigo_senha = md5($dados_usuario['id'].$email);
+		/*
+		 $inicio = "<br> <b>Altera��o de senha<br><br>
+		Informamos <a href='http://localhost/mysale/index.php/usuarios/alterar_senha/{$dados_usuario['id']}/{$codigo_senha}'>bysale.com.br/alterarSenha</a>. <br> <br>
+		*/
+	
+		$endereco = "http://bysale.com.br/mysale//index.php/usuarios/alterar_senha";
+		//$endereco = "http://localhost/mysale/index.php/usuarios/alterar_senha";
+		$inicio = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'
+'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<meta http-equiv='content-type' content='text/html; charset=iso8859-1' />
+<title>BySale</title>
+</head>
+	
+<body>
+    <p><img src='http://bizu.educacao.ws/app/logo_bizu_provisorio.png' id='logo' alt='Bizu' width='80' height='61' /></p>
+	
+	
+	
+    <p class='text'><strong>Prezado (a) ".$dados_usuario['nome'].",</strong></p>
+    <p class='text'>Bem vindo ao Bizu </p></br>
+    <p class='text'>A escola xx adicionou você ao aplicativo Bizu. A partir de agora, você poderá responder as listas de questões dos seus professores 
+    		direto do seu celular. Assim você terá mais comidiade para fazer seus exercícios onde estiver. <br/>
+    		
+    		Para começar, baixe o aplicativo no link indicado. <a href='https://play.google.com/store/apps/details?id=com.sale.cadastro'>Download Bizu</a>.   <br/> </p>
+    	<p class='text'>Desejamos boa sorte nos seus estudos! </p>
+    		
+    	<p class='text'>Atenciosamente, </p>
+	    <p align='center' class='text'><strong>Equipe Bizu</strong></p>
+	    <p align='center' class='text'><strong>Faça exercícios de forma diferente!</strong></p>
+	    <hr />
+	    <p class='text'>&nbsp;</p>
+	
+	    </body>
+		</html>";
+	
+	
+			
+	
+		$meio = "";
+			
+		$rodape = "";
+			
+	
+		$mensagem_completa = $inicio.$meio.$rodape;
+	
+		$this->load->library('email');
+			
+		$this->email->from('info@bizu.educacao.ws','Bizu Questões - Sua ferramenta de estudos ');
+		$this->email->to($email);
+		$this->email->cc('rezenderegis@gmail.com');
+			
+		/*
+		 $this->email->from('comercial@bysale.com.br','Bysale');
+		$this->email->to($email);
+		$this->email->cc('comercial@bysale.com.br');
+		*/
+			
+		$this->email->subject('Bem vindo ao Bizu, sua ferramenta de estudos!');
+		$this->email->message($mensagem_completa);
+	
+		if ($this->email->send ()) {
+	
+			//$this->session->set_flashdata("success", "Solicita��o feita com sucesso!");
+			//echo 'E-mail para '.$acoes['email'].' enviado com sucesso!';
+		} else {
+			show_error ( $this->email->print_debugger () );
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	}
+	
+	public function enviar_email_anotacoes ($destinatarios,$descricao_mensagem, $acao, $tipo_mensagem) {
+		/*
+		 * $tipo_mensagem: � o tipo da mensagem que est� sendo enviada. Ser� mostrada no assunto.
+		* Sinaliza��o de problema, anota��o
+		*
+		*/
+		$this->load->model("tool_model");
+		
+		$emails_para_copiar = $this->tool_model->retornoa_informacoes_por_perfil('email', '8');
+		
+	
+		$texto_padrao = 'Prezado(a), <br><br>Foi feita uma '.$tipo_mensagem.' na sua a��o: ';
+	
+		$mensagem = " <br><br>Descri��o: <b>".$descricao_mensagem."</b>";
+	
+	
+	
+		$meio = "<br><br>Para obter mais informa��es a respeito dessa notifica��o, acesse o Sistema Gest�o Estrat�gica e Operacinal no endere�o <a href='http://sged.bbtecno.com.br'>sged.bbtecno.com.br</a>. A a��o aparecer� no menu Acompanhamento de Suas a��es e para visualizar a anota��o, selecione o �cone representado por um bal�o, no canto direito da tela. ";
+	
+		$rodape = "<br><br><br><br><h4 align='center'><b>Escrit�rio de Projetos da Diretoria de Tecnologia
+			<br> Sistema de Gest�o Estrat�gica e Operacional </b>
+			<br> Tel: 061 3348-5456 - 021 2442-8912</h4>";
+	
+	
+		$mensagem_completa = $texto_padrao."<b>".$acao."</b>".$mensagem.$meio.$rodape;
+		//	echo $mensagem_completa;
+		//die();
+		$this->load->library('email');
+	
+		$this->email->from('pmo_ditec@bbtecno.com.br','PMO DITEC - Sistema de Gest�o Estrat�gica e Operacional');
+		$this->email->to($destinatarios);
+		$this->email->cc($emails_para_copiar);
+		$this->email->subject('Escrit�rio de Projetos da DITEC: '.$tipo_mensagem.' em a��o');
+		$this->email->message($mensagem_completa);
+		if ($this->email->send ()) {
+			echo 'E-mail enviado com sucesso!';
+		} else {
+			show_error ( $this->email->print_debugger () );
+		}
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+}

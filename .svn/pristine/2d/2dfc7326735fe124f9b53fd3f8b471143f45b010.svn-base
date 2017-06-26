@@ -1,0 +1,78 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class Geral extends CI_Controller {
+
+	public function index(){
+		
+		//$this->load->view("geral/HTML/page_home1.php");
+		
+	$this->load->template("geral/index.php");
+	//$this->load->view("rodape.php");
+}
+
+	public function home($idempresa=0) {
+		autoriza();
+		
+	
+//$this->db->query("SET NAMES 'UTF8'");
+		
+		if ($idempresa == 0){
+
+				$this->session->unset_userdata("idempresa");
+
+		} else {
+		
+			$this->session->set_userdata("idempresa", $idempresa);
+
+			
+		}
+		
+		$this->load->model("usuarios_model");
+		$usuario = $this->session->userdata("usuario_logado");
+		$idusuario = $usuario['id']; 
+		
+		//$this->usuarios_model->quantidadeEmpresaUsuario($idusuario);
+		
+		//Quantidade de empresas do usuario
+		$dados_usuario_empresa = $this->usuarios_model->quantidadeEmpresaUsuario($idusuario);
+		$qtd_empresas_usuario = $dados_usuario_empresa['idusuario'];
+		$id_empresa_usuario = $dados_usuario_empresa['idempresa'];
+		//Quantidade de perfis do usuário
+		$this->usuarios_model->quantidadePerfisUsuario($idusuario);
+		
+		
+		$empresasUsuario = $this->usuarios_model->buscaEmpresasUsuario($idusuario);
+		//$this->load->model("vendas_model");
+		//$vendasDia = $this->vendas_model->vendasDia();
+		//$mostraVendasDia = array("vendas" => $vendasDia);
+		
+		
+		//Buscar perfil do usuário na empresa logada
+		$perfilUsuario = $this->usuarios_model->buscaPerfilUsuario($idusuario, $idempresa);
+		
+		//echo $perfilUsuario;
+		if ($perfilUsuario != null) {
+			
+			$perfil = $perfilUsuario;
+		} else {$perfil = 0;
+				
+		}
+		$this->session->set_userdata("perfil", $perfil);
+		
+		if ($qtd_empresas_usuario == 1) {
+			$idempresa = $id_empresa_usuario;
+			$this->session->set_userdata("idempresa", $idempresa);
+		}
+		//print_r($empresasUsuario);
+		$trazPessoas = array("empresa" => $empresasUsuario, "idempresa" => $idempresa, "perfil" => $perfil);
+		//echo $id_empresa_usuario;
+		
+		$this->load->template("geral/home", $trazPessoas, 'refresh');
+		
+	}
+	
+	
+	
+
+
+}
+	

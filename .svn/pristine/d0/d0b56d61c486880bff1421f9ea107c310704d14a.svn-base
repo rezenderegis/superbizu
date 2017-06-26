@@ -1,0 +1,169 @@
+<?php if ( !defined('BASEPATH')) exit ('Não é permitido acesso direto ao site!');
+
+class Vendas extends CI_Controller {
+
+	public function nova(){
+		autoriza();
+		$usuario = $this->session->userdata("usuario_logado");
+		$this->load->helper("date");
+		
+		$this->load->model(array("vendas_model"));
+		$venda = array (
+		"produto_id" => $this->input->post("produto_id"),
+		"idcliente" =>  $usuario["id"],
+		"data_entrega" => dataPrBrParaMysql($this->input->post("data_de_entrega"))
+		);
+		
+		$this->vendas_model->salva($venda);
+		
+		
+		//CARREGAR BIBLIOTECA DE E-MAIL
+		$this->load->library("email");
+		$config["protocol"] = "smtp";
+		$config["smtp_host"] = "ssl://smtp.gmail.com";
+		$config["smtp_user"] = "rezenderegis@gmail.com";
+		$config["smtp_pass"] = "fr48915$&";
+		$config["charset"] = "utf-8";
+		$config["mailtype"] = "html";
+		$config["newline"] = "\r\n";
+		$config["smtp_port"] = '465';
+		$this->email->initialize($config);
+		
+		//$produto = $this->produtos_model->busca($venda["produto_id"]);
+		
+		//$vendedor = $this->pessoas_model->busca($produto['idusuario']);
+		
+		$this->email->from("rezenderegis@gmail.com", "MySale");
+		$this->email->to('rezenderegis@gmail.com');
+		$this->email->subject("MySale - Armazém 105 - Relatório de Compra");
+		$this->email->message("teste");
+		$this->email->send();
+		
+		$this->session->set_flashdata("success", "Pedido feito com sucesso");
+		redirect("/produtos/index");
+	}
+
+	public function index($idempresa = 0, $tipo=0) {
+		
+		autoriza();
+		
+		$this->load->helper(array("currency"));
+		$this->load->helper("date");
+
+		$usuario = $this->session->userdata("usuario_logado");
+		$this->load->model("produtos_model");
+		
+		$produtosVendidos = $this->produtos_model->buscaVendidos($usuario, $idempresa,$tipo);
+		
+		$dados = array("produtosVendidos" => $produtosVendidos);
+		$this->load->template("vendas/index", $dados);
+	}
+
+	public function mostra($idvendacliente) {
+	autoriza();
+	$this->load->helper("date");
+		
+			$this->load->helper(array("currency"));
+
+	$this->load->model("produtos_model");
+	$detalheVendas = $this->produtos_model->detalheVenda($idvendacliente);
+	
+	$detalhe = array("detalheVendas" => $detalheVendas);
+	$this->load->template("vendas/mostraDetalhe", $detalhe);
+	
+	
+	}
+	
+	public function formularioVendaBalcao($idempresa) {
+			autoriza();
+		
+		$this->load->template("vendas/novaVendaBalcao");
+		
+	}
+	
+	public function novaVendaBalcao() {
+	
+		autoriza();
+		
+		$this->load->model(array("vendas_model"));
+		
+		$venda = array("idproduto" => $this->input->post("codigoproduto"),
+		"idcliente" => $this->input->post("codigocliente"),
+		"totalproduto" => $this->input->post("quantidade"));
+		
+		$this->vendas_model->salvaVendaBalcao($venda);
+		
+		
+	}
+	
+	public function encerrar($venda) {
+	
+		autoriza();
+		
+		$vendaCliente = array("idvendacliente" => $venda);
+		
+		$this->load->template("vendas/encerrarVenda", $vendaCliente);
+	
+	}
+	
+	public function encerrarVenda(){
+		
+		if ($this->input->post("porcentagemAdicional") == 'S') {$porcentagem = 'S';} else {$porcentagem = 'N';}
+		
+		$encerrarVenda = array("porcentagemAdicional" => $porcentagem,
+		"formapagamento" =>$this->input->post("formapagamento"),
+		"idvendacliente" => $this->input->post("idvendaclienteencerrar"), 
+		'situacaovenda' => 3);
+		
+		
+		
+		$this->load->model("vendas_model");
+		$this->vendas_model->atualizaVenda($encerrarVenda);
+		
+		$idempresa = $this->session->userdata('idempresa');
+		redirect("vendas/index/$idempresa/1");
+		
+	}
+	
+	
+	public function vendasBalcao($tipoConsulta) {
+		// Possuem tês tipos: cozinha, bebida, entrega
+		
+		autoriza();
+		$this->load->helper(array("currency"));
+		$this->load->helper("date");
+		//echo "Ultima venda";
+	//	$ultimaVenda = $this->trazUltimaVenda($tipoConsulta, 38);
+		//echo "Ultima".$ultimaVenda;
+		//die();
+		
+		$tipoConsulta = array("tipoconsulta" => $tipoConsulta);
+	
+		$this->load->template("vendas/vendasBalcao", $tipoConsulta);
+		
+	}
+	
+	public function retornaVendas($idempresa,$tipoConsulta, $ordemconsulta, $primeiroid) {
+		autoriza();
+		
+		$this->load->model("vendas_model");
+		print_r($this->vendas_model->vendasBalcao($idempresa, $tipoConsulta, $ordemconsulta, $primeiroid));
+	}
+	
+	public function atualizarPedido($tipo, $idvenda) {
+		autoriza();
+		$this->load->model("vendas_model");
+		$this->vendas_model->atualizarPedido($tipo,$idvenda);
+		
+		
+	}
+	
+	public function trazUltimaVenda($tipoConsulta, $idempresa) {
+		//$anterior é a última venda que foi atuliazada. O sistema tem que trazer a próxima
+		autoriza();
+		$this->load->model("vendas_model");
+		print_r($this->vendas_model->trazUltimaVenda($tipoConsulta, $idempresa));
+		
+	}
+
+}

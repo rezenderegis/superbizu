@@ -1,0 +1,66 @@
+<?php
+//print_r($_REQUEST);
+include "mysale_conexao.php"; 
+include "constantes.php";
+
+$json = file_get_contents('php://input'); 
+$parsed = json_decode($json,true);
+
+	$resultado = verificaQuestao($empresa, $parsed['tipoSincronizacao']);
+	
+    print_r($resultado);
+    
+function verificaQuestao($idempresa, $tipoSincronizacao) {
+	mysql_query('SET CHARACTER SET utf8');
+	$query_empresa_usuario = "";
+	if (strcmp($tipoSincronizacao, "2015") == 0) {
+		file_put_contents("file96.txt",">>>> ".$tipoSincronizacao." ENTROU FILTRO ITEM 2015"."Comparacao: -".strcmp($parsed['tipoSincronizacao'], "2015"),FILE_APPEND);
+		
+		$query_empresa_usuario = "select i.* from tb_item i inner join tb_questao q on q.id_questao = i.id_questao
+where (q.ano_questao = 2015 && q.id_dono = 82) || q.id_dono != 82";
+		
+	} else {
+		file_put_contents("file96.txt",">>>> ".$tipoSincronizacao." NAO ENTROU FILTRO ITEM 2015"."Comparacao: -".strcmp($parsed['tipoSincronizacao'], "2015"),FILE_APPEND);
+		
+		$query_empresa_usuario = "select * from tb_item";
+		
+	}
+	
+$tipo= mysql_query(strtolower($query_empresa_usuario)) or die(mysql_error());
+ 
+
+
+while ($row_tipo = mysql_fetch_array($tipo))  
+{
+ 
+    $i=0;
+                 
+    foreach($row_tipo as $key => $value)    
+    {
+ 
+        if (is_string($key)) 
+        {
+         $fields[mysql_field_name($tipo,$i++)] = $value;
+        }
+ 
+    }
+ 
+    $json_result [ ] =  $fields;
+	}
+	
+//$JSON = json_encode($json_result, JSON_UNESCAPED_UNICODE);
+
+$JSON = json_encode($json_result);
+	
+return $JSON;
+
+			  }
+
+
+?>
+
+
+
+
+ 
+	

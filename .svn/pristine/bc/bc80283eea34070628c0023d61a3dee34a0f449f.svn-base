@@ -1,0 +1,98 @@
+<script
+	src="<?php echo base_url('js/datatable/media/js/jquery.dataTables.min.js');?>"
+	type="text/javascript"></script>	
+<script>
+
+
+
+
+	  $(document).ready(function() {
+			oTable = $('#questoes').dataTable({
+				"order": [[ 3, "desc" ]],
+				 'iDisplayLength': 100,
+				"language":{
+				    "emptyTable":     "Sem dados dispon�veis",
+				    "info":           "Mostrando _START_ to _END_ of _TOTAL_ registros",
+				    "infoEmpty":      "Mostrando 0 to 0 of 0 registros",
+				    "infoFiltered":   "(filtrado de _MAX_ total registros)",
+				    "infoPostFix":    "",
+				    "thousands":      ",",
+				    "lengthMenu":     "Mostrar _MENU_ registros por p�gina",
+				    "loadingRecords": "Lendo...",
+				    "processing":     "Processando...",
+				    "search":         "Procurar:",
+				    "zeroRecords":    "N�o foram encontrados registros",
+				    "paginate": {
+				        "first":      "Primeiro",
+				        "last":       "�ltimo",
+				        "next":       "Pr�ximo",
+				        "previous":   "Anterior"
+				    },
+				    "aria": {
+				        "sortAscending":  ": activate to sort column ascending",
+				        "sortDescending": ": activate to sort column descending"
+				    }
+				}
+			});
+		});
+
+
+
+
+
+		
+</script>
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Assuntos Cadastrados</b></td></tr>
+</table>
+
+<table id="questoes" class="display" cellspacing="0" width="100%">
+		<thead>
+			<tr  class="info"> 
+<th><b>ID</b></th><th><b>ASSUNTO</b></th><th><b>MATÉRIA</b></th><th><b>PAI</b></th><th><b>EDITAR</b></th></tr>
+		</thead>
+
+	<?php 
+	
+
+	
+	
+	$atts = array(
+			'width'      => '500',
+			'height'     => '250',
+			'scrollbars' => 'yes',
+			'status'     => 'yes',
+			'resizable'  => 'yes',
+			'screenx'    => '0',
+			'screeny'    => '0'
+	
+	            );
+	
+	if($this->session->userdata("usuario_logado")) :
+	foreach ($assuntos as $assunto) : 
+	
+	?>
+	<tr>
+			<td><?=$assunto["ID_ASSUNTO"] ?></td>	
+				<td><?=$assunto["DESCRICAO_ASSUNTO"] ?></td>	
+	
+		<td>
+		<?=$assunto["nome_materia"]?>
+		<?//=anchor("questoes/mostra/{$produto['id']}", $produto["nomeproduto"]) //NÃO PRECISEI CHAMAR O CONTROLER NO EXEMPLO ACIMA POR CONTA DO ROUTER QUE FOI CONFIGURADO NO ROUTES.PHP?>
+		</td>
+		<td><?= $assunto["descricao_assunto_pai"] ?></td>	
+			<td>
+				<?=anchor("assuntos/formulario/{$assunto['ID_ASSUNTO']}", '<img src="'.base_url().'imagens/ic_editar.png" alt="Delete" />', $atts)?>	
+	</td>	
+			
+	</tr>
+<?php endforeach ?>
+</table>
+
+
+<?=anchor('assuntos/formulario', 'Cadastrar Assunto', array("class" => "btn btn-primary"))?>
+
+
+
+<?php endif?>

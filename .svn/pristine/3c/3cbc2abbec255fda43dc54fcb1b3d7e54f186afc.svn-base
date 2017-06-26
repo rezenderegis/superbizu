@@ -1,0 +1,125 @@
+<?php
+if (! defined ( 'BASEPATH' ))
+	exit ( 'N�o � permitido acesso direto ao site!' );
+class UsuariosAplicativo extends CI_Controller {
+	
+	
+	
+	public function novoUsuarioDoAplicativo($nome,$email,$senha) {
+		// CARREGAR BIBLIOTECA DE VALIDA��O
+		
+		
+		$this->load->model ( "usuarios_model" );
+		
+		$idempresa = 2;
+
+			//id empresa do bizu para o caso de aluno
+			$usuario = array (
+					"nome" => $nome,
+					"email" => $email,
+					"senha" => $senha,
+					"idempresa" => $idempresa 
+			);
+			
+		
+				$this->usuarios_model->salva ( $usuario );
+				$idusuarioNovo =  $this->db->insert_id();//Essa função do codeigniter pega o último id inserido
+				
+				
+				
+				//Inscreve o aluno por padrão no Paulo
+				$this->insereUsuarioEmpresaPerfil(96,$idusuarioNovo);
+				$this->insereAlunoGrupo($idusuarioNovo, 96, 33,1);
+				
+				$this->enviar_email_criacao_conta($idusuarioNovo, "ALUNO_FEZ_PROPRIO_CADASTRO_APLICATIVO");
+				
+			
+	}
+	
+	public function insereAlunoGrupo($idusuarioNovo, $idEmpresa, $idGrupo) {
+		
+		$dados = array("idUsuario" => $idusuarioNovo, "idEmpresa" => $idEmpresa,
+				"idGrupo" => $idGrupo, "situacaoAlunoGrupo" => 1);
+		
+		$this->load->model("grupos_alunos_model");
+		$this->grupos_alunos_model->adicionaAlunoNoGrupo($dados);
+		
+		
+	}
+	
+	public function insereUsuarioEmpresaPerfil($idempresa, $idusuarioNovo) {
+		
+		$this->load->model ( "empresa_model" );
+		
+		
+		//$idusuarioBanco = $this->usuarios_model->bucaUltimoUsuarioInseridoEmpresa ( $idempresa );
+		
+		
+		// Envia e-mail ap�s cria��o de um novo usu�rio
+		// $this->enviar_email_criacao_conta ( $idusuarioNovo );
+		/*
+		 * Adicionado em 17-11-2014. Cadastra a empresa com o mesmo nome do usu�rio Se o usu�rio for novo, cadastra a empresa com o mesmo nome do usu�rio. No sistema o usu�rio dever� ser orientado a fazer a edi��o do nome da empresa
+		*/
+		
+		/*	if ($this->session->userdata ( 'idempresa' ) == '' && $this->input->post ( "perfil" ) != 3) {
+		 	
+		$empresa = array (
+				"idusuario" => $idusuarioNovo,
+				"nome_empresa" => $this->input->post ( "nome" ),
+				"tipoempresa" => 3,
+				"tipocontaempresa" => 2
+		);
+		// echo $idempresa;
+			
+		$this->empresa_model->salva ( $empresa );
+			
+		// TODO
+		$ultimaEmpresaInserida = $this->empresa_model->buscaEmpresaInserida ( $idusuarioNovo );
+		$idempresa = $ultimaEmpresaInserida ['id'];
+			
+		}*/
+		
+		$usuario_master = 'N';
+			
+		$perfil = 0;
+		$perfil = 2;
+		$insereUsuarioEmpresa = array (
+				"idusuario" => $idusuarioNovo,
+				"idempresa" => $idempresa,
+				"loginSistema" => "S",
+				"usuario_master" => "S"
+		);
+		
+		/* else {
+		 // Entra se o perfil informado for aluno
+		$perfil = 3;
+		$insereUsuarioEmpresa = array (
+				"idusuario" => $idusuarioNovo,
+				"idempresa" => 1,
+				"usuario_master" => "N"
+		);
+		}*/
+			
+		$this->usuarios_model->insereUsuarioEmpresa ( $insereUsuarioEmpresa );
+		$ultimoUsuarioEmpresaInserida =  $this->db->insert_id();//Essa função do codeigniter pega o último id inserido
+		
+		$this->load->model ( "usuarios_model" );
+			
+		// INSERE PERFIL PROFESSOR
+		$this->usuarios_model->salvaPerfil ( $ultimoUsuarioEmpresaInserida, 3 );
+		
+	}
+	
+	function enviar_email_criacao_conta($id_usuario, $tipoCadastroConta) {
+	
+		$this->load->model ( "usuarios_model" );
+		$email = $this->usuarios_model->buscaPorEmail ( '', $id_usuario );
+	
+		$this->load->model ( "email_model" );
+		$this->email_model->enviar_email_criacao_conta ( $email ['email'], $tipoCadastroConta );
+	
+		return null;
+	
+	}
+	
+}

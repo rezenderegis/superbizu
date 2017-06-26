@@ -1,0 +1,20 @@
+<?php if ( !defined('BASEPATH')) exit ('Não é permitido acesso direto ao site!');
+
+
+class MY_Loader extends CI_Loader {
+
+	public function template($nome, $dados = array()) {
+		//DEFINI O VALOR PADRÃO COMO ARRAY VAZIA POR QUE NEM TODOS TEM O SEGUNDO PARÂMETRO
+		$this->view("cabecalho.php");
+		$this->view($nome,$dados);
+		$this->view("rodape.php");
+	}
+	
+	public function templateCelular($nome, $dados = array()) {
+		//DEFINI O VALOR PADRÃO COMO ARRAY VAZIA POR QUE NEM TODOS TEM O SEGUNDO PARÂMETRO
+		$this->view("cabecalhoCelular.php");
+		$this->view($nome,$dados);
+		$this->view("rodape.php");
+	}
+
+}

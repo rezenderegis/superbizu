@@ -1,0 +1,141 @@
+<?php
+if (! defined ( 'BASEPATH' ))
+	exit ( 'N�o � permitido acesso direto ao site!' );
+class Lista extends CI_Controller {
+	public function novaLista() {
+		$this->load->template2 ( "lista/nova_lista" );
+	}
+	public function listaQuestoes() {
+		autoriza ();
+		
+		$this->load->model ( "lista_model" );
+		$dadosUsuarioLogado = $this->session->userdata ( "usuario_logado" );
+		$idUsuarioLogado = $dadosUsuarioLogado ['id'];
+		$lista_questao = $this->lista_model->trazListasPorUsuarioEescla ( true, true );
+		
+		$dados = array (
+				"listaQuestao" => $lista_questao 
+		);
+		
+		$this->load->template2 ( "lista/index", $dados );
+	}
+	
+	
+	public function criarLista($idempresa = 0, $id_questao = 0) {
+		autoriza ();
+		// UTILIZADO PARA DEBUGAR
+		// $this->output->enable_profiler(TRUE);
+		
+		// CARREGAR O MODELO PARA US�L-LO
+		$this->load->model ( "questoes_model" );
+		// $empresa = $this->session->userdata("idempresa");
+		$questoes = $this->questoes_model->buscaTodos ( $id_questao );
+		
+		$this->load->helper ( array (
+				"currency" 
+		) );
+		
+		$dados = array (
+				"questoes" => $questoes 
+		);
+		// $this->load->view("cabecalho.php");
+		$this->load->template2 ( "lista/novaLista.php", $dados );
+		// $this->load->view("rodape.php");
+	}
+	
+	public function inserirQuestoesListaExistente($idLista) {
+		autoriza ();
+		// UTILIZADO PARA DEBUGAR
+		// $this->output->enable_profiler(TRUE);
+	
+		// CARREGAR O MODELO PARA US�L-LO
+		$this->load->model ( "questoes_model" );
+		// $empresa = $this->session->userdata("idempresa");
+		$questoes = $this->questoes_model->buscaQuestoesNaoAdicionadasLista ( $idLista );
+	
+		$this->load->helper ( array (
+				"currency"
+		) );
+	
+		$dados = array (
+				"questoes" => $questoes, "idLista" => $idLista
+		);
+		// $this->load->view("cabecalho.php");
+		$this->load->template2 ( "lista/inserirNaLista", $dados );
+		// $this->load->view("rodape.php");
+	}
+	
+	public function cadastrarNovaLista() {
+		$this->load->library ( "form_validation" );
+		
+		// print_r($this->input->post("idQuestaoLista"));
+		$this->form_validation->set_rules ( "descricao", "Nome da lista", "required" );
+		$this->form_validation->set_rules ( "idQuestaoLista", "Questões	 da lista.", "required" );
+		
+		
+		$sucesso = $this->form_validation->run ();
+		
+		if ($sucesso) {
+			$this->load->model ( "lista_model" );
+			$this->lista_model->salvaLista ( $this->input->post ( "descricao" ) );
+			
+			$idUltimaListaInserida = $this->lista_model->buscaUltimaListaQuestaoInserida ();
+			
+			$this->lista_model->salvaQuestaoLista ( $idUltimaListaInserida ['idListaQuestoes'], $this->input->post ( "idQuestaoLista" ) );
+			
+			redirect ( 'lista/listaQuestoes' );
+		} else {
+			
+			$this->criarLista();
+				
+		}
+	}
+	
+	public function alterarLista($idLista) {
+		$this->load->library("form_validation");
+		$this->form_validation->set_rules ( "idQuestaoLista", "Questões	 da lista.", "required" );
+		
+		$sucesso = $this->form_validation->run();
+		
+		if ($sucesso) {
+			$this->load->model("lista_model");
+			$this->lista_model->salvaQuestaoLista ( $idLista, $this->input->post ( "idQuestaoLista" ) );
+			
+			redirect ('questoes/verDetalheQuestao/'.$idLista);
+		} else {
+			$this->inserirQuestoesListaExistente($idLista);
+		}
+		}
+		
+		public function formularioEditarLista($idLista) {
+			
+			$dados = array("idListaEdicao" => $idLista);
+			
+			$this->load->model("lista_model");
+			
+			$dadosLista = $this->lista_model->trazDadosLista($idLista);
+			$dados = array("dadosLista" => $dadosLista);
+			$this->load->template2("lista/formularioEdicao", $dados);
+			
+		} 
+		
+		public function salvarDadosAtualizacaoLista() {
+			
+			$this->load->library("form_validation");
+			
+			$this->form_validation->set_rules("descricao", "Descrição da Lista", "required");
+			
+			$sucesso = $this->form_validation->run();
+			
+			if ($sucesso) {
+				$this->load->model("lista_model");
+				
+				$dados = array("descricao" => $this->input->post("descricao"));
+					
+				$this->lista_model->atualizarLista($dados, $this->input->post("idLista"));
+			
+			}
+			
+			$this->listaQuestoes();
+		}
+}

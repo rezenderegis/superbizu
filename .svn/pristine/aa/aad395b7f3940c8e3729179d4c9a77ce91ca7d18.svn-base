@@ -1,0 +1,135 @@
+<script>
+
+
+
+
+	  $(document).ready(function() {
+			oTable = $('#questoes').dataTable({
+				"order": [[ 3, "desc" ]],
+				 'iDisplayLength': 5,
+				"language":{
+				    "emptyTable":     "Sem dados disponíveis",
+				    "info":           "Mostrando _START_ to _END_ of _TOTAL_ registros",
+				    "infoEmpty":      "Mostrando 0 to 0 of 0 registros",
+				    "infoFiltered":   "(filtrado de _MAX_ total registros)",
+				    "infoPostFix":    "",
+				    "thousands":      ",",
+				    "lengthMenu":     "Mostrar _MENU_ registros por página",
+				    "loadingRecords": "Lendo...",
+				    "processing":     "Processando...",
+				    "search":         "Procurar:",
+				    "zeroRecords":    "Não foram encontrados registros",
+				    "paginate": {
+				        "first":      "Primeiro",
+				        "last":       "Último",
+				        "next":       "Próximo",
+				        "previous":   "Anterior"
+				    },
+				    "aria": {
+				        "sortAscending":  ": activate to sort column ascending",
+				        "sortDescending": ": activate to sort column descending"
+				    }
+				}
+			});
+		});
+		
+</script>
+
+<?php
+$attributes = array (
+		'class' => 'col-sm-1 control-label',
+		'style' => 'color: #000;' 
+);
+
+echo form_open ( "grupos_alunos/salvarAlunoGrupo", array (
+		'id' => 'inclusaoAlunoGrupo',
+		'class' => 'form-horizontal',
+		'role' => 'form' 
+) );
+
+echo "<div class='form-group'>";
+echo form_label ( "Aluno:", "aluno_grupo", $attributes );
+echo "<div class='col-sm-10'>";
+echo "<select name='aluno_grupo' id='aluno_grupo' class='form-control'>";
+// echo "<select name='state_id' id='state_id'>";
+
+echo "<option></option>";
+if (count ( $alunosPorEmpresa )) {
+	
+	foreach ( $alunosPorEmpresa as $key => $list ) {
+		// echo $categoria.$list['idcategoriaproduto'];
+		
+		echo "<option value='" . $list ['id'] . "'>" . $list ['nome'] . "</option>";
+	}
+}
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
+echo form_hidden ( array (
+		"idGrupoDoFormulario" => $idGrupo 
+) );
+echo form_button ( array (
+		"class" => "btn btn-primary",
+		"content" => "Cadastrar",
+		"type" => "submit" 
+) );
+
+echo form_close ();
+
+?>
+
+
+
+<table class="table table-condensed">
+	<tr class="active">
+		<td align="center"><b>Grupos Cadastrados</b></td>
+	</tr>
+</table>
+
+<table id="questoes" class="display" cellspacing="0" width="100%">
+	<thead>
+		<tr class="info">
+			<th><b>Nome</b></th>
+			<th>E-mail</th>
+			<th>Ação</th>
+			</th>
+		</tr>
+	</thead>
+	<?php
+	
+	$atts = array (
+			'width' => '500',
+			'height' => '250',
+			'scrollbars' => 'yes',
+			'status' => 'yes',
+			'resizable' => 'yes',
+			'screenx' => '0',
+			'screeny' => '0' 
+	);
+	
+	if ($this->session->userdata ( "usuario_logado" )) :
+		foreach ( $alunosDoGrupo as $aluno ) :
+			
+			?>
+	<tr>
+
+		<td><?=$aluno["nome"] ?></td>
+		<td><?=$aluno["email"] ?></td>
+		<?php if ($aluno["situacaoAlunoGrupo"] == 1) {?>
+		<td><?=anchor("grupos_alunos/desativarAlunoGrupo/{$aluno['idalunogrupo']}/{$idGrupo}",  '<img src="'.base_url().'imagens/delete.png" alt="Delete" />') ?></td>
+		<?php } else { ?>
+				<td><?=anchor("grupos_alunos/ativarAlunoGrupo/{$aluno['idalunogrupo']}/{$idGrupo}",  '<img src="'.base_url().'imagens/active-icon.png" alt="Delete" />') ?></td>
+		
+		<?php }?>
+	</tr>
+<?php endforeach ?>
+</table>
+
+
+
+
+
+<?php endif?>
+
+

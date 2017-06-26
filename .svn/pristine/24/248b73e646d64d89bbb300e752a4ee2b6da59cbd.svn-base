@@ -1,0 +1,86 @@
+<?php include("application/views/usuarios/constantes.php");?>
+
+<table class="table table-condensed">
+<tr class="active"><td align="center"><b>Novo Aluno</b></td></tr>
+</table>
+<?= validation_errors("<p class='alert alert-danger'>", "</p>")?>
+
+<?php 
+
+$attributes = array (
+		'class' => 'col-sm-2 control-label',
+		'style' => 'color: #000;'
+);
+
+
+//usuarios ? o controler e novo ? a fun??o
+echo form_open("usuarios/adicionarUsuario", array('id' => 'novousuario'));
+
+
+echo "<div class='form-group'>";
+echo form_label ( "Nome (*)", "nome", $attributes );
+echo "<div class='col-sm-10'>";
+echo form_input(array(
+"name" => "nome",
+"id" => "name",
+//ID faz o link do label com o input text
+"class" => "form-control",
+"maxlength" => "255"
+));
+echo "</div>";
+echo "</div>";
+echo "<br/>";
+echo "<br/>";
+
+echo "<div class='form-group'>";
+echo form_label ( "Email (*)", "email", $attributes );
+echo "<div class='col-sm-10'>";
+echo form_input(array(
+"name" => "email",
+"id" =>"email",
+"class" => "form-control",
+"maxlength" => "255"
+));
+echo "</div>";
+echo "</div>";
+
+echo "<br/>";
+echo "<br/>";
+
+
+echo "<div align='center'>";
+echo form_button(array(
+"class" => "btn btn-primary",
+"content" => "Adicionar",
+"type" => "submit"
+
+));
+echo "</div>";
+echo form_close();
+?>
+
+
+
+		<table class="table table-condensed">
+		<tr class="active"><td><b>Nome</b></td><td><b>E-mail</b></td><td><b>Situação do Cadastro</b></td><td><b>Editar</b></td></tr>
+			<?php foreach ($usuarios as $usuario) : ?>
+				<?php if ($usuario["loginapp"] == 'S') { $loginapp = 'Sim'; } else { $loginapp = 'N�o'; }
+				if ($usuario["loginsistema"] == 'S') { $loginsistema = 'Sim'; } else { $loginsistema = 'N�o'; } ?>
+				<tr>
+				<td><?=$usuario["nome"]?> </td>
+				<td>
+				<?= $usuario["email"]?>	
+				</td>
+				<td>
+				<?= $loginapp?>	
+				</td>
+				
+			<td>
+				<?=anchor("usuarios/novoUsuario/{$usuario['id']}", 'Editar');?>
+			</td>
+			</tr>
+					<?php endforeach ?>
+					
+			</table>
+
+

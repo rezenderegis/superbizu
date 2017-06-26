@@ -1,0 +1,186 @@
+<?php
+
+class Produtos_model extends CI_Model {
+
+	public function buscaTodos($idempresa){
+	
+		//return $this->db->get("produto")->result_array();
+		$this->db->select("produto.*,categoria_produto.*");
+		$this->db->from("produto");
+		$this->db->join("categoria_produto", "produto.categoria = categoria_produto.idcategoriaproduto");
+		$this->db->where("categoria_produto.idempresa", $idempresa);
+		$this->db->where("produto.idempresa", $idempresa);
+		return $this->db->get()->result_array();
+		
+	
+	
+	}
+
+
+	public function salva($produto) {
+				
+	//	$empresa = $this->session->userdata("idempresa");
+	//	$this->db->set('idempresa', $empresa);
+
+		$this->db->insert("produto", $produto);
+
+
+		
+	}
+
+	public function atualizar_produto($id_empresa, $id_produto, $dados_produto) {
+	//print_r($dados_produto);
+	/*echo "Empresa".$id_empresa;
+	echo "Produto".$id_produto;
+	die();*/
+		$this->db->where("produto.id", $id_produto);
+		$this->db->where("produto.idempresa", $id_empresa);
+		$this->db->update("produto", $dados_produto);
+	}
+	
+	public function busca($id) {
+		
+		return $this->db->get_where("produto", array(
+		"id" => $id))->row_array();
+	//O RESULT_ARRAY TRAZ TODOS, O ROW_ARRAY TRAZ SOMENTE O PRIMEIRO
+	// OUTRA FORMA DE FAZER O WHERE
+	}
+	
+	
+	public function buscaVendidos($usuario,$idempresa, $tipo){
+		
+		if ($tipo == 1) {
+		$tipoVendas = array(1,2);
+		$this->db->select("produto.*, vendas.idcliente,  vendacliente.situacaovenda, vendacliente.dtvenda, pessoa.nome as nomecliente,vendacliente.idvendacliente,  sum(produto.preco) as totalvenda, sum((produto.preco * vendas.totalproduto)) as totalVenda, vendacliente.id as id,
+		vendacliente.porcentagemadicional, vendacliente.formapagamento, usuario.nome as nome_usuario");
+		$this->db->from("produto");
+		$this->db->join("vendas", "vendas.idproduto = produto.id");
+		$this->db->join("vendacliente", "vendacliente.id = vendas.idvenda_cliente_site");
+		$this->db->join("pessoa", "pessoa.idpessoa = vendacliente.idcliente");
+		$this->db->join("usuario", "vendacliente.idusuario = usuario.id");
+		$this->db->where("produto.idempresa", $idempresa);
+		$this->db->where("pessoa.idempresa", $idempresa);
+		$this->db->where("vendacliente.idempresa", $idempresa);
+		$this->db->where("vendas.situacao", 1);
+		$this->db->where_in('vendacliente.situacaovenda', $tipoVendas);
+	
+		
+		$this->db->group_by("vendacliente.id");
+		$this->db->order_by("vendacliente.dtvenda", "desc");
+		
+		$this->db->order_by("vendacliente.situacaovenda");
+		
+		} else {
+		
+			$this->db->select("produto.*, vendas.idcliente,  vendacliente.situacaovenda, vendacliente.dtvenda, pessoa.nome as nomecliente,vendacliente.idvendacliente,  sum(produto.preco) as totalvenda, sum((produto.preco * vendas.totalproduto)) as totalVenda, vendacliente.id as id,
+			vendacliente.porcentagemadicional, vendacliente.formapagamento, usuario.nome as nome_usuario");
+		$this->db->from("produto");
+		$this->db->join("vendas", "vendas.idproduto = produto.id");
+		$this->db->join("vendacliente", "vendacliente.id = vendas.idvenda_cliente_site");
+		$this->db->join("pessoa", "pessoa.idpessoa = vendacliente.idcliente");
+		$this->db->join("usuario", "vendacliente.idusuario = usuario.id");
+		
+		$this->db->where("produto.idempresa", $idempresa);
+		$this->db->where("pessoa.idempresa", $idempresa);
+		$this->db->where("vendacliente.idempresa", $idempresa);
+	
+		$this->db->group_by("vendacliente.id");
+		$this->db->order_by("vendacliente.dtvenda");
+		$this->db->order_by("vendacliente.situacaovenda");
+		
+		}
+		//$id = $usuario["id"];
+		
+	
+	
+		//print_r($this->db->select());
+		//$this->db->where("vendido", true);
+		//$this->db->where("idusuario", $id);
+
+		return $this->db->get()->result_array();	
+	
+	
+	}
+	
+	
+	public function detalheVenda($idvendacliente){
+	
+		$idempresa = $this->session->userdata("idempresa");
+		//$id = $usuario["id"];
+		$this->db->select("produto.*, vendas.idcliente, vendas.totalproduto as totalProduto, vendacliente.situacaovenda, vendacliente.dtvenda, pessoa.nome as nomecliente, vendacliente.idvendacliente, (produto.preco * vendas.totalproduto) as totalProdutoVenda, pessoa.nome as nome, vendacliente.id as idvendaclientesite");
+		$this->db->from("produto");
+		$this->db->join("vendas", "vendas.idproduto = produto.id");
+		$this->db->join("vendacliente", "vendacliente.id = vendas.idvenda_cliente_site");
+		$this->db->join("pessoa", "pessoa.idpessoa = vendacliente.idcliente");
+		$this->db->where("vendacliente.id", $idvendacliente);
+		$this->db->where("pessoa.idempresa", $idempresa);
+		$this->db->where("vendacliente.idempresa", $idempresa);
+		$this->db->where("produto.idempresa", $idempresa);
+		$this->db->where("vendas.situacao", 1);
+		//$this->db->where("idusuario", $id);
+		return $this->db->get()->result_array();	
+	
+	
+	}
+	
+
+	public function buscaProximoIdProdutoEmpresa($empresa) {
+	
+		$this->db->select("max(produto.id)+1 as id");
+		$this->db->from("produto");
+		$this->db->where("produto.idempresa", $empresa);
+		return $this->db->get()->row_array(0);
+	}
+	
+	public function busca_categoria($id_produto=0){
+		//$id_produto - s— deve vir preenchido para buscar alguma categoria espec’fica. Atualmente, s—
+		//Ž utilizado no formul‡rio de ed‹o
+	
+		$idempresa = $this->session->userdata("idempresa");
+	
+		$this->db->select("categoria_produto.*");
+		$this->db->from("categoria_produto");
+		$this->db->where("categoria_produto.idempresa", $idempresa);
+	
+	
+		if ($id_produto != 0) {
+			//Na edição de categoria, só deve retornar uma categoria. Por isso mudei o retorno para row_array
+			//S— entra para trazer uma categoria espec’fica, no caso da edi‹o
+			$this->db->where("categoria_produto.idcategoriaproduto", $id_produto);
+			return $this->db->get()->row_array();
+			
+		} else {
+				return $this->db->get()->result_array();
+			
+		}
+	
+	
+	}
+	
+	public function salvaCategoria($categoria) {
+			
+		$this->db->insert("categoria_produto", $categoria);		
+		
+	}
+	
+	public function atualizar_categoria($categoria, $id_empresa, $id_categoria) {
+	
+		$this->db->where("categoria_produto.idempresa", $id_empresa);
+		$this->db->where("categoria_produto.idcategoriaproduto", $id_categoria);
+		$this->db->update("categoria_produto", $categoria);
+	
+	}
+	
+	public function traz_dados_edicao($id_produto, $id_empresa) {
+		
+		$this->db->select("produto.*");
+		$this->db->from("produto");
+		$this->db->where("produto.idempresa", $id_empresa);
+		$this->db->where("produto.id", $id_produto);
+		
+		return $this->db->get()->row_array();
+		
+	}
+	
+	
+}

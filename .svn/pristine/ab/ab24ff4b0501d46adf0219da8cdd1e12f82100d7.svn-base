@@ -1,0 +1,41 @@
+<?php
+if (! defined ( 'BASEPATH' ))
+	exit ( 'N�o � permitido acesso direto ao site!' );
+class UsuariosAplicativo extends CI_Controller {
+	
+	
+	
+	public function novoUsuarioDoAplicativo($nome,$email,$senha) {
+		// CARREGAR BIBLIOTECA DE VALIDA��O
+		
+		
+		$this->load->model ( "usuarios_model" );
+		
+		$idempresa = 2;
+
+			//id empresa do bizu para o caso de aluno
+			$usuario = array (
+					"nome" => $nome,
+					"email" => $email,
+					"senha" => $senha,
+					"idempresa" => $idempresa 
+			);
+			
+		
+				$this->usuarios_model->salva ( $usuario );
+				$idusuarioNovo =  $this->db->insert_id();//Essa função do codeigniter pega o último id inserido
+				
+				
+				
+				//Inscreve o aluno por padrão no Paulo
+				$this->load->model("usuarios_model");
+				$this->usuarios_model->inserirDadosPadrao($idusuarioNovo);
+				
+				$this->load->model("email_model");
+				$this->email_model->enviar_email_criacao_conta($email, "ALUNO_FEZ_PROPRIO_CADASTRO_APLICATIVO");
+				
+			
+	}
+	
+	
+}

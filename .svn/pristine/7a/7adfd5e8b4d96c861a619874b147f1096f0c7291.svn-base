@@ -1,0 +1,97 @@
+
+ body { margin: 1% 0px 0px 0px; }
+h4 {
+	
+	background-color:#1E90FF;
+	/*Efeito degradê - CSS3*/
+	/*background:-moz-linear-gradient(top,#9CBF67, #C7BE9B);
+	background:-webkit-linear-gradient(top,#9CBF67, #C7BE9B);
+	/*Bordas arrendodadas - CSS3*/
+	
+	padding-top:5px;
+	padding-left:0px;
+	padding-bottom:5px;
+	padding-right:0px;
+	color:white;
+	text-align:center;
+}
+
+h1{
+	
+	background-color: #1E90FF;
+	
+}
+
+tr{
+	
+	    text-align:rigth; 
+	
+}
+
+
+
+nav ul {
+	list-style:none;
+	padding-left:0;
+}
+
+
+
+
+
+//Menu
+
+/* CSS commum ao menu horizontal e vertical */
+.site-navigation > .menu {
+	overflow:hidden;
+}
+.site-navigation > .menu li a {
+	padding:5px 15px;
+	text-align:center;
+	display:block;
+	background-color:#1E90FF;
+	color:white;
+	text-decoration: none;
+}
+.site-navigation > .menu > li a:hover, 
+.site-navigation > .menu > li.active a, 
+.site-navigation > .menu > li a.sub:hover {
+	color:#fff;
+	background-color:#00BFFF;
+}
+.site-navigation > .menu .sub-menu {
+	margin:0;
+	padding:0;
+	display:none;
+}
+.site-navigation > .menu .sub-menu li {
+	float:none;
+	list-style-type:none;
+	border-bottom: 1px solid #1E90FF7;
+}
+/* Menu Horizontal */
+.site-navigation > .horizontal {
+	width:100%;
+}
+.site-navigation > .horizontal > li {
+	float:left;
+	list-style-type:none;
+	border-left: 1px solid #99d0c7;
+}
+.site-navigation > .horizontal > li a.sub {
+	background:#1E90FF url(modulos/2.01.navigation_horizontal-dropdown/img/seta.png) no-repeat scroll 95% 17px;
+}
+.site-navigation > .horizontal > li > a.sub:hover {	
+	background-position:95% -9px;
+}
+.site-navigation > .horizontal > li:hover > .sub-menu {
+	display:block;
+}
+.site-navigation > .horizontal .sub-menu {
+	position:absolute;
+}
+
+
+
+
+

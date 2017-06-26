@@ -18,8 +18,7 @@ class Assuntos_model extends CI_Model {
 			$this->db->order_by("tb_materia.nome_materia, assunto_pai.descricao_assunto, tb_assunto.descricao_assunto");
 				
 			return $this->db->get()->result_array();
-			//print_r($this->db->last_query());
-			//die();
+			
 		}
 	}
 	

@@ -103,7 +103,6 @@ Highcharts.chart('container', {
 
 
 <?php 
-
 foreach ($questoesPorLista as $questoes)  {
 	//print_r($questoes); die();
 	$CI =& get_instance();

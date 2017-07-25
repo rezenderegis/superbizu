@@ -81,7 +81,7 @@ class Usuarios extends CI_Controller {
 				
 				$usuario = array (
 						"nome" => $this->input->post ( "nome" ),
-						"email" => $this->input->post ( "email" ),
+						"email" => trim ($this->input->post ( "email" )),
 						"idempresa" => $idempresa,
 						"senha" => md5 ( trim ( $this->input->post ( "email" ) ) ) 
 				);
@@ -169,8 +169,8 @@ class Usuarios extends CI_Controller {
 			
 			$usuario = array (
 					"nome" => $this->input->post ( "nome" ),
-					"email" => $this->input->post ( "email" ),
-					"senha" => md5 ( $this->input->post ( "senha" ) ),
+					"email" => trim ($this->input->post ( "email" )),
+					"senha" => md5 ( trim ($this->input->post ( "senha" )) ),
 					"idempresa" => $idempresa 
 			);
 			
@@ -264,8 +264,8 @@ class Usuarios extends CI_Controller {
 			
 			$usuario = array (
 					"nome" => $this->input->post ( "nome" ),
-					"email" => $this->input->post ( "email" ),
-					"senha" => md5 ( $this->input->post ( "senha" ) ),
+					"email" => trim ($this->input->post ( "email" )),
+					"senha" => md5 ( trim ($this->input->post ( "senha" )) ),
 					"idempresa" => $idempresa 
 			);
 			
@@ -388,8 +388,8 @@ class Usuarios extends CI_Controller {
 			
 			$usuario = array (
 					"nome" => $this->input->post ( "nome" ),
-					"email" => $this->input->post ( "email" ),
-					"senha" => md5 ( $this->input->post ( "senha" ) ),
+					"email" => trim ($this->input->post ( "email" )),
+					"senha" => md5 ( trim ($this->input->post ( "senha" )) ),
 					"idempresa" => $idempresa 
 			);
 			

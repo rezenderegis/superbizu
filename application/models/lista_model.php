@@ -274,7 +274,7 @@ WHERE
 		
 		mysql_set_charset('utf8');
 		
-		$sql = "SELECT i.descricao name,COUNT(R.ID_ITEM) y FROM TB_RESOLUCAO R
+		$sql = "SELECT concat(i.letra_item, ' - ', i.descricao) name,COUNT(R.ID_ITEM) y FROM TB_RESOLUCAO R
 		 INNER JOIN tb_lista_grupo lg ON lg.idLista = R.ID_LISTA
 		INNER JOIN tb_item i on i.ID_ITEM = R.ID_ITEM
 

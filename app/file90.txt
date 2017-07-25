@@ -1,0 +1,126 @@
+{
+"resolucao": [
+{"id_questao": 122, "id_grupo_questao":'133344dcc',"id_item": 1, "date": "", "id_lista": 2,"id_simulado": 3,"id_usuario": 1},
+{"id_questao": 13, "id_grupo_questao":'133344dcc',"id_item": 1, "date": "", "id_lista": 2,"id_simulado": 3,"id_usuario": 3}        
+    ]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 122, "id_grupo_questao":133344NBNBx,"id_item": 1, "date": "", "id_lista": 2,"id_simulado": 3,"id_usuario": 1},
+{"id_questao": 13, "id_grupo_questao":133344NBNBx3,"id_item": 1, "date": "", "id_lista": 2,"id_simulado": 3,"id_usuario": 3}
+]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 122, "id_grupo_questao":133344NBNBx,"id_item": 1, "date": "", "id_lista": 2,"id_simulado": 3,"id_usuario": 1},
+{"id_questao": 13, "id_grupo_questao":133344NBNBx3,"id_item": 1, "date": "", "id_lista": 2,"id_simulado": 3,"id_usuario": 3}
+]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 122, "id_grupo_questao":133344NBNBx,"id_item": 1, "date": "2017006-17 21:00:00", "id_lista": 2,"id_simulado": 3,"id_usuario": 1},
+{"id_questao": 13, "id_grupo_questao":133344NBNBx3,"id_item": 1, "date": "", "id_lista": 2,"id_simulado": 3,"id_usuario": 3}
+]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 122, "id_grupo_questao":133344NBNBx,"id_item": 1, "date": "2017-06-17 21:00:00", "id_lista": 2,"id_simulado": 3,"id_usuario": 1},
+{"id_questao": 13, "id_grupo_questao":133344NBNBx3,"id_item": 1, "date": "", "id_lista": 2,"id_simulado": 3,"id_usuario": 3}
+]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 122, "id_grupo_questao":133344NBNBx,"id_item": 1, "date": "2017-06-17 21:00:00", "id_lista": 2,"id_simulado": 3,"id_usuario": 1},
+{"id_questao": 13, "id_grupo_questao":133344NBNBx3,"id_item": 1, "date": "2017-06-17 21:00:00", "id_lista": 2,"id_simulado": 3,"id_usuario": 3}
+]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 27, "id_grupo_questao":1,"id_item": 2739, "date": "", "id_lista": 43,"id_simulado": 43,"id_usuario": 103},
+{"id_questao": 27, "id_grupo_questao":1,"id_item": 2739, "date": "", "id_lista": 43,"id_simulado": 43,"id_usuario": 3}]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 27, "id_grupo_questao":1,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 103},
+{"id_questao": 27, "id_grupo_questao":1,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 3}]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 27, "id_grupo_questao":188,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 103},
+{"id_questao": 27, "id_grupo_questao":199,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 3}]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 29, "id_grupo_questao":18833,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 103},
+{"id_questao": 29, "id_grupo_questao":19933,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 3}]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 29, "id_grupo_questao":18833,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 103},
+{"id_questao": 29, "id_grupo_questao":19933,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 3}]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 29, "id_grupo_questao":18833,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 103},
+{"id_questao": 29, "id_grupo_questao":19933,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 3}]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 29, "id_grupo_questao":18833,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 103},
+{"id_questao": 29, "id_grupo_questao":19933,"id_item": 2739, "date": "2017-06-17 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 3}]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 29, "id_grupo_questao":18833,"id_item": 2739, "date": "17-06-2017 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 103},
+{"id_questao": 29, "id_grupo_questao":19933,"id_item": 2739, "date": "17-06-2017 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 3}]
+}
+
+
+
+{
+"resolucao": [
+{"id_questao": 30, "id_grupo_questao":1883333,"id_item": 2739, "date": "17-06-2017 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 31},
+{"id_questao": 30, "id_grupo_questao":1993333,"id_item": 2739, "date": "17-06-2017 09:00:00", "id_lista": 43,"id_simulado": 43,"id_usuario": 40}]
+}
+
+
+

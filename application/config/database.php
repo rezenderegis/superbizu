@@ -58,7 +58,7 @@ $db['default']['database'] = 'superbizu';
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'root';
+$db['default']['password'] = 'rnk30ghhh';
 $db['default']['database'] = 'bizu';
 
 

@@ -20,6 +20,9 @@ $metodo = $_SERVER['REQUEST_METHOD'];
 
 $json = file_get_contents('php://input');
 
+file_put_contents("file90.txt",$json."\n",FILE_APPEND);
+
+
 include "mysale_conexao.php";
 
 $parsed = json_decode(utf8_encode($json),true);
@@ -28,11 +31,16 @@ $parsed = json_decode(utf8_encode($json),true);
 
 	foreach ($parsed['resolucao'] as $key => $values) {
 		
+		$data = $values['date'];
+		
+		$data= date( 'Y-m-d H:i:s ', strtotime($data) );
+		
+		
 		//$guid_pessoa = $values['id'];
 		$id_questao= $values['id_questao'];
 		$id_grupo_questao= $values['id_grupo_questao'];
 		$id_item= $values['id_item'];
-		$date= $values['date'];
+		$date= $data;
 		$id_lista= $values['id_lista'];
 		$id_simulado= $values['id_simulado'];
 		$id_usuario= $values['id_usuario'];

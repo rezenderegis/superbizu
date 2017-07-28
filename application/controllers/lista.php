@@ -35,7 +35,6 @@ class Lista extends CI_Controller {
 		//grafico
 		
 		$dadosGrafico =  $this->lista_model->calculaPercentualAcertoLista($idLista,$idGrupo, "RETORNAR_JSON");
-		
 		//fim grafico
 		
 		
@@ -48,7 +47,7 @@ class Lista extends CI_Controller {
 		//$dadosGrafico = array("dados" => $dados, "questoesPorLista" => $questoesPorLista);
 		
 		//
-		
+	
 		
 		$dados = array (
 				"listaQuestao" => $lista_questao,

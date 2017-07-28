@@ -159,7 +159,7 @@ WHERE
 	
 	public function verificarAlunoResolveuListaParaGrafico($idLista, $idGrupo) {
 		$dadosUsuarioLogado = $this->session->userdata ( "usuario_logado" );
-		
+
 		$idUsuarioLogado = $dadosUsuarioLogado ['id'];
 		
 		$sql = "SELECT
@@ -176,7 +176,7 @@ WHERE
     lg.idlista = " . $idLista . "
         AND lg.situacaoAcesso = 1
         and ag.idgrupo = " . $idGrupo . "";
-		
+	//	echo $sql;die();
 		$query = $this->db->query ( $sql );
 		
 		return $query->result_array ();
@@ -314,6 +314,7 @@ WHERE
 	
 	public function contaPercentualAcertos ($idGrupo, $idLista) {
 		// Teste: '0b768ffd-b21c-4622-9f2c-2f842dea219d', 1
+		
 		if ($idGrupo) {
 			$dado = $this->lista_model->trazGrupoResolucaoDeIdResolucao($idGrupo);
 			
@@ -333,8 +334,12 @@ WHERE
 		$listaComPercentual = [];
 		
 		foreach ( $lista_questao as $lista ) {
-			$percentualAcertos = $this->contaPercentualAcertos($lista['RES'],$lista['idLista']);
 			
+			$percentualAcertos = $this->contaPercentualAcertos($lista['RES'],$lista['idLista']);
+			//print($percentualAcertos); die();
+			if ($percentualAcertos == "") {
+				$percentualAcertos = 0;
+			}
 			$lista["y"] = $percentualAcertos;
 			unset($lista["idListaGrupo"]);
 			unset($lista["idgrupo"]);
@@ -344,10 +349,11 @@ WHERE
 			
 			array_push($listaComPercentual, $lista);
 			
-		}
+		} 
 		if ($tipoRetorno == "RETORNAR_ARRAY") {
 			return $listaComPercentual;
 		} else if ($tipoRetorno == "RETORNAR_JSON") {
+		
 			return json_encode($listaComPercentual, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 			
 		}

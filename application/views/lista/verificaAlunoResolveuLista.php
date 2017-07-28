@@ -34,7 +34,6 @@ body, html {
 	</div>
 
 
-
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto;   background: #FFFFFF;"></div>
 
 
@@ -88,6 +87,28 @@ Highcharts.chart('container', {
         name: 'Brands',
         colorByPoint: true,
         data: dados
+
+        /*
+        [{
+            name: 'Microsoft Internet Explorer',
+            y: 56.33
+        }, {
+            name: 'Chrome',
+            y: 24.03
+        }, {
+            name: 'Firefox',
+            y: 10.38
+        }, {
+            name: 'Safari',
+            y: 4.77
+        }, {
+            name: 'Opera',
+            y: 0.91
+        }, {
+            name: 'Proprietary or Undetectable',
+            y: 0.2
+        }]
+        */
     }] 
 });
 		</script>

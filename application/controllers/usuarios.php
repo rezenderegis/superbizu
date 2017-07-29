@@ -616,19 +616,19 @@ class Usuarios extends CI_Controller {
 		$email = $this->usuarios_model->buscaPorEmail ( '', $id_usuario );
 		//print_r($email); die();
 		
-		//$codigo_senha = md5 ( $id_usuario . $email ['email'] );
+		$codigo_senha = md5 ( $id_usuario . $email ['email'] );
 		
-		//if ($codigo == $codigo_senha) {
+		if ($codigo == $codigo_senha) {
 			$dados_cliente = array (
 					"dados_pessoa_edicao" => $id_usuario 
 			);
 
 			$this->load->view( "usuarios/formularioCadastrarNovaSenha", $dados_cliente);
 		
-			//$this->load->template2 ( "usuarios/formulario_alteracao_senha", $dados_cliente );
-	//	} else {
-		//	echo "Aconteceu um problema ao alterar sua senha";
-	//	}
+			//$this->load->view ( "usuarios/formulario_alteracao_senha", $dados_cliente );
+		} else {
+			echo "Aconteceu um problema ao alterar sua senha";
+		}
 		
 	}
 	function mudar_senha($id_usuario) {
@@ -649,6 +649,7 @@ class Usuarios extends CI_Controller {
 		redirect ( 'geral/index' );
 		// $this->load->template2("geral/index");
 	}
+	
 	public function enviar_email_criacao_conta($id_usuario, $tipoCadastroConta) {
 		/*$this->load->model ( "usuarios_model" );
 		$email = $this->usuarios_model->buscaPorEmail ( '', $id_usuario );

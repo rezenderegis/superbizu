@@ -50,12 +50,13 @@ $config['mailtype'] = 'html';
 
 $config['protocol']='smtp';
 $config['smtp_host']='ssl://smtp.googlemail.com';
+$config['smtp_host']='ssl://209.85.233.16';
 $config['smtp_port']='465';
 $config['smtp_timeout']='60';
 //$config['smtp_crypto'] = 'ssl';
 $config['smtp_user']='superbizu.estudos@gmail.com';
 $config['smtp_pass']='rnk30ghhh';
-$config['charset']='ISO-8859-1';
+$config['charset']='utf-8';
 $config['newline']="\r\n";
 
 $config['wordwrap'] = TRUE;

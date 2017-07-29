@@ -1,6 +1,24 @@
 <?php
 class Email_model extends CI_Model {
+	
+	 
+	
+	private $enderecoServidor;
+	
+	public function __construct() {
+		parent::__construct();
+		$this->enderecoServidor = 'http://localhost/superbizu/';
+		//$this->enderecoServidor = 'http://www.superbizu.com.br/';
+		
+	}
+	
 	public function enviar($email, $nome) {
+		
+		if(!extension_loaded('openssl'))
+		{
+			throw new Exception('This app needs the Open SSL PHP extension.');
+		}
+		
 		
 		/*
 		 * $tipo_mensagem: � o tipo da mensagem que est� sendo enviada. Ser� mostrada no assunto. Sinaliza��o de problema, anota��o
@@ -19,26 +37,27 @@ class Email_model extends CI_Model {
 		 * $inicio = "<br> <b>Altera��o de senha<br><br> Informamos <a href='http://localhost/mysale/index.php/usuarios/alterar_senha/{$dados_usuario['id']}/{$codigo_senha}'>bysale.com.br/alterarSenha</a>. <br> <br>
 		 */
 		
-		$endereco = "http://bysale.com.br/mysale//index.php/usuarios/alterar_senha";
+		$endereco = $this->enderecoServidor."index.php/usuarios/alterar_senha";
+		
 		// $endereco = "http://localhost/mysale/index.php/usuarios/alterar_senha";
 		$inicio = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'
 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <meta http-equiv='content-type' content='text/html; charset=utf-8' />
-<title>BySale</title>
+<title>Superbizu</title>
 </head>
 
 <body>
-    <p><img src='http://bysale.com.br/mysale/app/bysale_site_index.png' id='logo' alt='BySale' width='220' height='61' /></p>
+    <p><img src='http://www.superbizu.com.br/imagens/superbizu_email.png' id='logo' alt='Superbizu' width='70' height='61' /></p>
 
 
 
-    <p class='text'><strong>Prezado (a) " . $dados_usuario ['nome'] . "</strong></p>
-    <p class='text'>Voc� fez uma solicita��o para recuperar o acesso ao aplicativo BySale. </p>
+    <p class='text'><strong>Ol&aacute; " . $dados_usuario ['nome'] . "</strong></p>
+    <p class='text'>Voc&ecirc; fez uma solicita&ccedil;&atilde;o para recuperar o acesso ao aplicativo Superbizu. </p>
     <p class='text'>Clique no <a href='" . $endereco . "/{$dados_usuario['id']}/{$codigo_senha}'>link</a> para alterar sua senha.    </p>
     <p class='text'>Atenciosamente, </p>
-    <p align='center' class='text'><strong>Equipe Bysale</strong></p>
-    <p align='center' class='text'><strong>Transforme a gest�o das suas vendas!</strong></p>
+    <p align='center' class='text'><strong>Equipe Superbizu</strong></p>
+    <p align='center' class='text'><strong>Prepare-se para a vit&oacute;ria!</strong></p>
 <hr />
     <p class='text'>&nbsp;</p>
 
@@ -50,18 +69,17 @@ class Email_model extends CI_Model {
 		$rodape = "";
 		
 		$mensagem_completa = $inicio . $meio . $rodape;
-		
 		$this->load->library ( 'email' );
 		
 		$this->email->from ( 'superbizu.estudos@gmail.com', 'Superbizu Estudos ' );
-		$this->email->to ('rezenderegis@gmail.com');
-		$this->email->cc ( 'rezenderegis@gmail.com' );
+		$this->email->to ($email);
+		//$this->email->cc ( 'rezenderegis@gmail.com' );
 		
 		/*
 		 * $this->email->from('comercial@bysale.com.br','Bysale'); $this->email->to($email); $this->email->cc('comercial@bysale.com.br');
 		 */
 		
-		$this->email->subject ( 'Bysale - Altera��o de Senha' );
+		$this->email->subject ( 'Superbizu - Alterar Senha' );
 		$this->email->message ( $mensagem_completa );
 		
 		if ($this->email->send ()) {
@@ -155,7 +173,7 @@ class Email_model extends CI_Model {
 		</head>
 		
 		<body>
-		<p><img src='http://www.superbizu.com/app/superbizu.png' id='logo' alt='SuperBizu' width='80' height='50' /></p>
+		<p><img src='http://www.superbizu.com.br/imagens/superbizu_email.png' id='logo' alt='SuperBizu' width='80' height='50' /></p>
 			<p class='text'><b>Prezado (a) " . $nomeUsuarioCadastrado . ",</b></p>
 			<p class='text'>	
 				";

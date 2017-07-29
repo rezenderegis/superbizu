@@ -127,8 +127,9 @@ if ($this->session->userdata ( "usuario_logado" )) {
 					<a href="index.html" class="navbar-brand">
 						<div>
 							<img alt="Pixel Admin"
-								src="<?php echo base_url('assets/images/pixel-admin/main-navbar-logo.png');?>">
-						</div> SuperBizu 2.0.0
+							
+								src="<?php echo base_url('imagens/superbizu_email.png');?>">
+						</div> SuperBizu 2.0.1
 					</a>
 
 					<!-- Main navbar toggle -->

@@ -127,7 +127,7 @@
 				
 				<div class="form-group w-icon">
 					<input type="password" name="senha" id="senha" class="form-control input-lg" placeholder="Nova Senha">
-					<span class="fa fa-envelope signup-form-icon"></span>
+					<span class="fa fa-lock signin-form-icon signup-form-icon"></span>
 				</div>
 
 

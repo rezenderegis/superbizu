@@ -106,17 +106,17 @@
 		<!-- Left side -->
 		<div class="signin-info">
 			<a href="index.html" class="logo">
-				<img src="<?php echo base_url('assets/demo/logo-big.png');?>" alt="" style="margin-top: -5px;">&nbsp;
+				<img src="<?php echo base_url('imagens/superbizu_email.png');?>" alt="" style="margin-top: -5px;">&nbsp;
 				SuperBizu	
 			</a> <!-- / .logo -->
 			<div class="slogan">
 				Prepare-se para a vitória.
 			</div> <!-- / .slogan -->
 			<ul>
-				<li><i class="fa fa-sitemap signin-icon"></i> Resolução de exercícios</li>
-				<li><i class="fa fa-file-text-o signin-icon"></i> Platagorma para criação de questões</li>
-				<li><i class="fa fa-outdent signin-icon"></i> Criação de lista de exercícios</li>
+				<li><i class="fa fa-file-text-o signin-icon"></i> Plataforma para criação de exercícios</li>	
 				<li><i class="fa fa-heart signin-icon"></i> Acompanhamento de desempenho de alunos</li>
+				<li><i class="fa fa-sitemap signin-icon"></i> Resolução de exercícios</li>
+			
 			</ul> <!-- / Info list -->
 		</div>
 		<!-- / Left side -->

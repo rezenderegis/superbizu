@@ -42,7 +42,7 @@ class Lista_model extends CI_Model {
 		
 		$idEmpresa = $this->session->userdata ( 'idempresa' );
 		$sql = "SELECT lq.*, professor.nome nome_professor, 
-case  when (select max(idresolucao) from TB_RESOLUCAO where id_usuario = " . $idUsuarioLogado . " and id_lista = lq.idlistaquestoes) is null then 'Não Resolvida' else 'Resolvida' end as SITUACAO_LISTA
+case  when (select min(idresolucao) from TB_RESOLUCAO where id_usuario = " . $idUsuarioLogado . " and id_lista = lq.idlistaquestoes) is null then 'Não Resolvida' else 'Resolvida' end as SITUACAO_LISTA
  FROM (usuario u) JOIN tb_aluno_grupo ag ON ag.idUsuario = u.id 
  JOIN tb_grupo g ON g.idGrupo = ag.idGrupo JOIN tb_lista_grupo lg ON lg.idGrupo = g.idGrupo
  JOIN lista_questoes lq ON lq.idlistaquestoes = lg.idLista 
@@ -138,7 +138,7 @@ case  when (select max(idresolucao) from TB_RESOLUCAO where id_usuario = " . $id
 		$idUsuarioLogado = $dadosUsuarioLogado ['id'];
 		
 		$sql = "SELECT 
-    u.nome,u.id, lg.idListaGrupo,lg.idgrupo, lg.idLista, (select MAX(idResolucao) from TB_RESOLUCAO where ID_USUARIO = u.id 
+    u.nome,u.id, lg.idListaGrupo,lg.idgrupo, lg.idLista, (select min(idResolucao) from TB_RESOLUCAO where ID_USUARIO = u.id 
         AND ID_LISTA = ".$idLista." and lg.idgrupo = " . $idGrupo . " ) AS RES
 
 FROM
@@ -163,7 +163,7 @@ WHERE
 		$idUsuarioLogado = $dadosUsuarioLogado ['id'];
 		
 		$sql = "SELECT
-    u.nome name,u.id, lg.idListaGrupo,lg.idgrupo, lg.idLista, (select MAX(idResolucao) from TB_RESOLUCAO where ID_USUARIO = u.id
+    u.nome name,u.id, lg.idListaGrupo,lg.idgrupo, lg.idLista, (select min(idResolucao) from TB_RESOLUCAO where ID_USUARIO = u.id
         AND ID_LISTA = ".$idLista." and lg.idgrupo = " . $idGrupo . " ) AS RES
         		
 FROM

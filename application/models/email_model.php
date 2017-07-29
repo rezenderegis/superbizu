@@ -7,8 +7,8 @@ class Email_model extends CI_Model {
 	
 	public function __construct() {
 		parent::__construct();
-		$this->enderecoServidor = 'http://localhost/superbizu/';
-		//$this->enderecoServidor = 'http://www.superbizu.com.br/';
+		//$this->enderecoServidor = 'http://localhost/superbizu/';
+		$this->enderecoServidor = 'http://www.superbizu.com.br/';
 		
 	}
 	

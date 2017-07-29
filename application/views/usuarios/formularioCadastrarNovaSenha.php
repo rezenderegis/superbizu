@@ -115,71 +115,30 @@
 		
 		<!-- Form -->
 		<div class="signup-form">
-		<?php 
-			echo form_open("usuarios/novo", array (
-			'id' => 'novousuario',
-			'role' => 'form'
-	));
+<?php 
+
+			echo form_open("usuarios/mudar_senha/{$dados_pessoa_edicao}");
+
+			//echo form_open("usuarios/solicitar_alteracao_senha", array('id' => 'login'));
 				?>
 				<div class="signup-text">
-					<span>Criar uma nova conta</span>
-				</div>
-
-				<div class="form-group w-icon">
-					<input type="text" name="nome" id="nome" class="form-control input-lg" placeholder="Nome">
-					<span class="fa fa-info signup-form-icon"></span>
+					<span>Esqueceu a Senha</span>
 				</div>
 				
 				<div class="form-group w-icon">
-					<input type="text" name="email" id="email" class="form-control input-lg" placeholder="E-mail">
+					<input type="password" name="senha" id="senha" class="form-control input-lg" placeholder="Nova Senha">
 					<span class="fa fa-envelope signup-form-icon"></span>
 				</div>
 
-				<!-- Perfil -->
-				<div class="form-group w-icon">
-						<div class="row">
-							<div class="col-md-12">
-								<select id="perfil" name="perfil" class="form-control input-lg">
-								
-										<option value="">Selecione o Perfil</option>
-										<option value="3">Aluno</option>
-										<option value="2">Professor</option>
-									
 
-								</select>
-							</div>
-							
-						</div>
-					</div>
-				
-				<!-- Fim Perfil -->
-		
-
-				<div class="form-group w-icon">
-					<input type="password" name="senha" id="senha" class="form-control input-lg" placeholder="Password">
-					<span class="fa fa-lock signup-form-icon"></span>
-				</div>
-
-				<div class="form-group" style="margin-top: 20px;margin-bottom: 20px;">
-					<label class="checkbox-inline">
-						<input type="checkbox" name="signup_confirm" class="px" id="confirm_id">
-						<span class="lbl">Eu concordo com os termos e condições <a href="#" target="_blank">Termos e Condições</a></span>
-					</label>
-				</div>
 
 				<div class="form-actions">
-					<input type="submit" value="CADASTRAR" class="signup-btn bg-primary">
+					<input type="submit" value="SOLICITAR SENHA" class="signup-btn bg-primary">
 				</div>
 			</form>
 			<!-- / Form -->
 
-			<!-- "Sign In with" block -->
-			<!-- 
-			<div class="signup-with">
-				<!-- 
-				<a href="index.html" class="signup-with-btn" style="background:#4f6faa;background:rgba(79, 111, 170, .8);">Entrar com <span>Facebook</span></a>
-			</div> -->
-			<!-- / "Sign In with" block -->
+			
 		</div>
 		<!-- Right side -->
 	</div>

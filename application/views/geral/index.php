@@ -1,3 +1,4 @@
+
 <?php date_default_timezone_set('America/Sao_Paulo'); ?>
 <!DOCTYPE html>
 <!--[if IE 8]>         <html class="ie8"> <![endif]-->
@@ -73,9 +74,9 @@
 	var init = [];
 	init.push(function () {
 		var $div = $('<div id="signin-demo" class="hidden-xs"><div>PAGE BACKGROUND</div></div>'),
-		    bgs  = [ '<?php echo base_url('assets/demo/signin-bg-1.jpg');?>', 'assets/demo/signin-bg-2.jpg', 'assets/demo/signin-bg-3.jpg',
-		    		 '<?php echo base_url('assets/demo/signin-bg-4.jpg');?>', 'assets/demo/signin-bg-5.jpg', 'assets/demo/signin-bg-6.jpg',
-					 '<?php echo base_url('assets/demo/signin-bg-7.jpg');?>', 'assets/demo/signin-bg-8.jpg', 'assets/demo/signin-bg-9.jpg' ];
+		    bgs  = [ '<?php echo base_url('assets/demo/signin-bg-4.jpg');?>', 'assets/demo/signin-bg-4.jpg'
+		    		 '<?php echo base_url('assets/demo/signin-bg-4.jpg');?>', 'assets/demo/signin-bg-4.jpg',
+					 ];
 		for (var i=0, l=bgs.length; i < l; i++) $div.append($('<img src="' + bgs[i] + '">'));
 		$div.find('img').click(function () {
 			var img = new Image();
@@ -95,7 +96,7 @@
 		<!-- Background overlay -->
 		<div class="overlay"></div>
 		<!-- Replace this with your bg image -->
-		<img src="<?php echo base_url('assets/demo/signin-bg-2.jpg');?>" alt="">
+		<img src="<?php echo base_url('assets/demo/signin-bg-1.jpg');?>" alt="">
 	</div>
 	<!-- / Page background -->
 
@@ -152,7 +153,7 @@
 			<!-- "Sign In with" block -->
 			<div class="signin-with">
 				<!-- Facebook -->
-				<a href="index.html" class="signin-with-btn" style="background:#4f6faa;background:rgba(79, 111, 170, .8);">Entrar com <span>Facebook</span></a>
+				<?=anchor('usuarios/novoUsuario',  'Ainda não é cadastrado? <Span>Cadastre-se agora</Span>', array('class' => 'signin-with-btn', 'style' => 'background:#4f6faa;background:rgba(79, 111, 170, .8)'))?>
 			</div>
 			<!-- / "Sign In with" block -->
 
@@ -183,10 +184,10 @@
 		<!-- Right side -->
 	</div>
 	<!-- / Container -->
-
+	<!--  
 	<div class="not-a-member">
 		Ainda não é cadastrado? <?=anchor('usuarios/novoUsuario', 'Cadastre-se agora')?>
-	</div>
+	</div>-->
 
 <!-- Get jQuery from Google CDN -->
 <!--[if !IE]> -->

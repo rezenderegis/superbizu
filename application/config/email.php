@@ -32,7 +32,7 @@ $config['charset']='ISO-8859-1';
 $config['newline']="\r\n";
 */
 
-
+/*
 $config['protocol']='smtp';
 $config['smtp_host']='smtp.bizu.educacao.ws';
 $config['smtp_port']='587';
@@ -45,6 +45,25 @@ $config['newline']="\r\n";
 
 $config['wordwrap'] = TRUE;
 $config['mailtype'] = 'html';
+*/
+
+
+$config['protocol']='smtp';
+$config['smtp_host']='ssl://smtp.googlemail.com';
+$config['smtp_port']='465';
+$config['smtp_timeout']='60';
+//$config['smtp_crypto'] = 'ssl';
+$config['smtp_user']='superbizu.estudos@gmail.com';
+$config['smtp_pass']='rnk30ghhh';
+$config['charset']='ISO-8859-1';
+$config['newline']="\r\n";
+
+$config['wordwrap'] = TRUE;
+$config['mailtype'] = 'html';
+
+
+
+
 
 /* End of file email.php */
 /* Location: ./system/application/config/email.php */

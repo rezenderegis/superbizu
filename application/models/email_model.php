@@ -53,9 +53,9 @@ class Email_model extends CI_Model {
 		
 		$this->load->library ( 'email' );
 		
-		$this->email->from ( 'info@bysale.com.br', 'BySale ' );
-		$this->email->to ( $email );
-		$this->email->cc ( 'info@bysale.com.br' );
+		$this->email->from ( 'superbizu.estudos@gmail.com', 'Superbizu Estudos ' );
+		$this->email->to ('rezenderegis@gmail.com');
+		$this->email->cc ( 'rezenderegis@gmail.com' );
 		
 		/*
 		 * $this->email->from('comercial@bysale.com.br','Bysale'); $this->email->to($email); $this->email->cc('comercial@bysale.com.br');

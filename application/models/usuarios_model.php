@@ -325,6 +325,7 @@ class Usuarios_model extends CI_Model {
 	}
 	
 	public function mudar_senha($dados, $id_usuario) {
+		//print_r($dados); echo "ID USUARIO".$id_usuario; die();
 		$this->db->where("usuario.id", $id_usuario);
 		$this->db->update("usuario", $dados);
 		

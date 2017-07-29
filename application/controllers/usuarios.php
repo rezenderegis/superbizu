@@ -607,22 +607,32 @@ class Usuarios extends CI_Controller {
 			redirect ( 'usuarios/formulario_esqueceu_senha' );
 		}
 	}
-	function alterar_senha($id_usuario, $codigo) {
+	
+	/*
+	 * FORMULÁRIO DE ALTERAÇÃO DE SENHA ESQUECIDA
+	 * */
+	function alterar_senha($id_usuario=0, $codigo=0) {
 		$this->load->model ( "usuarios_model" );
 		$email = $this->usuarios_model->buscaPorEmail ( '', $id_usuario );
+		//print_r($email); die();
 		
-		$codigo_senha = md5 ( $id_usuario . $email ['email'] );
+		//$codigo_senha = md5 ( $id_usuario . $email ['email'] );
 		
-		if ($codigo == $codigo_senha) {
+		//if ($codigo == $codigo_senha) {
 			$dados_cliente = array (
 					"dados_pessoa_edicao" => $id_usuario 
 			);
-			$this->load->template2 ( "usuarios/formulario_alteracao_senha", $dados_cliente );
-		} else {
-			echo "Aconteceu um problema ao alterar sua senha";
-		}
+
+			$this->load->view( "usuarios/formularioCadastrarNovaSenha", $dados_cliente);
+		
+			//$this->load->template2 ( "usuarios/formulario_alteracao_senha", $dados_cliente );
+	//	} else {
+		//	echo "Aconteceu um problema ao alterar sua senha";
+	//	}
+		
 	}
 	function mudar_senha($id_usuario) {
+		//echo $this->input->post ( "senha" ); die();
 		$this->load->model ( "usuarios_model" );
 		$dados = array (
 				"senha" => md5 ( $this->input->post ( "senha" ) ) 

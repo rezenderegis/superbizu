@@ -301,7 +301,6 @@ class Usuarios_model extends CI_Model {
 	}
 	
 	public function buscaPorEmail($email='',$id='') {
-	
 		$email = trim($email);
 
 		$this->db->select("usuario.email as email, usuario.nome as nome, usuario.id as id");
@@ -320,8 +319,12 @@ class Usuarios_model extends CI_Model {
 		}
 	
 		$usuario = $this->db->get()->row_array();
+		if (empty($usuario)) {
+			return 0;
+		} else {
+			return 1;
+		}
 		
-		return $usuario;
 	}
 	
 	public function mudar_senha($dados, $id_usuario) {
@@ -483,10 +486,18 @@ class Usuarios_model extends CI_Model {
 		$this->db->delete("perfil_usuario");
 	}
 	
-	
+	/*
+	 * Este método insere os novos usuários no grupo público do Paulo e na sua conta
+	 * 
+	 * */	
 	public function inserirDadosPadrao($idusuarioNovo) {
-		$this->insereUsuarioEmpresaPerfil(96,$idusuarioNovo);
-		$this->insereAlunoGrupo($idusuarioNovo, 96, 33,1);
+		
+		//$this->insereUsuarioEmpresaPerfil(105,$idusuarioNovo);
+		//$this->insereAlunoGrupo($idusuarioNovo, 105,40);
+		
+		
+		$this->insereUsuarioEmpresaPerfil(112,$idusuarioNovo);
+		$this->insereAlunoGrupo($idusuarioNovo,112,48);
 		
 	}
 	
@@ -566,7 +577,27 @@ class Usuarios_model extends CI_Model {
 	}
 	
 	
-	
+	public function verificaUsuarioExiste($email='',$id='') {
+		$email = trim($email);
+		
+		$this->db->select("usuario.email as email, usuario.nome as nome, usuario.id as id");
+		$this->db->from("usuario");
+		
+		
+		
+		if ($email != '') {
+			
+			$this->db->where("usuario.email",  $email);
+		}
+		
+		if ($id != '') {
+			$this->db->where("usuario.id",  $id);
+			
+		}
+		
+		$usuario = $this->db->get()->row_array();
+		return $usuario;
+	}
 	
 	
 	

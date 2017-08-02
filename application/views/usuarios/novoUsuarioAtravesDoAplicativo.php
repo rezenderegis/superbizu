@@ -1,3 +1,7 @@
+<?php 
+
+
+?>
 <!DOCTYPE html>
 <!--[if IE 8]>         <html class="ie8"> <![endif]-->
 <!--[if IE 9]>         <html class="ie9 gt-ie8"> <![endif]-->
@@ -113,12 +117,24 @@
 			</div> <!-- / .slogan -->
 		</div>
 		<!-- / Header -->
-	<?= validation_errors("<p class='alert alert-danger'>", "</p>")?>
+		
+		
 		
 		<!-- Form -->
 		<div class="signup-form">
+		
 		<?php 
-			echo form_open("usuarios/novo", array (
+		if ($this->session->flashdata('success')) {
+		echo "<p class='alert alert-success'>";
+			 print_r($this->session->flashdata('success'));
+			 
+			echo "</p>";
+			}
+
+		
+		
+		
+			echo form_open("usuarios/salvaUsuarioAtravesDoAplicativo", array (
 			'id' => 'novousuario',
 			'role' => 'form'
 	));
@@ -143,7 +159,6 @@
 							<div class="col-md-12">
 								<select id="perfil" name="perfil" class="form-control input-lg">
 										<option value="3">Sou Aluno</option>
-										<option value="2">Sou Professor</option>
 									
 
 								</select>

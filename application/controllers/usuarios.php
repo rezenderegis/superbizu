@@ -358,6 +358,14 @@ class Usuarios extends CI_Controller {
 		
 		$this->load->view ( "usuarios/usuarioNovo", $usuario );
 	}
+	
+	public function novoUsuarioAtravesDoAplicativo() {
+
+		
+		$this->load->view ( "usuarios/novoUsuarioAtravesDoAplicativo" );
+	}
+	
+	
 	public function novo() {
 		// CARREGAR BIBLIOTECA DE VALIDA��O
 		$this->load->library ( "form_validation" );
@@ -368,13 +376,26 @@ class Usuarios extends CI_Controller {
 		
 		if (! $this->input->post ( "id_usuario" )) {
 			
-			$this->form_validation->set_rules ( "email", "email", "required|callback_usuarioDuplicado" ); // REGRA PARA O CAMPO NOME LABEL NOME
-		}
+			$this->form_validation->set_rules ( "email", "email", "required|usuarioDuplicado" ); // REGRA PARA O CAMPO NOME LABEL NOME
+			
+			}
+		
 		$this->form_validation->set_rules ( "senha", "senha", "required|min_length[3]" ); // REGRA PARA O CAMPO NOME LABEL NOME
+		
+		//$this->form_validation->set_rules("email", "email", "required|callback_usuarioDuplicado"); //REGRA PARA O CAMPO NOME LABEL NOME
 		
 		$sucesso = $this->form_validation->run ();
 		
 		$this->load->model ( "usuarios_model" );
+		
+		
+		$this->load->model ( "usuarios_model" );
+		$usuarioEmail = $this->usuarios_model->verificaUsuarioExiste( trim ($this->input->post ( "email" )));
+		if (!empty($usuarioEmail)) {
+		
+			$this->load->view ( "usuarios/mmensagem" ); 
+			
+		} else {
 		
 		$idempresa = '';
 		if ($sucesso) {
@@ -470,6 +491,9 @@ class Usuarios extends CI_Controller {
 			 * Esse trecho de c�digo verifica se o usu�rio est� logado. Se estiver logado, ap�s o cadastramento, � redirecionado para a tela de consulta de usu�rios da sua empresa. Caso contr�rio, � redirecionado para a tela de login.
 			 */
 			
+			
+		
+			
 			if ($this->session->userdata ( 'idempresa' ) != null) {
 				$usuariosEmpresa = $this->usuarios_model->buscaUsuariosEmpresa ( $this->session->userdata ( "idempresa" ), 0, 0 );
 				
@@ -481,11 +505,167 @@ class Usuarios extends CI_Controller {
 			} else {
 				redirect ( '/' );
 			}
+			
+			
 		} else {
 			
 			$this->novoUsuario ();
 		}
+		
 	}
+	}
+	
+	
+	
+	
+	public function salvaUsuarioAtravesDoAplicativo() {
+		// CARREGAR BIBLIOTECA DE VALIDA��O
+		$this->load->library ( "form_validation" );
+		
+		// ADICIONAR UMA REGRA DE VALIDA��O
+		
+		$this->form_validation->set_rules ( "nome", "nome", "required" ); // REGRA PARA O CAMPO NOME LABEL NOME
+		
+	//	if (! $this->input->post ( "id_usuario" )) {
+			
+		//	$this->form_validation->set_rules ( "email", "email", "required|callback_usuarioDuplicado" ); // REGRA PARA O CAMPO NOME LABEL NOME
+		//}
+		$this->form_validation->set_rules ( "senha", "senha", "required|min_length[3]" ); // REGRA PARA O CAMPO NOME LABEL NOME
+		
+		$sucesso = $this->form_validation->run ();
+		
+		$this->load->model ( "usuarios_model" );
+		
+		$idempresa = '';
+		
+		
+		$this->load->model ( "usuarios_model" );
+		$usuarioEmail = $this->usuarios_model->verificaUsuarioExiste( trim ($this->input->post ( "email" )));
+		if (!empty($usuarioEmail)) {
+			
+			$this->load->view ( "usuarios/mmensagem" );
+			
+		} else {
+		
+		
+		if ($sucesso) {
+			
+			if ($this->session->userdata ( 'idempresa' ) != null) {
+				
+				$idempresa = $this->session->userdata ( 'idempresa' );
+			} else {
+				$idempresa = 0;
+			}
+			
+			$usuario = array (
+					"nome" => $this->input->post ( "nome" ),
+					"email" => trim ($this->input->post ( "email" )),
+					"senha" => md5 ( trim ($this->input->post ( "senha" )) ),
+					"idempresa" => $idempresa
+			);
+			
+			// $this->load->database();
+			
+			$this->usuarios_model->salva ( $usuario );
+			
+			// Busca �ltimo id do usu�rio inserido para vincular a empresa
+			$idusuarioBanco = $this->db->insert_id (); // Essa função do codeigniter pega o último id inserido
+			
+			$this->load->model ( "empresa_model" );
+			
+			$tipoCadastroConta = "";
+			
+			if ($this->input->post ( "perfil" ) == 2) {
+				$tipoCadastroConta = "PROFESSOR_FEZ_PROPRIO_CADASTRO";
+			} else if ($this->input->post ( "perfil" ) == 3) {
+				$tipoCadastroConta = "ALUNO_FEZ_PROPRIO_CADASTRO";
+			}
+			
+			$this->enviar_email_criacao_conta ( $idusuarioBanco, $tipoCadastroConta );
+			
+			/*
+			 * Adicionado em 17-11-2014. Cadastra a empresa com o mesmo nome do usu�rio Se o usu�rio for novo, cadastra a empresa com o mesmo nome do usu�rio. No sistema o usu�rio dever� ser orientado a fazer a edi��o do nome da empresa
+			 */
+			
+			if ($this->session->userdata ( 'idempresa' ) == '' && $this->input->post ( "perfil" ) != 3) {
+				
+				$empresa = array (
+						"idusuario" => $idusuarioBanco,
+						"nome_empresa" => $this->input->post ( "nome" ),
+						"tipoempresa" => 3,
+						"tipocontaempresa" => 2
+				);
+				// echo $idempresa;
+				
+				$this->empresa_model->salva ( $empresa );
+				
+				// TODO
+				$ultimaEmpresaInserida = $this->empresa_model->buscaEmpresaInserida ( $idusuarioBanco );
+				$idempresa = $ultimaEmpresaInserida ['id'];
+				
+				// Fim cadatro empresa com o mesmo nome do usu�rio
+			}
+			
+			if ($this->input->post ( "perfil" ) == 3) {
+				// Inscreve o aluno por padrão no Paulo
+				$this->load->model ( "usuarios_model" );
+				$this->usuarios_model->inserirDadosPadrao ( $idusuarioBanco );
+			}
+			
+			$usuario_master = 'N';
+			
+			$perfil = 0;
+			if ($this->input->post ( "perfil" ) != 3) {
+				$perfil = 2;
+				$insereUsuarioEmpresa = array (
+						"idusuario" => $idusuarioBanco,
+						"idempresa" => $idempresa,
+						"loginSistema" => "S",
+						"usuario_master" => "S"
+				);
+				
+				$this->usuarios_model->insereUsuarioEmpresa ( $insereUsuarioEmpresa );
+				
+				$ultimoUsuarioEmpresaInserida = $this->db->insert_id (); // Essa função do codeigniter pega o último id inserido
+				
+				$this->load->model ( "usuarios_model" );
+				
+				// INSERE PERFIL PROFESSOR
+				$this->usuarios_model->salvaPerfil ( $ultimoUsuarioEmpresaInserida, $perfil );
+			}
+			
+			
+			/*
+			 * Esse trecho de c�digo verifica se o usu�rio est� logado. Se estiver logado, ap�s o cadastramento, � redirecionado para a tela de consulta de usu�rios da sua empresa. Caso contr�rio, � redirecionado para a tela de login.
+			 */
+			
+			if ($this->session->userdata ( 'idempresa' ) != null) {
+				$usuariosEmpresa = $this->usuarios_model->buscaUsuariosEmpresa ( $this->session->userdata ( "idempresa" ), 0, 0 );
+				
+				$usuarios = array (
+						"usuarios" => $usuariosEmpresa
+				);
+				
+				$this->load->template2 ( "usuarios/index", $usuarios );
+			} else {
+				$this->session->set_flashdata ( "success", "Usuario criado com sucesso! </br>
+												Pressione botão voltar para entrar no aplicativo." );
+				
+			//	$this->session->set_flashdata ( "success", "Usuario salvo com sucesso!" );
+				
+				redirect ( 'usuarios/novoUsuarioAtravesDoAplicativo' );
+			}
+		} else {
+			
+			$this->novoUsuario ();
+		}
+		}
+	}
+	
+	
+	
+	
+	
 	public function novoAluno($id_usuario = 0, $tipo_acesso = 0) {
 		// tipo_abertura = 1: significa que a abertura foi do app
 		$this->load->model ( "usuarios_model" );
@@ -566,22 +746,20 @@ class Usuarios extends CI_Controller {
 	}
 	public function usuarioDuplicado($email) {
 		
-		// echo "sfalsdfasdfçasdf: s".$email;
+		 
 		$this->load->model ( "usuarios_model" );
-		$usuarioEmail = $this->usuarios_model->verificaExisteUsuario ( $email );
-		// echo "<br/>";
-		// print_r($usuarioEmail['id']);
-		// die();
-		if ($usuarioEmail) {
-			
-			$this->form_validation->set_message ( "usuarioDuplicado", "Ja existe um usu�rio cadastrado com esse email" );
-			
+		$usuarioEmail = $this->usuarios_model->buscaPorEmail( $email );
+
+		
+		if ($usuarioEmail == 0) {
+						
 			return FALSE;
 		} else {
 			// $this->form_validation->set_message("usuarioduplicado", "J� existe um usu�rio cadastrado com esse email");
 			return TRUE;
 		}
 	}
+	
 	function formulario_esqueceu_senha() {
 		$this->load->view ( "usuarios/formulario_esqueceu_senha" );
 	}
@@ -681,4 +859,11 @@ class Usuarios extends CI_Controller {
 		
 		return implode ( ",", $perfilRetorno );
 	}
+	
+
+	
+	
+	
+	
+	
 }

@@ -113,63 +113,14 @@
 			</div> <!-- / .slogan -->
 		</div>
 		<!-- / Header -->
-	<?= validation_errors("<p class='alert alert-danger'>", "</p>")?>
 		
 		<!-- Form -->
 		<div class="signup-form">
-		<?php 
-			echo form_open("usuarios/novo", array (
-			'id' => 'novousuario',
-			'role' => 'form'
-	));
-				?>
-				<div class="signup-text">
-					<span>Criar uma nova conta</span>
-				</div>
-
-				<div class="form-group w-icon">
-					<input type="text" name="nome" id="nome" class="form-control input-lg" placeholder="Nome">
-					<span class="fa fa-info signup-form-icon"></span>
-				</div>
-				
-				<div class="form-group w-icon">
-					<input type="text" name="email" id="email" class="form-control input-lg" placeholder="E-mail">
-					<span class="fa fa-envelope signup-form-icon"></span>
-				</div>
-
-				<!-- Perfil -->
-				<div class="form-group w-icon">
-						<div class="row">
-							<div class="col-md-12">
-								<select id="perfil" name="perfil" class="form-control input-lg">
-										<option value="3">Sou Aluno</option>
-										<option value="2">Sou Professor</option>
-									
-
-								</select>
-							</div>
-							
-						</div>
-					</div>
-				
-				<!-- Fim Perfil -->
 		
-
-				<div class="form-group w-icon">
-					<input type="password" name="senha" id="senha" class="form-control input-lg" placeholder="Password">
-					<span class="fa fa-lock signup-form-icon"></span>
+				<div class="signup-text">
+					<span>Já existe um usuário cadastrado com este e-mail!</span>
 				</div>
 
-				<div class="form-group" style="margin-top: 20px;margin-bottom: 20px;">
-					<label class="checkbox-inline">
-						<input type="checkbox" name="signup_confirm" class="px" id="confirm_id">
-						<span class="lbl">Eu concordo com os termos e condições <a href="#" target="_blank">Termos e Condições</a></span>
-					</label>
-				</div>
-
-				<div class="form-actions">
-					<input type="submit" value="CADASTRAR" class="signup-btn bg-primary">
-				</div>
 			</form>
 			<!-- / Form -->
 
@@ -184,9 +135,7 @@
 		<!-- Right side -->
 	</div>
 
-		<div class="have-account">
-		Já tem uma conta? <?=anchor('geral/index', 'Entrar')?>
-	</div>
+	
 
 
 <!-- Get jQuery from Google CDN -->

@@ -49,7 +49,7 @@ $config['mailtype'] = 'html';
 
 
 $config['protocol']='smtp';
-$config['smtp_host']='ssl://smtp.googlemail.com';
+//$config['smtp_host']='ssl://smtp.googlemail.com';
 $config['smtp_host']='ssl://209.85.233.16';
 $config['smtp_port']='465';
 $config['smtp_timeout']='60';

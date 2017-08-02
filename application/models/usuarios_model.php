@@ -77,7 +77,7 @@ class Usuarios_model extends CI_Model {
 	}
 	
 	public function insereUsuarioEmpresa($idusuarioempresa) {
-	
+		
 				$this->db->insert("usuario_empresa", $idusuarioempresa);
 
 	}
@@ -326,6 +326,8 @@ class Usuarios_model extends CI_Model {
 		}
 		
 	}
+
+	
 	
 	public function mudar_senha($dados, $id_usuario) {
 		//print_r($dados); echo "ID USUARIO".$id_usuario; die();
@@ -490,14 +492,10 @@ class Usuarios_model extends CI_Model {
 	 * Este método insere os novos usuários no grupo público do Paulo e na sua conta
 	 * 
 	 * */	
-	public function inserirDadosPadrao($idusuarioNovo) {
+	public function inserirDadosPadrao($idusuarioNovo, $idEmpresa, $idGrupo) {
 		
-		//$this->insereUsuarioEmpresaPerfil(105,$idusuarioNovo);
-		//$this->insereAlunoGrupo($idusuarioNovo, 105,40);
-		
-		
-		$this->insereUsuarioEmpresaPerfil(112,$idusuarioNovo);
-		$this->insereAlunoGrupo($idusuarioNovo,112,48);
+		$this->insereUsuarioEmpresaPerfil($idEmpresa,$idusuarioNovo);
+		$this->insereAlunoGrupo($idusuarioNovo,$idEmpresa, $idGrupo);
 		
 	}
 	

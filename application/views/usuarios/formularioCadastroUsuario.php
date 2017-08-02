@@ -1,7 +1,3 @@
-<?php 
-
-
-?>
 <!DOCTYPE html>
 <!--[if IE 8]>         <html class="ie8"> <![endif]-->
 <!--[if IE 9]>         <html class="ie9 gt-ie8"> <![endif]-->
@@ -117,24 +113,18 @@
 			</div> <!-- / .slogan -->
 		</div>
 		<!-- / Header -->
-		
-		
-		
-		<!-- Form -->
-		<div class="signup-form">
-		
-		<?php 
-		if ($this->session->flashdata('success')) {
+	<?= validation_errors("<p class='alert alert-danger'>", "</p>")?>
+	<?php 
+			if ($this->session->flashdata('success')) {
 		echo "<p class='alert alert-success'>";
 			 print_r($this->session->flashdata('success'));
 			 
 			echo "</p>";
-			}
-
-		
-		
-		
-			echo form_open("usuarios/salvaUsuarioAtravesDoAplicativo", array (
+			}	?>
+		<!-- Form -->
+		<div class="signup-form">
+		<?php 
+			echo form_open("cadastroUsuario/salvarUsuario", array (
 			'id' => 'novousuario',
 			'role' => 'form'
 	));
@@ -159,6 +149,7 @@
 							<div class="col-md-12">
 								<select id="perfil" name="perfil" class="form-control input-lg">
 										<option value="3">Sou Aluno</option>
+										<option value="2">Sou Professor</option>
 									
 
 								</select>
@@ -168,7 +159,7 @@
 					</div>
 				
 				<!-- Fim Perfil -->
-		
+			
 
 				<div class="form-group w-icon">
 					<input type="password" name="senha" id="senha" class="form-control input-lg" placeholder="Password">
@@ -181,7 +172,7 @@
 						<span class="lbl">Eu concordo com os termos e condições <a href="#" target="_blank">Termos e Condições</a></span>
 					</label>
 				</div>
-
+				<input type="hidden" name="cadastroDoSite" value=<?=$cadastroDoSite?> >
 				<div class="form-actions">
 					<input type="submit" value="CADASTRAR" class="signup-btn bg-primary">
 				</div>

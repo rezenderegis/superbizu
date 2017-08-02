@@ -153,7 +153,7 @@
 			<!-- "Sign In with" block -->
 			<div class="signin-with">
 				<!-- Facebook -->
-				<?=anchor('usuarios/novoUsuario',  'Ainda não é cadastrado? <Span>Cadastre-se agora</Span>', array('class' => 'signin-with-btn', 'style' => 'background:#4f6faa;background:rgba(79, 111, 170, .8)'))?>
+				<?=anchor('cadastroUsuario/formularioCadastroUsuario/true',  'Ainda não é cadastrado? <Span>Cadastre-se agora</Span>', array('class' => 'signin-with-btn', 'style' => 'background:#4f6faa;background:rgba(79, 111, 170, .8)'))?>
 			</div>
 			<!-- / "Sign In with" block -->
 

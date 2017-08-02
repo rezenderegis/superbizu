@@ -72,11 +72,12 @@ class Usuarios extends CI_Controller {
 			}
 			
 			// Verifica o id do usuário para adicionar o perfil
-			$idusuarioNovo = $this->usuarios_model->buscaPorEmail ( $this->input->post ( "email" ) );
+			$idusuarioNovo = $this->usuarios_model->verificaUsuarioExiste( $this->input->post ( "email" ) );
 			
-			if (count ( $idusuarioNovo ) != 0) {
+			if (sizeof($idusuarioNovo)  != 0) {
 				
 				$idusuarioNovo = $idusuarioNovo ['id'];
+				
 			} else {
 				
 				$usuario = array (
@@ -111,10 +112,13 @@ class Usuarios extends CI_Controller {
 			);
 			
 			$this->usuarios_model->insereUsuarioEmpresa ( $insereUsuarioEmpresa );
+			
+			
+			
 			$ultimoUsuarioEmpresaInserida = $this->empresa_model->buscaUltimoUsuarioEmpresaInserida ( $idusuarioNovo );
 			
 			$this->load->model ( "usuarios_model" );
-			
+		
 			$this->usuarios_model->salvaPerfil ( $ultimoUsuarioEmpresaInserida ['id'], $this->input->post ( "tipoUsuarioInserir" ) );
 			$tipoCadastroConta = "";
 			if ($this->input->post ( "tipoUsuarioInserir" ) == 2) {
@@ -127,11 +131,13 @@ class Usuarios extends CI_Controller {
 			
 			$this->session->set_flashdata ( "success", "Usuario salvo com sucesso!" );
 			
+			
 			if ($this->input->post ( "tipoUsuarioInserir" ) == 3) {
 				redirect ( "usuarios/listaAlunos" );
 			} else if ($this->input->post ( "tipoUsuarioInserir" ) == 2) {
 				redirect ( "usuarios/listaProfessores" );
 			}
+			
 		} else {
 			
 			if ($this->input->post ( "tipoUsuarioInserir" ) == 3) {
@@ -198,7 +204,7 @@ class Usuarios extends CI_Controller {
 				$this->load->model ( "empresa_model" );
 				
 				// Desabilitado dia 07/06/2017 por conta do erro de conexão no servidor de email do google.
-				$this->enviar_email_criacao_conta ( $idusuarioNovo );
+				$this->enviar_email_criacao_conta ( $idusuarioNovo,"" );
 				/*
 				 * Adicionado em 17-11-2014. Cadastra a empresa com o mesmo nome do usu�rio Se o usu�rio for novo, cadastra a empresa com o mesmo nome do usu�rio. No sistema o usu�rio dever� ser orientado a fazer a edi��o do nome da empresa
 				 */
@@ -694,7 +700,7 @@ class Usuarios extends CI_Controller {
 		
 		// echo "sfalsdfasdfçasdf: s".$email;
 		$this->load->model ( "usuarios_model" );
-		$usuarioEmail = $this->usuarios_model->verificaExisteUsuario ( $email, 2 );
+		$usuarioEmail = $this->usuarios_model->verificaExisteUsuario ( trim ($this->input->post ( "email" )), 2 );
 		// echo "<br/>";
 		// print_r($usuarioEmail['id']);
 		// die();
@@ -712,7 +718,7 @@ class Usuarios extends CI_Controller {
 		
 		// echo "sfalsdfasdfçasdf: s".$email;
 		$this->load->model ( "usuarios_model" );
-		$usuarioEmail = $this->usuarios_model->verificaExisteUsuario ( $email, 3 );
+		$usuarioEmail = $this->usuarios_model->verificaExisteUsuario ( trim ($this->input->post ( "email" )), 3 );
 		// echo "<br/>";
 		// print_r($usuarioEmail['id']);
 		// die();
@@ -730,7 +736,7 @@ class Usuarios extends CI_Controller {
 		
 		// echo "sfalsdfasdfçasdf: s".$email;
 		$this->load->model ( "usuarios_model" );
-		$usuarioEmail = $this->usuarios_model->verificaExisteUsuarioQualquerPerfilNaEmpresa ( $email );
+		$usuarioEmail = $this->usuarios_model->verificaExisteUsuarioQualquerPerfilNaEmpresa ( trim ($this->input->post ( "email" )));
 		// echo "<br/>";
 		// print_r($usuarioEmail['id']);
 		// die();

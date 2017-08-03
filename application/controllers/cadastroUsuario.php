@@ -111,16 +111,16 @@ class cadastroUsuario extends CI_Controller {
 			// Inscreve o aluno por padrão no Paulo
 			$this->load->model ( "usuarios_model" );
 			
-			/*
+			
 			//Produção
 			$idEmpresaPadrao = 112;
 			$idGrupoPadrao = 48;
-			*/
-			
+		
+			/*
 			 //Desenvolvimento
 			$idEmpresaPadrao = 105;
 			$idGrupoPadrao = 40;
-			 
+			 */
 			
 			$this->usuarios_model->inserirDadosPadrao ( $idUsuario, $idEmpresaPadrao, $idGrupoPadrao);
 		}

@@ -1,3 +1,11 @@
+<style>
+#formatacao { 
+    z-index: 2;
+    position: relative;
+
+}
+</style>
+
 <div class="page-header">
 	<h1>
 		<span class="text-ligth-gray">Questões Cadastradas</span>
@@ -52,12 +60,11 @@
 						</td>
 						
 				
-				
 									<td style="width: 50px"> 
 									
-										<div class="btn-group btn-group-xs">
+								<div class="btn-group btn-group-xs">
 								<button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"><span class="fa fa-cog"></span>&nbsp;<span class="fa fa-caret-down"></span></button>
-								<ul class="dropdown-menu dropdown-menu-right">
+								<ul class="dropdown-menu dropdown-menu-right" id="formatacao">
 									<li><?=anchor ( "questoes/formulario/{$questao['ID_QUESTAO']}", '<img src="' . base_url () . 'imagens/ic_editar.png" alt="Delete" /> &nbsp;&nbsp;&nbsp;&nbsp;Editar' )?></li>
 									<li><?=anchor("questoes/listaItens/{$questao['ID_QUESTAO']}",  '<img src="'.base_url().'imagens/ic_add_box.png" alt="Delete" />  &nbsp;&nbsp;&nbsp;&nbsp;Incluir Itens')?></li>
 									<li><?=anchor_popup("arquivo/novaEvidencia/{$questao['ID_QUESTAO']}", '<img src="'.base_url().'imagens/ic_insert_photo.png" alt="Delete" />  &nbsp;&nbsp;&nbsp;&nbsp;Incluir Imagem', $atts)?></li>

@@ -113,7 +113,6 @@ function loadDoc() {
 
 
 				<td> <?=anchor("questoes/verDetalheQuestao/{$lista['IDLISTAQUESTOES']}", '<img src="'.base_url().'imagens/ic_zoom_in.png" alt="Delete" />')?>
-				<?=anchor ( "lista/formularioEditarLista/{$lista['IDLISTAQUESTOES']}", '<img src="' . base_url () . 'imagens/ic_editar.png" /> ' )?>
 								<?=anchor ( "lista/formularioEditarLista/{$lista['IDLISTAQUESTOES']}", '<img src="' . base_url () . 'imagens/ic_editar.png" /> ' )?>
 				
 				
@@ -121,7 +120,7 @@ function loadDoc() {
 				</td>
 
 				<td class="gacesso"> <?=anchor("grupos_alunos/mostrarGruposAcessoLista/{$lista['IDLISTAQUESTOES']}", '<img src="'.base_url().'imagens/ic_add_box.png" alt="Delete" />')?>
-				<?=anchor("lista/formularioResolverLista/{$lista['IDLISTAQUESTOES']}", '<i class="navbar-icon fa fa-bars icon"></i><span')?>
+				<?=anchor("lista/formularioVisualizarLista/{$lista['IDLISTAQUESTOES']}", '<i class="navbar-icon fa fa-bars icon"></i><span')?>
 				</td>
 				<!-- 
 				<td>

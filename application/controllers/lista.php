@@ -226,11 +226,41 @@ class Lista extends CI_Controller {
 					"questoes" => $questoes, "idLista" => $idLista, "tipoTela" => "RESOLUCAO"
 			);
 			// $this->load->view("cabecalho.php");
-			$this->load->template2 ( "lista/formularioResolverLista.php", $dados );
+			$this->load->template2 ( "lista/formularioResolverLista", $dados );
 			// $this->load->view("rodape.php");
 		
 		
 		}
+		
+		
+		public function formularioVisualizarLista ($idLista) {
+			
+			autoriza ();
+			
+			$this->load->model ( "questoes_model" );
+			// $empresa = $this->session->userdata("idempresa");
+			$questoes = $this->questoes_model->buscaQuestoesPorLista ($idLista);
+			
+			$this->load->helper ( array (
+					"currency"
+			) );
+			// $this->load->helper("currency");
+			
+			// ADICIONA HELPER DE CRIA��O DE FORMUL�RIO
+			// $this->load->helper("form");
+			
+			$dados = array (
+					"questoes" => $questoes, "idLista" => $idLista, "tipoTela" => "VISUALIZACAO"
+			);
+			// $this->load->view("cabecalho.php");
+			$this->load->template2 ( "lista/formularioVisualizacaoLista", $dados );
+			// $this->load->view("rodape.php");
+			
+			
+		}
+		
+		
+		
 		
 		public function formularioVerificarResolucao ($idLista, $idResolucao=0) {
 		

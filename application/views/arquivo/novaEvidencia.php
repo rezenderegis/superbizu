@@ -22,7 +22,7 @@ $texto_botao = 'Salvar';
 
 $dados = array("id_questao" => $id_questao, "tipoInsercao" => $tipoInsercao);
 
-echo form_hidden();
+echo form_hidden($dados);
 
 ?>
 

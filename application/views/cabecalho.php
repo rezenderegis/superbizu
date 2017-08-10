@@ -576,7 +576,8 @@ if ($this->session->userdata ( "usuario_logado" )) {
 	
 	<!-- Menu espefício para questões -->
 				<li><?=anchor("lista/resolucoesLista", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Resoluções</span>');?></li>
-	
+				<li><?=anchor("materias/index", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Matérias</span>');?></li>
+
 				<li><?=anchor("assuntos/index", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Assuntos de Questões</span>');?></li>
 				<li><?=anchor("questoes/index", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Questões</span>');?></li>
 				<li><?=anchor("lista/listaQuestoes", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Lista de Questões</span>');?></li>

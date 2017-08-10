@@ -120,17 +120,29 @@
 			</ul> <!-- / Info list -->
 		</div>
 		<!-- / Left side -->
-<?= validation_errors("<p class='alert alert-danger'>", "</p>")?>
 		
 		<!-- Right side -->
 		<div class="signin-form">
-
+	<?php 
+			if ($this->session->flashdata('danger')) {
+			
+		echo "<p class='alert alert-danger'>";
+			 print_r($this->session->flashdata('danger'));
+			 
+			echo "</p>";
+			}	?>
 			<!-- Form -->
+			
+			
+			
 			<?php
 			echo form_open("login/autenticar", array('id' => 'login'));
 			?>
+			
 				<div class="signin-text">
+				
 					<span>Entre com sua conta</span>
+					
 				</div> <!-- / .signin-text -->
 
 				<div class="form-group w-icon">

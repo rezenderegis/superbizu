@@ -20,7 +20,14 @@ class cadastroUsuario extends CI_Controller {
 		$this->form_validation->set_rules ( "email", "email", "required|callback_usuarioDuplicado" ); // REGRA PARA O CAMPO NOME LABEL NOME
 			
 		$this->form_validation->set_rules ( "senha", "senha", "required|min_length[3]" ); // REGRA PARA O CAMPO NOME LABEL NOME
-				
+		
+		if ($this->input->post ( "perfil" ) == 3) 
+			{
+				$this->form_validation->set_rules ( "codigoConvite", "Código Convite", "required|callback_verificaConviteExiste" ); // REGRA PARA O CAMPO NOME LABEL NOME
+			}
+		
+
+				//
 		$sucesso = $this->form_validation->run ();
 				
 		$this->load->model ( "usuarios_model" );
@@ -32,7 +39,7 @@ class cadastroUsuario extends CI_Controller {
 				$usuario = array (
 						"nome" => $this->input->post ( "nome" ),
 						"email" => trim ($this->input->post ( "email" )),
-						"senha" => md5 ( trim ($this->input->post ( "senha" )) ),
+						"senha" => md5 ( trim ($this->input->post ( "senha" )) )
 				);
 				
 				$this->usuarios_model->salva ( $usuario );
@@ -62,7 +69,8 @@ class cadastroUsuario extends CI_Controller {
 				}
 				
 					
-				$this->salvaPerfilUsuarios($idusuarioBanco, $this->input->post ( "perfil" ), $idEmpresa);
+				$this->salvaPerfilUsuarios($idusuarioBanco, $this->input->post ( "perfil" ), 
+				$idEmpresa, $this->input->post ( "codigoConvite" ));
 				
 			
 				if ($this->input->post("cadastroDoSite") == true) {
@@ -104,17 +112,22 @@ class cadastroUsuario extends CI_Controller {
 		return $idempresa;
 	}
 	
-	public function salvaPerfilUsuarios($idUsuario, $idPerfil, $idEmpresa) {
+	public function salvaPerfilUsuarios($idUsuario, $idPerfil, $idEmpresa, $codigoConvite) {
 		
+
 		
 		if ($idPerfil == 3) {
+
+			$this->load->model("grupos_alunos_model");
+			$dadosGrupo = $this->grupos_alunos_model->trazGrupoPeloCodigoConvite($codigoConvite);
+			//print_r($dadosGrupo); die();
 			// Inscreve o aluno por padrão no Paulo
 			$this->load->model ( "usuarios_model" );
 			
 			
 			//Produção
-			$idEmpresaPadrao = 112;
-			$idGrupoPadrao = 48;
+			$idEmpresaPadrao = $dadosGrupo['empresaGrupo'];
+			$idGrupoPadrao = $dadosGrupo['idGrupo'];
 		
 			/*
 			 //Desenvolvimento
@@ -175,6 +188,22 @@ class cadastroUsuario extends CI_Controller {
 			return true;
 		} else {
 			 $this->form_validation->set_message("usuarioDuplicado", "Já existe um usuário cadastrado com esse email");
+			return false;
+		}
+	}
+
+		public function verificaConviteExiste() {
+		
+		$this->load->model ( "grupos_alunos_model" );
+		$codigoConvite = $this->grupos_alunos_model->trazGrupoPeloCodigoConvite( $this->input->post ( "codigoConvite" ));
+		//echo $usuarioEmail; die();
+		//print_r($codigoConvite);
+	//	echo sizeof($codigoConvite) ; die();
+		if (sizeof($codigoConvite) != 0) {
+						
+			return true;
+		} else {
+			 $this->form_validation->set_message("verificaConviteExiste", "Código de convite inválido.");
 			return false;
 		}
 	}

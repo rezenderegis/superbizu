@@ -767,8 +767,20 @@ class Usuarios extends CI_Controller {
 	}
 	
 	function formulario_esqueceu_senha() {
-		$this->load->view ( "usuarios/formulario_esqueceu_senha" );
+		//$this->load->view ( "usuarios/formulario_esqueceu_senha" );
+		$this->mensagem();
 	}
+	function formularioEsqueceuSenha() {
+		$this->load->view ( "usuarios/formulario_esqueceu_senha" );
+		
+	}
+	
+	function mensagem() {
+		$this->load->view ( "usuarios/mmensagem" );
+		
+	}
+	
+	
 	function solicitar_alteracao_senha() {
 		$this->load->model ( "usuarios_model" );
 		$email = $this->usuarios_model->buscaPorEmail ( $this->input->post ( "email" ), '' );
@@ -776,8 +788,12 @@ class Usuarios extends CI_Controller {
 		if ($email) {
 			
 			$this->load->model ( "email_model" );
-			$this->email_model->enviar ( $this->input->post ( "email" ), $this->input->post ( "nome" ) );
+			$retorno = $this->email_model->enviar ( $this->input->post ( "email" ), $this->input->post ( "nome" ) );
 			
+			if ($retorno){
+				redirect ( "usuarios/formulario_esqueceu_senha" );
+				
+			}
 			$this->session->unset_userdata ( "usuario_logado" );
 			$this->session->unset_userdata ( "idempresa" );
 			$this->session->unset_userdata ( "login" );

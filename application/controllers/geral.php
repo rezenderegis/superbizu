@@ -85,13 +85,14 @@ class Geral extends CI_Controller {
 		$this->usuarios_model->quantidadePerfisUsuario ( $idusuario );
 		
 		$perfilUsuario = $this->usuarios_model->buscaPerfilUsuario ( $idusuario, $id_empresa_usuario );
-		
+		//print_r($perfilUsuario); die();
 		if ($perfilUsuario != null) {
 			
 			$perfil = $perfilUsuario;
 		} else {
 			$perfil = 0;
 		}
+		
 		$this->session->set_userdata ( "perfil", $perfil );
 		// echo $qtd_empresas_usuario;
 		

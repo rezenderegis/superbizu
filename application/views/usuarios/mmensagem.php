@@ -118,7 +118,7 @@
 		<div class="signup-form">
 		
 				<div class="signup-text">
-					<span>Já existe um usuário cadastrado com este e-mail!</span>
+					<span>Solicite recuperação da senha através do email <br/> <a href="mailto:suporte@superbizu.com.br">suporte@superbizu.com.br</a></span>
 				</div>
 
 			</form>

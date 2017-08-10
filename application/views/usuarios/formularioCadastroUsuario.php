@@ -55,6 +55,24 @@
 			padding-bottom: 6px;
 		}
 	</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+	<script>
+	$(document).ready(function(){
+    $('#perfil').on('change', function() {
+      if ( this.value == '3')
+      //.....................^.......
+      {
+        $("#codigoConvite").show();
+      }
+      else
+      {
+        $("#codigoConvite").hide();
+      }
+    });
+});
+	
+	</script>
 <!-- / $DEMO -->
 
 </head>
@@ -159,7 +177,10 @@
 					</div>
 				
 				<!-- Fim Perfil -->
-			
+				<div class="form-group w-icon">
+					<input type="text" name="codigoConvite" id="codigoConvite" class="form-control input-lg" placeholder="Código Convite">
+					<span class="fa fa-info signup-form-icon"></span>
+				</div>
 
 				<div class="form-group w-icon">
 					<input type="password" name="senha" id="senha" class="form-control input-lg" placeholder="Password">

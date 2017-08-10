@@ -12,6 +12,18 @@ class Grupos_alunos_model extends CI_Model {
 			return $this->db->get()->result_array();
 		}
 		
+		public function trazGrupoPeloCodigoConvite($codigoConvite) {
+
+			$idGrupo = explode("#", $codigoConvite);
+			//echo $idGrupo[1]; die();
+			$this->db->select("tb_grupo.*");
+			$this->db->from("tb_grupo");
+			$this->db->where("tb_grupo.idGrupo", $idGrupo[1]);
+			return $this->db->get()->row_array();
+		}
+
+
+
 		public function trazSemExistentes($gruposExistentes,$idEmpresa) { 
 			
 			$parametro = "";

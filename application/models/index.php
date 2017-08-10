@@ -53,8 +53,6 @@ echo form_open ( "grupos_alunos/salvarNovoGrupo", array (
 		<thead>
 			<tr>
 				<th><b>Nome do Grupo</b></th>
-				<th><b>Códgo Convite Grupo</b></th>
-
 				<th>Incluir Aluno no Grupo</th>
 			</tr>
 		</thead>
@@ -68,7 +66,6 @@ echo form_open ( "grupos_alunos/salvarNovoGrupo", array (
 	<tr>
 
 				<td><?=$grupo["nomeGrupo"] ?></td>
-				<td><?=strtoupper(substr($grupo["nomeGrupo"], 0, 3))."#".$grupo['idGrupo'] ?></td>
 
 				<td>
 				<?=anchor("grupos_alunos/incluir_aluno_grupo/{$grupo['idGrupo']}",  '<img src="'.base_url().'imagens/ic_add_box.png" alt="Delete" />')?>

@@ -8,7 +8,9 @@ class assuntos extends CI_Controller {
 		
 		//Dados para o formulário de assuntos
 		
-		$materias = $this->assuntos_model->traz_materias();
+		$idEmpresa = $this->session->userdata('idempresa');
+		$this->load->model("materias_model");
+		$materias = $this->materias_model->traz_materias($idEmpresa);
 		$assuntosParaFormulario = $this->assuntos_model->traz_itens();
 				
 		

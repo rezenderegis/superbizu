@@ -29,7 +29,7 @@ public function autenticar() {
 
 	} else {
 
-			$this->session->set_flashdata("danger", "Usu�rio ou senha inv�lidos.");
+			$this->session->set_flashdata("danger", "Usuário ou senha inválidos.");
 			redirect('geral/index'); 
 
 	}

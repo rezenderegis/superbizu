@@ -71,7 +71,7 @@ class Email_model extends CI_Model {
 		$mensagem_completa = $inicio . $meio . $rodape;
 		$this->load->library ( 'email' );
 		
-		$this->email->from ( 'superbizu.estudos@gmail.com', 'Superbizu Estudos ' );
+		$this->email->from ( 'info@superbizu.com.br', 'Superbizu - Info ' );
 		$this->email->to ($email);
 		//$this->email->cc ( 'rezenderegis@gmail.com' );
 		
@@ -87,17 +87,19 @@ class Email_model extends CI_Model {
 			// $this->session->set_flashdata("success", "Solicita��o feita com sucesso!");
 			// echo 'E-mail para '.$acoes['email'].' enviado com sucesso!';
 		} else {
-			show_error ( $this->email->print_debugger () );
+			//show_error ( $this->email->print_debugger () );
+			return $this->email->print_debugger ();
+			
 		}
 	}
 	
 	public function enviarEmailNotificacaoNovaLista($alunos, $nomeLista) {
 		
-		foreach ($alunos as $aluno) {
+		/*foreach ($alunos as $aluno) {
 			 
 			$this->enviar_email_criacao_conta($aluno['email'], "PROFESSOR_ADICIONA_LISTA_GRUPO_ALUNO", $nomeLista);
 				
-		}
+		}*/
 		
 		
 	}

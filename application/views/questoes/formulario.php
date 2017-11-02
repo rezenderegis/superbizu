@@ -43,7 +43,20 @@ echo form_open ( "questoes/novo", array (
 					<div class="tab-pane active" id="bs-tabdrop-pill1">
 						
 						<?php 
-						
+						echo "<div class='form-group'>";
+						echo form_label ( "Questão", "nome", $attributes );
+						echo "<div class='col-sm-10'>";
+						echo form_textarea ( array (
+									"name" => "nome",
+									"class" => "form-control",
+									"id" => "nome",
+									"type" => "text",
+									"maxlength" => "5000",
+									"value" => set_value ( "nome", $dados_produto_edicao ['DESCRICAO_QUESTAO'] )
+							) );
+							// echo form_error("nome");
+						echo "</div>";
+						echo "</div>";
 
 						echo "<div class='form-group'>";
 						echo form_label ( "Comando da Questão", "comando", $attributes );
@@ -59,20 +72,7 @@ echo form_open ( "questoes/novo", array (
 						echo "</div>";
 						
 
-						echo "<div class='form-group'>";
-						echo form_label ( "Questão", "nome", $attributes );
-						echo "<div class='col-sm-10'>";
-						echo form_textarea ( array (
-								"name" => "nome",
-								"class" => "form-control",
-								"id" => "nome",
-								"type" => "text",
-								"maxlength" => "5000",
-								"value" => set_value ( "nome", $dados_produto_edicao ['DESCRICAO_QUESTAO'] )
-						) );
-						// echo form_error("nome");
-						echo "</div>";
-						echo "</div>";
+					
 						
 						echo "<div class='form-group'>";
 						echo form_label ( "Comentário da Questão", "comentario_questao", $attributes );
@@ -191,6 +191,25 @@ echo "<option value=2 " . $apl_2 . ">2a</option>";
 echo "</select>";
 echo "</div>";
 echo "</div>";
+
+
+if ($dados_produto_edicao ['APLICACAO'] == 1) {
+	$apl_1 = "selected";
+} else if ($dados_produto_edicao ['APLICACAO'] == 2) {
+	$apl_2 = "selected";
+}
+
+echo form_error ( 'habilidades', "<p class='alert alert-danger'>", "</p>" );
+echo "<div class='form-group'>";
+echo form_label ( "Habilidades", "habilidades", $attributes );
+echo "<div class='col-sm-2'>";
+echo "<select name='habilidades' id='habilidades' class='form-control'>";
+echo "<option value=1 " . $apl_1 . ">1a</option>";
+echo "<option value=2 " . $apl_2 . ">2a</option>";
+echo "</select>";
+echo "</div>";
+echo "</div>";
+
 
 if ($dados_produto_edicao ['DIA_PROVA'] == 1) {
 	$dia_1 = "selected";

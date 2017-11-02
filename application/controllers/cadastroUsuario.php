@@ -125,7 +125,6 @@ class cadastroUsuario extends CI_Controller {
 			$this->load->model ( "usuarios_model" );
 			
 			
-			//Produção
 			$idEmpresaPadrao = $dadosGrupo['empresaGrupo'];
 			$idGrupoPadrao = $dadosGrupo['idGrupo'];
 		

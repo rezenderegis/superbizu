@@ -124,6 +124,7 @@ Highcharts.chart('container', {
 
 
 <?php 
+//print_r($questoesPorLista); 
 foreach ($questoesPorLista as $questoes)  {
 	//print_r($questoes); die();
 	$CI =& get_instance();
@@ -151,7 +152,7 @@ Highcharts.chart('<?=$questoes['ID_QUESTAO']?>', {
         type: 'pie'
     },
     title: {
-        text: '<?=$questoes['NUMERO_QUESTAO']." - ".word_limiter($questoes['DESCRICAO_QUESTAO'], 7)?>',
+        text: '<?=$questoes['NUMERO_QUESTAO']." - ".word_limiter($questoes['DESCRICAO_QUESTAO'], 10, '')?>',
         align: 'justify',
         style: 'CSSObject'
     },

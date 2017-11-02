@@ -108,14 +108,14 @@ function loadDoc() {
 	<tr>
 								<td><?=$lista["nome_professor"] ?></td>
 				
-				<td><?=$lista["DESCRICAO"] ?></td>
-
+				<td><?=anchor("lista/formularioResolverLista/{$lista['IDLISTAQUESTOES']}/{$lista['DESCRICAO']}", $lista["DESCRICAO"]) ?></td>
+				
 				
 								<td><?=$lista["SITUACAO_LISTA"] ?></td>
 				
 
 				<td class="gacesso"> 
-				<?=anchor("lista/formularioResolverLista/{$lista['IDLISTAQUESTOES']}", '<i class="navbar-icon fa fa-bars icon"></i><span')?>
+				<?=anchor("lista/formularioResolverLista/{$lista['IDLISTAQUESTOES']}/{$lista['DESCRICAO']}", '<i class="navbar-icon fa fa-bars icon"></i><span')?>
 				</td>
 			
 			</tr>

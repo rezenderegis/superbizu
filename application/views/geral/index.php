@@ -157,7 +157,7 @@
 
 				<div class="form-actions">
 					<input type="submit" value="ENTRAR" class="signin-btn bg-primary">
-					<?=anchor('usuarios/formulario_esqueceu_senha', 'Esqueceu sua senha?', array("class" => "forgot-password"))?>
+					<?=anchor('usuarios/formularioEsqueceuSenha', 'Esqueceu sua senha?', array("class" => "forgot-password"))?>
 				</div> <!-- / .form-actions -->
 			</form>
 			<!-- / Form -->

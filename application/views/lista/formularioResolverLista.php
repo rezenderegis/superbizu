@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1>
-		<span class="text-ligth-gray">Lista xxxx - Professor Fulano</span>
+		<span class="text-ligth-gray">Lista de Exercícios - <b> <?=$descricaoLista?> </b></span>
 	</h1>
 </div>
 

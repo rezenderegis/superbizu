@@ -206,14 +206,17 @@ class Lista extends CI_Controller {
 		}
 		
 		
-		public function formularioResolverLista ($idLista, $descricao='') {
+		public function formularioResolverLista ($idLista) {
 		
 			autoriza ();
 			
 			$this->load->model ( "questoes_model" );
+			$this->load->model("lista_model");
+
 			// $empresa = $this->session->userdata("idempresa");
 			$questoes = $this->questoes_model->buscaQuestoesPorLista ($idLista);
-		
+			$dadosLista = $this->lista_model->trazDadosLista($idLista);
+
 			$this->load->helper ( array (
 					"currency"
 			) );
@@ -223,7 +226,7 @@ class Lista extends CI_Controller {
 			// $this->load->helper("form");
 		
 			$dados = array (
-					"questoes" => $questoes, "idLista" => $idLista, "tipoTela" => "RESOLUCAO", "descricaoLista" => $descricao
+					"questoes" => $questoes, "idLista" => $idLista, "tipoTela" => "RESOLUCAO", "descricaoLista" => $dadosLista['DESCRICAO']
 			);
 			// $this->load->view("cabecalho.php");
 			$this->load->template2 ( "lista/formularioResolverLista", $dados );

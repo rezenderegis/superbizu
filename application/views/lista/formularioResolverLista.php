@@ -51,6 +51,7 @@
 		 	
 							<?php
 							$itens = $CI->trazItensQuestao($questao['ID_QUESTAO']);
+							
 				foreach ($itens as $item) {
 						$checked = "";
 						$edicao = "";
@@ -72,8 +73,10 @@
 							
 							
 						}
-						
+							
+
 						$preencher = $item['LETRA_ITEM']." )".$item['DESCRICAO'];
+						
 					if ( strcmp($falso, "SIM") == 0 && $checked) { 
 						
 							$preencher = "<s>".$preencher."</s>";
@@ -82,17 +85,33 @@
 						
 							$preencher = "<font color='blue'>".$preencher."</font>";
 						}
+
+						
+
 					?>
 					<label>
 					<input type="radio" name="resposta[<?=$questao['ID_QUESTAO']?>]" id="optionsRadios1" value="<?=$item['ID_ITEM']?>" <?=$checked?> class="px" <?=$edicao ?>>
 					<span class="lbl"><?=$preencher?></span>
-					</label>
 					
+					</label>
+					<?php 
+					///print_r($preencher); die();
+						$preencher = $item['LETRA_ITEM']." )".$item['DESCRICAO'];
+						$imagem = "uploads/".$item['NOME_IMAGEM_ITEM_SISTEMA'];
+						if ($item['NOME_IMAGEM_ITEM_SISTEMA'] != 1) {
+						?>
+						<img src='<?=base_url($imagem)?>' alt="" class="img-rounded"  width="283" height="236" align="center" >
+						 
+						 <?php } ?>
+
+
+
 					
 				<?php 
 				}
 				?>				
 				</div>
+				</br></br></br>	 
 						
 
 <?php endforeach ?>

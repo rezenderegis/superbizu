@@ -29,8 +29,8 @@ class Email_model extends CI_Model {
 		$this->load->model ( "usuarios_model" );
 		$email = trim ( $email );
 		
-		$dados_usuario = $this->usuarios_model->buscaPorEmail ( $email, '' );
-		
+		$dados_usuario = $this->usuarios_model->trazDadosUsuario ( $email, '' );
+		//print_r($dados_usuario); die();
 		$date = date ( 'm/Y' );
 		$codigo_senha = md5 ( $dados_usuario ['id'] . $email );
 		/*

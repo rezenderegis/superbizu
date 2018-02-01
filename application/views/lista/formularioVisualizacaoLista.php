@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1>
-		<span class="text-ligth-gray">Lista xxxx - Professor Fulano</span>
+		<span class="text-ligth-gray"><?=$descricaoLista; ?> </span>
 	</h1>
 </div>
 
@@ -77,12 +77,23 @@
 					<span class="lbl"><?=$preencher?></span>
 					</label>
 					
+					<?php 
+					///print_r($preencher); die();
+						$preencher = $item['LETRA_ITEM']." )".$item['DESCRICAO'];
+						$imagem = "uploads/".$item['NOME_IMAGEM_ITEM_SISTEMA'];
+						if ($item['NOME_IMAGEM_ITEM_SISTEMA'] != 1) {
+						?>
+						<img src='<?=base_url($imagem)?>' alt="" class="img-rounded"  width="283" height="236" align="center" >
+						</br></br></br>	 
+						 <?php } ?>
+						
 					
 				<?php 
 				}
-				?>				
+				?>	
+								
 				</div>
-						
+				
 
 <?php endforeach ?>
 

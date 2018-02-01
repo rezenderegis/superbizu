@@ -49,14 +49,16 @@ Use search to find needed section.
 	rel="stylesheet" type="text/css">
 <link href="<?=base_url("assets/stylesheets/themes.min.css")?>"
 	rel="stylesheet" type="text/css">
-
+	<link href="<?=base_url("js/mathquill-0.10.1/mathquill-basic.css")?>"
+	rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
 		<script src="assets/javascripts/ie.min.js"></script>
 	<![endif]-->
 
 </head>
 	<script src="<?php echo base_url('js/MathJax-master/MathJax.js');?>"></script>
-	
+	<script src="<?php echo base_url('js/mathquill-0.10.1/mathquill.min.js');?>"></script>
+
 	<script src="<?php echo base_url('js/highcharts.js');?>"
 	type="text/javascript"></script>
 	<script src="<?php echo base_url('js/highstock.js');?>"

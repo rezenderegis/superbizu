@@ -129,10 +129,10 @@ class Questoes extends CI_Controller {
 		$this->load->model ( "questoes_model" );
 		$this->load->library ( "form_validation" );
 		
-		$this->form_validation->set_rules ( "descricao", "Descrição da ítem", "required" );
+		///$this->form_validation->set_rules ( "descricao", "Descrição da ítem", "required" );
 		
-		$sucesso = $this->form_validation->run ();
-		
+	//	$sucesso = $this->form_validation->run ();
+		$sucesso = 1;
 		if ($sucesso) {
 			
 			if (! $this->input->post ( "id_item" )) {
@@ -389,10 +389,6 @@ class Questoes extends CI_Controller {
 	
 	public function verDetalheQuestao ($idLista) {
 		
-		
-		
-		
-		
 		autoriza ();
 	
 		$this->load->model ( "questoes_model" );
@@ -419,10 +415,7 @@ class Questoes extends CI_Controller {
 	
 	public function verDetalhePopup ($idLista=1) {
 	
-	
-	
-	
-	
+
 		autoriza ();
 	
 		$this->load->model ( "questoes_model" );

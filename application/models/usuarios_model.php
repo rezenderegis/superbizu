@@ -327,6 +327,29 @@ class Usuarios_model extends CI_Model {
 		
 	}
 
+	public function trazDadosUsuario($email='',$id='') {
+		$email = trim($email);
+
+		$this->db->select("usuario.email as email, usuario.nome as nome, usuario.id as id");
+		$this->db->from("usuario");
+	;
+
+		
+		if ($email != '') {
+		
+			$this->db->where("usuario.email",  $email);
+		} 
+		
+		if ($id != '') {
+			$this->db->where("usuario.id",  $id);
+				
+		}
+	
+		$usuario = $this->db->get()->row_array();
+		
+		return $usuario;
+		
+	}
 	
 	
 	public function mudar_senha($dados, $id_usuario) {

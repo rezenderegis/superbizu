@@ -1,3 +1,8 @@
+<script>
+var MQ = MathQuill.getInterface(2);
+
+</script>
+
 <div class="page-header">
 	<h1>
 		<span class="text-ligth-gray">Cadastro de Nova Questão</span>
@@ -153,7 +158,32 @@ echo form_open ( "questoes/novo", array (
 						
 						
 						?>
-						
+
+						<div class='form-group'>
+<p>In your webapp:</p>
+
+<div id="example">
+  <p>Type math here: <span id="math-field"></span></p>
+  <p>LaTeX of what you typed: <code id="latex"></code></p>
+
+  <script>
+  var mathFieldSpan = document.getElementById('math-field');
+  var latexSpan = document.getElementById('latex');
+
+  var MQ = MathQuill.getInterface(2); // for backcompat
+  var mathField = MQ.MathField(mathFieldSpan, {
+    spaceBehavesLikeTab: true, // configurable
+    handlers: {
+      edit: function() { // useful event handlers
+        latexSpan.textContent = mathField.latex(); // simple API
+      }
+    }
+  });
+  </script>
+</div>
+
+
+</div>
 						
 					</div>
 					<div class="tab-pane" id="bs-tabdrop-pill2">
@@ -230,7 +260,7 @@ echo "</div>";
 
 
 echo "<div class='form-group'>";
-echo form_label ( "Ano", "ano", $attributes );
+echo form_label ( "AnoASDFASD", "ano", $attributes );
 echo "<div class='col-sm-2'>";
 echo form_input ( array (
 		"name" => "ano",
@@ -244,6 +274,9 @@ echo form_input ( array (
 echo "</div>";
 echo "</div>";
 ?>
+
+
+
 					</div>
 
 				</div>

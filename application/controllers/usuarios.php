@@ -813,7 +813,7 @@ class Usuarios extends CI_Controller {
 	 * */
 	function alterar_senha($id_usuario=0, $codigo=0) {
 		$this->load->model ( "usuarios_model" );
-		$email = $this->usuarios_model->buscaPorEmail ( '', $id_usuario );
+		$email = $this->usuarios_model->trazDadosUsuario ( '', $id_usuario );
 		//print_r($email); die();
 		
 		$codigo_senha = md5 ( $id_usuario . $email ['email'] );

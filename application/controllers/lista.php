@@ -241,6 +241,8 @@ class Lista extends CI_Controller {
 			autoriza ();
 			
 			$this->load->model ( "questoes_model" );
+			$this->load->model("lista_model");
+			
 			// $empresa = $this->session->userdata("idempresa");
 			$questoes = $this->questoes_model->buscaQuestoesPorLista ($idLista);
 			
@@ -251,9 +253,10 @@ class Lista extends CI_Controller {
 			
 			// ADICIONA HELPER DE CRIA��O DE FORMUL�RIO
 			// $this->load->helper("form");
+			$dadosLista = $this->lista_model->trazDadosLista($idLista);
 			
 			$dados = array (
-					"questoes" => $questoes, "idLista" => $idLista, "tipoTela" => "VISUALIZACAO"
+					"questoes" => $questoes, "idLista" => $idLista, "tipoTela" => "VISUALIZACAO", "descricaoLista" => $dadosLista['DESCRICAO']
 			);
 			// $this->load->view("cabecalho.php");
 			$this->load->template2 ( "lista/formularioVisualizacaoLista", $dados );

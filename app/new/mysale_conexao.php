@@ -11,7 +11,7 @@ or die('Não foi possível conectar ao banco. Erro: '.mysql_errno().mysql_error(
 $conexao = mysql_connect('localhost','root','rnk30ghhh')
 or die('Não foi possível conectar ao banco. Erro: '.mysql_errno().mysql_error());
 
-mysql_selectdb('bizu',$conexao)
+mysql_selectdb('superbizu',$conexao)
 or die('Não foi possível conectar ao banco. Erro: '.mysql_errno().mysql_error());
 
 

@@ -84,10 +84,10 @@ class Email_model extends CI_Model {
 		
 		if ($this->email->send ()) {
 			
-			// $this->session->set_flashdata("success", "Solicita��o feita com sucesso!");
+			 $this->session->set_flashdata("success", "Solicitação feita com sucesso!");
 			// echo 'E-mail para '.$acoes['email'].' enviado com sucesso!';
 		} else {
-			//show_error ( $this->email->print_debugger () );
+			show_error ( $this->email->print_debugger () );
 			return $this->email->print_debugger ();
 			
 		}

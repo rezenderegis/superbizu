@@ -399,7 +399,7 @@ class Usuarios extends CI_Controller {
 		$usuarioEmail = $this->usuarios_model->verificaUsuarioExiste( trim ($this->input->post ( "email" )));
 		if (!empty($usuarioEmail)) {
 		
-			$this->load->view ( "usuarios/mmensagem" ); 
+			$this->load->view ( "usuarios/erro_envio_email" ); 
 			
 		} else {
 		
@@ -549,7 +549,7 @@ class Usuarios extends CI_Controller {
 		$usuarioEmail = $this->usuarios_model->verificaUsuarioExiste( trim ($this->input->post ( "email" )));
 		if (!empty($usuarioEmail)) {
 			
-			$this->load->view ( "usuarios/mmensagem" );
+			$this->load->view ( "usuarios/merro_envio_email" );
 			
 		} else {
 		
@@ -768,20 +768,21 @@ class Usuarios extends CI_Controller {
 	
 	function formulario_esqueceu_senha() {
 		//$this->load->view ( "usuarios/formulario_esqueceu_senha" );
-		$this->mensagem();
+		$this->erro_envio_email();
 	}
 	function formularioEsqueceuSenha() {
 		$this->load->view ( "usuarios/formulario_esqueceu_senha" );
 		
 	}
 	
-	function mensagem() {
-		$this->load->view ( "usuarios/mmensagem" );
+	function erro_envio_email() {
+		$this->load->view ( "usuarios/erro_envio_email" );
 		
 	}
 	
 	
 	function solicitar_alteracao_senha() {
+
 		$this->load->model ( "usuarios_model" );
 		$email = $this->usuarios_model->buscaPorEmail ( $this->input->post ( "email" ), '' );
 		
@@ -789,17 +790,27 @@ class Usuarios extends CI_Controller {
 			
 			$this->load->model ( "email_model" );
 			$retorno = $this->email_model->enviar ( $this->input->post ( "email" ), $this->input->post ( "nome" ) );
+		
+			/* Se retornar alguma coisa quer dizer que houve algum erro
+			   Em 2017 aconteceu do Digital Ocean bloquear a conexão com o zoho mail. 
+			   Aconteceu novamente dia 24-05-2018.
+			   Para verificar se foi bloqueado faço telnet na porta smtp do digital ocean para o zohomail
+			   telnet smtp.zoho.com 465. Da minha estação funciona.
 			
+
+			*/
 			if ($retorno){
-				redirect ( "usuarios/formulario_esqueceu_senha" );
-				
+			
+				redirect ( 'usuarios/erro_envio_email' );
+
 			}
 			$this->session->unset_userdata ( "usuario_logado" );
 			$this->session->unset_userdata ( "idempresa" );
 			$this->session->unset_userdata ( "login" );
 			
 			$this->session->set_flashdata ( "success", "Solicitação efetuada com sucesso! Siga as instruções no seu e-mail." );
-			
+		
+
 			redirect ( 'geral/index' );
 		} else {
 			$this->session->set_flashdata ( "success", "E-mail não cadastrado na base do BySale!" );

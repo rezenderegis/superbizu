@@ -118,7 +118,7 @@
 		<div class="signup-form">
 		
 				<div class="signup-text">
-					<span>Solicite recuperação da senha através do email <br/> <a href="mailto:suporte@superbizu.com.br">suporte@superbizu.com.br</a></span>
+					<span>Erro ao enviar o e-mail, entre em contato com a equipe de suporte <br/> <a href="mailto:suporte@superbizu.com.br">suporte@superbizu.com.br</a></span>
 				</div>
 
 			</form>
@@ -134,7 +134,6 @@
 		</div>
 		<!-- Right side -->
 	</div>
-
 	
 
 
@@ -201,6 +200,5 @@
 
 	window.PixelAdmin.start(init);
 </script>
-
 </body>
 </html>

@@ -55,6 +55,8 @@ Use search to find needed section.
 		<script src="assets/javascripts/ie.min.js"></script>
 	<![endif]-->
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
 </head>
 	<script src="<?php echo base_url('js/MathJax-master/MathJax.js');?>"></script>
 	<script src="<?php echo base_url('js/mathquill-0.10.1/mathquill.min.js');?>"></script>
@@ -67,7 +69,7 @@ Use search to find needed section.
 	type="text/javascript"></script>
 
 <!-- 1. $BODY ======================================================================================
-	
+
 	Body
 
 	Classes:
@@ -84,17 +86,17 @@ Use search to find needed section.
 $usuario = '';
 
 if ($this->session->userdata ( "usuario_logado" )) {
-	
+
 	$usuario = $this->session->userdata ( "usuario_logado" );
-	
+
 	$idempresa = $this->session->userdata ( 'idempresa' );
-	
+
 }
 
  if ($usuario['nome_foto_sistema']) {
 	$imagem = "uploads/imagens_contas/".$usuario['nome_foto_sistema'];
 } else { $imagem = "imagens/ic_no_image.png"; }
-	
+
 
 ?>
 
@@ -129,7 +131,7 @@ if ($this->session->userdata ( "usuario_logado" )) {
 					<a href="index.html" class="navbar-brand">
 						<div>
 							<img alt="Pixel Admin"
-							
+
 								src="<?php echo base_url('imagens/superbizu_email.png');?>">
 						</div> SuperBizu 2.0.4
 					</a>
@@ -146,10 +148,10 @@ if ($this->session->userdata ( "usuario_logado" )) {
 				<div id="main-navbar-collapse"
 					class="collapse navbar-collapse main-navbar-collapse">
 					<div>
-					<!-- 
+					<!--
 						<ul class="nav navbar-nav">
 							<li><a href="#">Home</a></li>
-							
+
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown">Dropdown</a>
 								<ul class="dropdown-menu">
@@ -159,7 +161,7 @@ if ($this->session->userdata ( "usuario_logado" )) {
 									<li><a href="#">Third item</a></li>
 								</ul></li>  -->
 						</ul>
-						 
+
 						<!-- / .navbar-nav -->
 
 						<div class="right clearfix">
@@ -175,7 +177,7 @@ if ($this->session->userdata ( "usuario_logado" )) {
 							* 'nav-icon-btn-info'
 							* 'nav-icon-btn-success'
 							* 'nav-icon-btn-warning'
-							* 'nav-icon-btn-danger' 
+							* 'nav-icon-btn-danger'
 -->
 							<!-- 	<li class="nav-icon-btn nav-icon-btn-danger dropdown"><a
 									href="#notifications" class="dropdown-toggle"
@@ -183,13 +185,13 @@ if ($this->session->userdata ( "usuario_logado" )) {
 										class="nav-icon fa fa-bullhorn"></i> <span
 										class="small-screen-text">Notifications</span>
 								</a> <!-- NOTIFICATIONS -->
-								
+
 								 <!-- Javascript --> <script>
 									init.push(function () {
 										$('#main-navbar-notifications').slimScroll({ height: 250 });
 									});
 								</script> <!-- / Javascript -->
-								
+
 	<!-- Inicio Notificações -->
 								<!-- 		<div class="dropdown-menu widget-notifications no-padding"
 										style="width: 300px">
@@ -248,12 +250,12 @@ if ($this->session->userdata ( "usuario_logado" )) {
 
 								<!-- / .notifications-list -->
 									<!-- 		</div>
-										
+
 										<a href="#" class="notifications-link">MORE NOTIFICATIONS</a>
-									</div> 	
-									<!-- / .dropdown-menu --></li> 
+									</div>
+									<!-- / .dropdown-menu --></li>
 									<!-- Fim das notificações -->
-									<!-- 
+									<!--
 								<li class="nav-icon-btn nav-icon-btn-success dropdown"><a
 									href="mail.ru" class="dropdown-toggle" data-toggle="dropdown">
 										<span class="label">10</span> <i
@@ -410,8 +412,8 @@ if ($this->session->userdata ( "usuario_logado" )) {
 										<input type="text" class="form-control" placeholder="Search">
 									</form>
 								</li> -->
-								<?php 
-								
+								<?php
+
 								$usuarioParaMostrar = $this->session->userdata('usuario_logado');?>
 								<li class="dropdown"><a href="#"
 									class="dropdown-toggle user-menu" data-toggle="dropdown"> <img
@@ -421,7 +423,7 @@ if ($this->session->userdata ( "usuario_logado" )) {
 									<ul class="dropdown-menu">
 										<li><a href="#"><span class="label label-warning pull-right"></span>Home</a></li>
 										<!-- <li><a href="#"><span class="badge badge-primary pull-right">New</span>Account</a></li> -->
-										<li><?=anchor("usuarios/alteracaoConta", "<span class='badge badge-primary pull-right'></span>Minha Conta") ?></li> 
+										<li><?=anchor("usuarios/alteracaoConta", "<span class='badge badge-primary pull-right'></span>Minha Conta") ?></li>
 										<!-- <li><a href="#"><i class="dropdown-icon fa fa-cog"></i>&nbsp;&nbsp;Settings</a></li> -->
 										<li class="divider"></li>
 										<li><?=anchor('login/logout', '<i
@@ -445,7 +447,7 @@ if ($this->session->userdata ( "usuario_logado" )) {
 		<!-- 4. $MAIN_MENU =================================================================================
 
 		Main menu
-		
+
 		Notes:
 		* to make the menu item active, add a class 'active' to the <li>
 		  example: <li class="active">...</li>
@@ -477,7 +479,7 @@ if ($this->session->userdata ( "usuario_logado" )) {
 							<span class="text-slim">Bem vindo, </BR></span> <span
 								class="text-semibold"><?=$usuarioParaMostrar['nome']?></span>
 						</div>
-						
+
 						<img src="<?=base_url($imagem)?>"
 							alt="" class="">
 						<div class="btn-group">
@@ -493,20 +495,20 @@ if ($this->session->userdata ( "usuario_logado" )) {
 						<a href="#" class="close">&times;</a>
 					</div>
 				</div>
-			
+
 				<ul class="navigation">
-				
-						
-				
-				
-				
+
+
+
+
+
 					 <?php
 					 $isSomenteAluno = false;
 					 $professor = false;
 					 $aluno = false;
 					// if ($this->session->userdata('idempresa')) {
-					 	
-					 
+
+
 					 	foreach ($this->session->userdata('perfil') as $dados) {
 					 		if ($dados['idperfil'] == 2) {
 					 			$professor = true;
@@ -515,67 +517,67 @@ if ($this->session->userdata ( "usuario_logado" )) {
 					 			$aluno = true;
 					 		}
 					 	}
-					 	
-					 	
-					 	
+
+
+
 					 	if (sizeof($this->session->userdata('perfil')) == 1) {
 					 		foreach ($this->session->userdata('perfil') as $perfil) {
 					 			if ($perfil['idperfil'] == 3) {
 					 				$isSomenteAluno = true;
 					 			} else {
 					 				$isSomenteAluno = false;
-					 	
+
 					 			}
 					 		}
 					 	}
-					 	
-					 	
-					 	
+
+
+
 				//	 }
-					 
-					 
-					
+
+
+
 						if ($this->session->userdata ( 'idempresa' ) or $isSomenteAluno) {
 							?>
 	<li><?=anchor("geral/home/{$this->session->userdata ( 'idempresa' )}", '<i class="menu-icon fa fa-tasks"></i><span class="mm-text">Home</span>');?></li>
-	
+
 	<?php }
-				
-			
-				if ($this->session->userdata("qtdEmpresasUsuario") > 1 && ($professor == true)) { 
+
+
+				if ($this->session->userdata("qtdEmpresasUsuario") > 1 && ($professor == true)) {
 	?>
 	<li><?=anchor('geral/home', '<i class="menu-icon fa fa-tasks"></i><span class="mm-text">Minhas Contas</span>');?></li>
 	<?php  }
-	
-	
+
+
 	if ($this->session->userdata('idempresa')) {
 		if($professor) {
-	
-	
+
+
 	?>
-	
+
 	<!-- Menu espefício para professores -->
-	
+
 		<!-- <li class="mm-dropdown">
 		<a href="#"><i class="menu-icon fa fa-desktop"></i><span class="mm-text">Alunos</span></a>
 						<ul>
 							<li><?//=anchor("usuarios/listaAlunos", '<span class="mm-text">Alunos Cadastrados</span>');?></li>
 							<li><?//=anchor("grupos_alunos/listaGrupos", '<span class="mm-text">Grupos de Alunos</span>');?></li>
-						
-							
+
+
 						</ul></li>
 		 -->
-	
+
 	<!-- <li class="mm-dropdown">
 		<a href="#"><i class="menu-icon fa fa-desktop"></i><span class="mm-text">Alunos</span></a>
 						<ul>
 							<li><?//=anchor("grupos_alunos/listaGrupos", '<span class="mm-text">Grupos de Alunos</span>');?></li>
-						
-							
+
+
 						</ul></li> -->
-		 
+
 	<!-- Fim menu específico professores -->
-	
+
 	<!-- Menu espefício para questões -->
 				<li><?=anchor("lista/resolucoesLista", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Resoluções</span>');?></li>
 				<li><?=anchor("materias/index", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Matérias</span>');?></li>
@@ -583,25 +585,25 @@ if ($this->session->userdata ( "usuario_logado" )) {
 				<li><?=anchor("assuntos/index", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Assuntos de Questões</span>');?></li>
 				<li><?=anchor("questoes/index", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Questões</span>');?></li>
 				<li><?=anchor("lista/listaQuestoes", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Lista de Questões</span>');?></li>
-	
+
 	<!-- Fim menu específico professores -->
 		<li><?=anchor("usuarios/listaAlunos", '<i class="menu-icon fa fa-user"></i><span class="mm-text">Alunos</span>');?></li>
 			<li><?=anchor("grupos_alunos/listaGrupos", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Grupos de Alunos</span>');?></li>
-	
+
 	<!-- 	<li class="mm-dropdown"><a href="#"><i
 							class="menu-icon fa fa-desktop"></i><span class="mm-text">Questões</span></a>
 						<ul>
 							<li><?//=anchor("questoes/index", '<span class="mm-text">Questões Cadastradas</span>');?></li>
 							<li><?//=anchor("assuntos/index", '<span class="mm-text">Assuntos de Questões</span>');?></li>
 							<li><?//=anchor("lista/listaQuestoes", '<span class="mm-text">Lista de Questões</span>');?></li>
-						
-							
+
+
 						</ul></li> -->
-		
+
 	<!-- Fim menu específico professores -->
-	
+
 	<!-- Cadastro de usuário -->
-	
+
 <?php
 //echo "Master ??? ".$this->session->userdata("usuario_master");
 
@@ -610,30 +612,30 @@ if($this->session->userdata("usuario_master") == "S") {
 		<li><?=anchor('usuarios/index', '<i class="menu-icon fa fa-tasks"></i><span class="mm-text">Usuários</span>');?></li>
 						<li><?=anchor('usuarios/listaProfessores', '<i class="menu-icon fa fa-group"></i><span class="mm-text"></i><span class="mm-text">Professores</span>');?></li>
 				<li><?=anchor("empresa/empresaFormulario/{$idempresa}", '<i class="menu-icon fa fa-tasks"></i><span class="mm-text">Dados da Conta</span>');?></li>
-		
-		
-		<?php 
+
+
+		<?php
 }
 ?>
-	
-	
+
+
 	<!-- Fim cadastro de usuário -->
 	<?php }
 
-	
+
 	}
-	
+
 	if ($this->session->userdata['idempresa'] == 82) {
-	
+
 	?>
      				<li><?=anchor("questoes/indexEnem", '<i class="menu-icon fa fa-group"></i><span class="mm-text">Questões ENEM</span>');?></li>
-        	
-			<?php }?>	
-							
+
+			<?php }?>
+
 	<li><?=anchor('resolucoes/minhasResolucoes', '<i class="menu-icon fa fa-tasks"></i><span class="mm-text">Minhas Resoluções</span>');?></li>
-				
+
 				</ul>
-			
+
 			</div>
 			<!-- / #main-menu-inner -->
 		</div>
@@ -648,4 +650,3 @@ if($this->session->userdata("usuario_master") == "S") {
 -->
 
 			<!-- Content here - O corpo da página começa aqui-->
-		

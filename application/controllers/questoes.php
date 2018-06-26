@@ -114,7 +114,6 @@ class Questoes extends CI_Controller {
 		}
 
 		$categoria_produto = $this->questoes_model->busca_categoria ();
-		print_r($categoria_produto);
 		$dados_categoria = array (
 				"categoria_produto" => $categoria_produto,
 				"dados_produto_edicao" => $dados_produto,
@@ -290,7 +289,8 @@ class Questoes extends CI_Controller {
 
 			$this->session->set_flashdata ( "success", "Questão salvo com sucesso" );
 
-			redirect ( 'questoes/index/0/'.$ultimaQuestaoInserida);
+			// redirect ( 'questoes/index/0/'.$ultimaQuestaoInserida);
+			redirect ( 'questoes/exibir/'.$ultimaQuestaoInserida);
 		} else {
 
 			$dados_formulario = array (

@@ -3,23 +3,23 @@ class Questoes_model extends CI_Model {
 	public function buscaTodos($id_item = 0, $tipoConsulta="",$trazerQuestoesDoBizu=false) {
 		//tipoConsulta = ENEM busca as questões do ENEM, a única diferença é que deve ordenar
 		// return $this->db->get("produto")->result_array();
-		
+
 		$empresa_trazer = "";
 		if ($trazerQuestoesDoBizu == true) {
 			$empresa_trazer = array($this->session->userdata ( "idempresa"), 82);
-		
+
 		} else {
 			$empresa_trazer = array($this->session->userdata ( "idempresa"));
 		}
-		
-		
+
+
 		$this->db->select ( "tb_questao.*, tb_materia.nome_materia, tb_assunto.descricao_assunto" );
 		$this->db->from ( "tb_questao" );
 		$this->db->join ( "tb_assunto_questao aq", "aq.id_questao = tb_questao.id_questao", "left" );
 		$this->db->join ( "tb_assunto", "tb_assunto.id_assunto = aq.id_assunto", "left" );
 		$this->db->join ( "tb_materia", "tb_materia.id_materia = tb_assunto.id_materia", "left" );
 		$this->db->where_in ( "tb_questao.ID_DONO", $empresa_trazer );
-		
+
 		if ($id_item != 0) {
 			$this->db->where ( "tb_questao.id_questao", $id_item );
 		}
@@ -27,21 +27,21 @@ class Questoes_model extends CI_Model {
 		if ($tipoConsulta == "ENEM") {
 			$this->db->order_by ( "tb_questao.ano_questao desc, tb_questao.aplicacao, tb_questao.dia_prova,tb_questao.numero_questao asc");
 		}
-		
+
 		return $this->db->get ()->result_array ();
-		
+
 	}
-	
-	
+
+
 	public function buscaQuestoesNaoAdicionadasLista($idLista = 0) {
-		$sql = "SELECT tb_questao.*, tb_materia.nome_materia, tb_assunto.descricao_assunto 
+		$sql = "SELECT tb_questao.*, tb_materia.nome_materia, tb_assunto.descricao_assunto
 FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.id_questao
  LEFT JOIN tb_assunto ON tb_assunto.id_assunto = aq.id_assunto
- LEFT JOIN tb_materia ON tb_materia.id_materia = tb_assunto.id_materia 
+ LEFT JOIN tb_materia ON tb_materia.id_materia = tb_assunto.id_materia
  WHERE tb_questao.ID_DONO = ".$this->session->userdata ( "idempresa" )."
  AND tb_questao.id_questao not in (select idQuestao from questao_lista where idListaQuestao = ".$idLista."
 )";
-		
+
 		/*$this->db->select ( "tb_questao.*, tb_materia.nome_materia, tb_assunto.descricao_assunto" );
 		$this->db->from ( "tb_questao" );
 		$this->db->join ( "tb_assunto_questao aq", "aq.id_questao = tb_questao.id_questao", "left" );
@@ -49,7 +49,7 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 		$this->db->join ( "tb_materia", "tb_materia.id_materia = tb_assunto.id_materia", "left" );
 		$this->db->where ( "tb_questao.ID_DONO", $this->session->userdata ( "idempresa" ) );
 		return $this->db->get ()->result_array ();*/
-		
+
 		// print_r($this->db->last_query());
 		// die();
 		$query = $this->db->query($sql);
@@ -63,7 +63,7 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 		return $this->db->get ()->result_array ();
 	}
 	public function salva($produto) {
-		
+
 		// $empresa = $this->session->userdata("idempresa");
 		// $this->db->set('idempresa', $empresa);
 		$this->db->insert ( "tb_questao", $produto );
@@ -85,7 +85,7 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 	}
 	public function busca($id) {
 		return $this->db->get_where ( "produto", array (
-				"id" => $id 
+				"id" => $id
 		) )->row_array ();
 		// O RESULT_ARRAY TRAZ TODOS, O ROW_ARRAY TRAZ SOMENTE O PRIMEIRO
 		// OUTRA FORMA DE FAZER O WHERE
@@ -94,7 +94,7 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 		if ($tipo == 1) {
 			$tipoVendas = array (
 					1,
-					2 
+					2
 			);
 			$this->db->select ( "produto.*, vendas.idcliente,  vendacliente.situacaovenda, vendacliente.dtvenda, pessoa.nome as nomecliente,vendacliente.idvendacliente,  sum(produto.preco) as totalvenda, sum((produto.preco * vendas.totalproduto)) as totalVenda, vendacliente.id as id,
 		vendacliente.porcentagemadicional, vendacliente.formapagamento, usuario.nome as nome_usuario" );
@@ -108,13 +108,13 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 			$this->db->where ( "vendacliente.idempresa", $idempresa );
 			$this->db->where ( "vendas.situacao", 1 );
 			$this->db->where_in ( 'vendacliente.situacaovenda', $tipoVendas );
-			
+
 			$this->db->group_by ( "vendacliente.id" );
 			$this->db->order_by ( "vendacliente.dtvenda", "desc" );
-			
+
 			$this->db->order_by ( "vendacliente.situacaovenda" );
 		} else {
-			
+
 			$this->db->select ( "produto.*, vendas.idcliente,  vendacliente.situacaovenda, vendacliente.dtvenda, pessoa.nome as nomecliente,vendacliente.idvendacliente,  sum(produto.preco) as totalvenda, sum((produto.preco * vendas.totalproduto)) as totalVenda, vendacliente.id as id,
 			vendacliente.porcentagemadicional, vendacliente.formapagamento, usuario.nome as nome_usuario" );
 			$this->db->from ( "produto" );
@@ -122,21 +122,21 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 			$this->db->join ( "vendacliente", "vendacliente.id = vendas.idvenda_cliente_site" );
 			$this->db->join ( "pessoa", "pessoa.idpessoa = vendacliente.idcliente" );
 			$this->db->join ( "usuario", "vendacliente.idusuario = usuario.id" );
-			
+
 			$this->db->where ( "produto.idempresa", $idempresa );
 			$this->db->where ( "pessoa.idempresa", $idempresa );
 			$this->db->where ( "vendacliente.idempresa", $idempresa );
-			
+
 			$this->db->group_by ( "vendacliente.id" );
 			$this->db->order_by ( "vendacliente.dtvenda" );
 			$this->db->order_by ( "vendacliente.situacaovenda" );
 		}
 		// $id = $usuario["id"];
-		
+
 		// print_r($this->db->select());
 		// $this->db->where("vendido", true);
 		// $this->db->where("idusuario", $id);
-		
+
 		return $this->db->get ()->result_array ();
 	}
 	public function detalheVenda($idvendacliente) {
@@ -165,7 +165,7 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 		// $id_produto - s� deve vir preenchido para buscar alguma categoria espec�fica. atualmente, s�
 		// � utilizado no formul�rio de ed��o
 		$idempresa = $this->session->userdata ( "idempresa" );
-		
+
 		$this->db->select ( "a.id_assunto as id_assunto, concat(m.nome_materia, ' - ' ,a.descricao_assunto) as assunto", false );
 		$this->db->from ( "tb_assunto a" );
 		$this->db->join ( "tb_materia m", "m.id_materia = a.id_materia" );
@@ -181,9 +181,9 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 		$this->db->join ( "tb_assunto_questao am", "am.id_questao = q.id_questao" );
 		$this->db->where ( "q.id_questao", $id_questao );
 		$questao = $this->db->get ()->row_array ( 0 );
-		
+
 		if ($questao != null) {
-			
+
 			return $questao ['id'];
 		} else {
 			return 0;
@@ -203,7 +203,7 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 		$this->db->select ( "tb_questao.*" );
 		$this->db->from ( "tb_questao" );
 		$this->db->where ( "tb_questao.id_questao", $id_questao );
-		
+
 		return $this->db->get ()->row_array ();
 	}
 	public function insereImagemQuestao($dados, $id_questao) {
@@ -253,46 +253,82 @@ FROM (tb_questao) LEFT JOIN tb_assunto_questao aq ON aq.id_questao = tb_questao.
 		$this->db->join ( "lista_questoes lq", "lq.idListaQuestoes = ql.idListaQuestao" );
 		$this->db->where ( "lq.idListaQuestoes", $idLista );
 		// return $this->db->get()->result_array();
-		
+
 		return json_encode ( $this->db->get ()->result_array (), JSON_UNESCAPED_UNICODE );
 	}
-	
+
 	public function desativarQuestao($idQuestao) {
-		
+
 		$dados = array("SITUACAO" => 0);
-		
+
 		$this->db->where("tb_questao.ID_QUESTAO", $idQuestao);
 		$this->db->update("tb_questao", $dados);
-		
+
 	}
-	
+
 	public function desativarItem($idQuestao) {
-		
+
 		$dados = array("SITUACAO" => 0);
-		
+
 		$this->db->where("tb_item.ID_QUESTAO", $idQuestao);
 		$this->db->update("tb_item", $dados);
-		
+
 	}
-	
-	
-	
+
+
+
 	public function desativarItemEspecifico($idItem) {
-		
+
 		$dados = array("SITUACAO" => 0);
-	
+
 		$this->db->where("tb_item.ID_ITEM", $idItem);
 		$this->db->update("tb_item", $dados);
-	
+
 	}
-	
-	
+
+
 	public function deletarQuestaoDaLista ($idLista, $idQuestao) {
-		
+
 		$this->db->where("questao_lista.IDLISTAQUESTAO", $idLista);
 		$this->db->where("questao_lista.IDQUESTAO", $idQuestao);
 		$this->db->delete("questao_lista");
-		
+
 	}
-	
+
+    /**
+    * @return string Rótulo de um campo da tabela.
+    */
+    public static function getRotulos($campo) {
+        $campo = strtoupper($campo);
+        $rotulos = [
+            'ID_QUESTAO' => 'ID',
+            'ANO_QUESTAO' => 'Ano',
+            'NUMERO_QUESTAO' => 'Número',
+            'DESCRICAO_QUESTAO' => 'Descrição',
+            'COMANDO_QUESTAO' => 'Comando',
+            'PROVA' => 'Prova',
+            'SITUACAO' => 'Situação',
+            'NOME_IMAGEM_QUESTAO' => 'Imagem',
+            'COMENTARIO_QUESTAO' => 'Comentário',
+            'NOME_IMAGEM_QUESTAO_SISTEMA' => 'Caminho',
+            'LETRA_ITEM_CORRETO' => 'Letra Item',
+            'DIA_PROVA' => 'Dia da prova',
+            'APLICACAO' => 'Aplicação',
+            'ID_DONO' => 'Dono',
+        ];
+
+        return isset($rotulos[$campo]) ? $rotulos[$campo] : $campo;
+    }
+
+    /**
+    * @return array Dados de uma questão.
+    */
+    public function dados($id) {
+        $this->db->from('tb_questao');
+        $this->db->join ('tb_assunto_questao aq', 'aq.id_questao = tb_questao.id_questao', 'left');
+		$this->db->join ('tb_assunto', 'tb_assunto.id_assunto = aq.id_assunto', 'left');
+        $this->db->where('tb_questao.id_questao', $id);
+        return $this->db->get()->row_array();
+    }
+
 }

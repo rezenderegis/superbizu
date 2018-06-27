@@ -545,6 +545,7 @@ class Questoes extends CI_Controller {
         $this->load->model('questoes_model');
         $model = $this->questoes_model;
         $item = $model->traz_dados_item($id_item);
+        $letras = ['' => 'Selecione', 'A' => 'A','B' => 'B','C' => 'C','D' => 'D','E' => 'E'];
 
         if (!$item) show_error('Página não encontrada', 404);
 
@@ -553,11 +554,6 @@ class Questoes extends CI_Controller {
         $validation = $this->form_validation;
         $eValido = false;
         $resultado = $model->buscaItens($item['ID_QUESTAO']);
-        $letras = [];
-
-        foreach ($resultado as $dado) {
-            $letras[$dado['LETRA_ITEM']] = $dado['LETRA_ITEM'];
-        }
 
         $validation->set_rules('LETRA_ITEM', 'Letra', 'required');
         $validation->set_rules('DESCRICAO', 'Descrição', 'required');

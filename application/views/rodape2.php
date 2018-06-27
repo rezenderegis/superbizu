@@ -34,13 +34,15 @@
 <!-- <link href="//cdn.quilljs.com/1.3.6/quill.core.css" rel="stylesheet"> -->
 <!-- <script src="//cdn.quilljs.com/1.3.6/quill.core.js"></script> -->
 
-<script type="text/javascript">
+
+<script>
 	init.push(function () {
 		$('[data-toggle=popover]').popover();
 		$('[data-toggle=tooltip]').tooltip();
 	});
 	window.PixelAdmin.start(init);
 </script>
+
 <script src="<?php echo base_url('js/bysale.js');?>" type="text/javascript"></script>
 	<script src="<?php echo base_url('js/highcharts.js');?>"
 	type="text/javascript"></script>

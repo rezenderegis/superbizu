@@ -488,7 +488,11 @@ class Questoes extends CI_Controller {
     public function itens($id_questao) {
         $this->load->model('questoes_model');
         $model = $this->questoes_model;
-		$itens = $model->buscaItens($id_questao);
+        $itens = $model->buscaItens($id_questao);
+
+        // foreach ($itens as &$item) {
+        //     $item['DESCRICAO'] = htmlentities($item['DESCRICAO']);
+        // }
 
         echo json_encode(array_values($itens));
 	}
@@ -502,19 +506,36 @@ class Questoes extends CI_Controller {
         $this->load->model('questoes_model');
         $model = $this->questoes_model;
         $validation = $this->form_validation;
+        $letras = ['' => 'Selecione', 'A' => 'A','B' => 'B','C' => 'C','D' => 'D','E' => 'E'];
         $eValido = false;
+        $vazio = [
+            'ID_QUESTAO' => $id_questao,
+            'ID_ITEM' => '',
+            'LETRA_ITEM' => '',
+            'DESCRICAO' => '',
+        ];
 
-        $validation->set_rules('id_questao', 'Questão', 'required|integer');
-        $validation->set_rules('letra_item', 'Letra', 'required');
-        $validation->set_rules('descricao', 'Descrição', 'required');
+        $validation->set_rules('LETRA_ITEM', 'Letra', 'required');
+        $validation->set_rules('DESCRICAO', 'Descrição', 'required');
 
         $dados = $this->input->post(null, true);
+        $ePost = $dados !== false;
+        $dados['ID_QUESTAO'] = $id_questao;
 
-        if ($dados && ($eValido = $validation->run())) {
+        if ($ePost && ($eValido = $validation->run())) {
             $model->salva_item($dados);
+            $dados = $vazio;
+            $dados['status'] = 'save';
         }
 
-        echo json_encode(['status' => $eValido]);
+        if (!$ePost) {
+            $dados = $vazio;
+        }
+
+        $this->load->view('questoes/_form-item', [
+            'item' => $dados,
+            'letras' => $letras
+        ]);
     }
 
     /**
@@ -532,10 +553,10 @@ class Questoes extends CI_Controller {
         $validation = $this->form_validation;
         $eValido = false;
         $resultado = $model->buscaItens($item['ID_QUESTAO']);
-        $itens = [];
+        $letras = [];
 
         foreach ($resultado as $dado) {
-            $itens[$dado['LETRA_ITEM']] = $dado['LETRA_ITEM'];
+            $letras[$dado['LETRA_ITEM']] = $dado['LETRA_ITEM'];
         }
 
         $validation->set_rules('LETRA_ITEM', 'Letra', 'required');
@@ -551,7 +572,7 @@ class Questoes extends CI_Controller {
 
         $this->load->view('questoes/_form-item', [
             'item' => $item,
-            'itens' => $itens
+            'letras' => $letras
         ]);
     }
 
@@ -562,6 +583,24 @@ class Questoes extends CI_Controller {
         $this->load->model('questoes_model');
         $dados = $this->input->post(null, true);
         $this->questoes_model->desativarItemEspecifico($dados['id_item']);
+    }
+
+    /**
+    * @return string Retorna um json com a url para o arquivo.
+    */
+    public function upload() {
+        $local = 'uploads/var';
+        $uploads_dir = dirname(__DIR__) . "/../$local";
+        $time = time();
+        if (($file = $_FILES['image']) && isset($file)) {
+            if ($file['error'] == UPLOAD_ERR_OK) {
+                $tmp_name = $file['tmp_name'];
+                $name = "qst-$time-" . basename($file['name']);
+                $url = "$uploads_dir/$name";
+                move_uploaded_file($tmp_name, $url);
+                echo json_encode(['url' => base_url("$local/$name")]);
+            }
+        }
     }
 
 }

@@ -150,9 +150,9 @@ init.push(function() {
         $.get(url, function(data) {
             mod.find('.modal-body').html(data);
             var descricao = $(formAlterar).find('#descricao');
-            var editorDescricao = new Quill(formAlterar + ' #editor-descricao', editorCfg);
+            var editorDescricao = new Quill(formAlterar + ' #editor-descricao', editor.cfg);
 
-            editorDescricao.getModule('toolbar').addHandler('image', selectLocalImage);
+            editorDescricao.getModule('toolbar').addHandler('image', editor.selectLocalImage);
             editorDescricao.on('text-change', function() {
                 var html = editorDescricao.root.innerHTML;
                 descricao.val(html);

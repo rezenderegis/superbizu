@@ -5,7 +5,7 @@ $listar = site_url(['questoes', 'itens', $questao['ID_QUESTAO']]);
 $cadastrar = site_url(['questoes', 'cadastrarItem', $questao['ID_QUESTAO']]);
 $excluir = site_url('questoes/excluirItem');
 $alterar = site_url('questoes/alterarItem');
-$listarQuestao = site_url('questoes');
+$listarQuestao = site_url('questoes/index');
 $alterarQuestao = site_url(['questoes', 'formulario', $questao['ID_QUESTAO']]);
 $upload = site_url('questoes/upload');
 ?>

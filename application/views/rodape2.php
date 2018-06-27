@@ -17,6 +17,11 @@
 <script src="<?php echo base_url('assets/javascripts/bootstrap.min.js');?>"></script>
 <script src="<?php echo base_url('assets/javascripts/pixel-admin.min.js');?>"></script>
 
+
+<!-- Include KaTeX -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js"></script>
+
 <!-- Main Quill library -->
 <!-- <script src="//cdn.quilljs.com/1.3.6/quill.js"></script> -->
 <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -31,7 +36,8 @@
 
 <script type="text/javascript">
 	init.push(function () {
-		// Javascript code here
+		$('[data-toggle=popover]').popover();
+		$('[data-toggle=tooltip]').tooltip();
 	});
 	window.PixelAdmin.start(init);
 </script>

@@ -7,7 +7,6 @@ $excluir = site_url('questoes/excluirItem');
 $alterar = site_url('questoes/alterarItem');
 $listarQuestao = site_url('questoes/index');
 $alterarQuestao = site_url(['questoes', 'formulario', $questao['ID_QUESTAO']]);
-$upload = site_url('questoes/upload');
 ?>
 
 <p>
@@ -21,14 +20,14 @@ $upload = site_url('questoes/upload');
         <div id="editor-questao"><?= $questao['DESCRICAO_QUESTAO'] ?></div>
     </div>
 </div>
-<div class="panel panel-default">
+<!-- <div class="panel panel-default">
     <div class="panel-body">
         <h4>Comando</h4>
         <div id="editor-comando"><?= $questao['COMANDO_QUESTAO'] ?></div>
     </div>
-</div>
+</div> -->
 
-<table class="table table-bordered table-striped hide">
+<!-- <table class="table table-bordered table-striped hide">
    <tbody>
        <?php foreach($questao as $campo => $v): ?>
            <?php if (!in_array($campo, ['DESCRICAO_QUESTAO', 'COMANDO_QUESTAO'])) continue; ?>
@@ -38,7 +37,7 @@ $upload = site_url('questoes/upload');
            </tr>
        <?php endforeach; ?>
    </tbody>
-</table>
+</table> -->
 
 <div id="panel-itens" class="panel panel-default">
     <div class="panel panel-heading">Itens</div>
@@ -78,26 +77,6 @@ init.push(function() {
     var mod = $('#modal-alterar-item');
     var btnExcluir = $('<a class="excluir" href="$excluir" title="Excluir"><i class="fas fa-trash"></i></a>');
     var btnAlterar = $('<a class="alterar" href="$alterar" title="Alterar"><i class="fas fa-pen-alt"></i></a>');
-    var editorCfg = {
-        modules: {
-            formula: true,
-            toolbar: [
-                ['bold', 'italic', 'underline', 'strike'],
-
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
-
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
-
-                ['formula','image'],
-
-                ['clean']
-            ],
-        },
-        theme: 'snow'
-    };
     var tb = $('#itens').DataTable({
         "dom": "t",
         "bSort": false,
@@ -126,7 +105,7 @@ init.push(function() {
     });
 
     new Quill('#editor-questao', {readOnly: true});
-    new Quill('#editor-comando', {readOnly: true});
+    // new Quill('#editor-comando', {readOnly: true});
 
     function atualizar() {
         tb.ajax.reload();
@@ -134,9 +113,9 @@ init.push(function() {
 
     function initFormCadastrar() {
         var descricao = $(formCadastrar).find('#descricao');
-        var editorDescricao = new Quill(formCadastrar + ' #editor-descricao', editorCfg);
+        var editorDescricao = new Quill(formCadastrar + ' #editor-descricao', editor.cfg);
 
-        editorDescricao.getModule('toolbar').addHandler('image', selectLocalImage);
+        editorDescricao.getModule('toolbar').addHandler('image', editor.selectLocalImage);
         editorDescricao.on('text-change', function() {
             var html = editorDescricao.root.innerHTML;
             descricao.val(html);
@@ -190,43 +169,6 @@ init.push(function() {
                 id_item: $(this).data('id')
             }, atualizar);
         }
-    }
-
-    // https://github.com/quilljs/quill/issues/1089
-    function selectLocalImage() {
-        var quill = this.quill;
-        var input = $('<input type="file">');
-        input.click();
-
-        input.change(function() {
-            var file = input[0].files[0];
-
-            if (/^image\//.test(file.type)) {
-                saveToServer(file, quill);
-            } else {
-                alert('Apenas imagem é válido.');
-            }
-        });
-    }
-
-    function saveToServer(file, quill) {
-        var fd = new FormData();
-        var xhr = new XMLHttpRequest();
-
-        fd.append('image', file);
-        xhr.open('POST', '$upload');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var url = JSON.parse(xhr.responseText).url;
-                insertToEditor(url, quill);
-            }
-        };
-        xhr.send(fd);
-    }
-
-    function insertToEditor(url, quill) {
-        var range = quill.getSelection();
-        quill.insertEmbed(range.index, 'image', url);
     }
 
     $(document).on('submit', formCadastrar, cadastrar);

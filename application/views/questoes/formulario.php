@@ -54,11 +54,11 @@ echo form_open ( "questoes/novo", array (
                             <div id="editor-questao"><?= $dados_produto_edicao['DESCRICAO_QUESTAO'] ?></div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <?= form_label('Comando', 'editor-comando', $attributes) ?>
                             <input id="comando" type="hidden" name="comando" value="<?= htmlentities($dados_produto_edicao['COMANDO_QUESTAO']) ?>">
                             <div id="editor-comando"><?= $dados_produto_edicao['COMANDO_QUESTAO'] ?></div>
-                        </div>
+                        </div> -->
 
                         <?php
 						// echo "<div class='form-group'>";
@@ -340,84 +340,26 @@ echo form_close ();
 </div>
 
 <?php
-$upload = site_url('questoes/upload');
 $js = <<<JS
 init.push(function() {
     var questao = $('#nome');
-    var comando = $('#comando');
-    var editorCfg = {
-        modules: {
-            formula: true,
-            toolbar: [
+    // var comando = $('#comando');
 
-                ['bold', 'italic', 'underline', 'strike'],
-
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
-
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
-
-                ['formula', 'image'],
-
-                ['clean']
-            ],
-        },
-        theme: 'snow'
-    };
-    var editorQuestao = new Quill('#editor-questao', editorCfg);
-    var editorComando = new Quill('#editor-comando', editorCfg);
-
-    // https://github.com/quilljs/quill/issues/1089
-    function selectLocalImage() {
-        var quill = this.quill;
-        var input = $('<input type="file">');
-        input.click();
-
-        input.change(function() {
-            var file = input[0].files[0];
-
-            if (/^image\//.test(file.type)) {
-                saveToServer(file, quill);
-            } else {
-                alert('Apenas imagem é válido.');
-            }
-        });
-    }
-
-    function saveToServer(file, quill) {
-        var fd = new FormData();
-        fd.append('image', file);
-        //
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '$upload');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var url = JSON.parse(xhr.responseText).url;
-                insertToEditor(url, quill);
-            }
-        };
-        xhr.send(fd);
-    }
-
-    function insertToEditor(url, quill) {
-        var range = quill.getSelection();
-        quill.insertEmbed(range.index, 'image', url);
-    }
+    var editorQuestao = new Quill('#editor-questao', editor.cfg);
 
     editorQuestao.on('text-change', function() {
         var html = editorQuestao.root.innerHTML;
         questao.val(html);
     });
 
-    editorComando.on('text-change', function() {
-        var html = editorComando.root.innerHTML;
-        comando.val(html);
-    });
+    editorQuestao.getModule('toolbar').addHandler('image', editor.selectLocalImage);
 
-    editorQuestao.getModule('toolbar').addHandler('image', selectLocalImage);
-    editorComando.getModule('toolbar').addHandler('image', selectLocalImage);
+    // var editorComando = new Quill('#editor-comando', editorCfg);
+    // editorComando.on('text-change', function() {
+    //     var html = editorComando.root.innerHTML;
+    //     comando.val(html);
+    // });
+    // editorComando.getModule('toolbar').addHandler('image', editor.selectLocalImage);
 });
 JS;
 ?>

@@ -50,14 +50,14 @@ echo form_open ( "questoes/novo", array (
                         <div class="form-group">
                             <?= form_label('Questão', 'editor-questao',$attributes) ?>
                             <!-- <a><i class="fas fa-info-circle" data-toggle="popover" data-html="true" data-content="Para saber como construir fórmulas, <a href='https://khan.github.io/KaTeX/function-support.html' target='_blank'>clique aqui.</a>"></i></a> -->
-                            <div id="editor-questao"><?= $dados_produto_edicao['DESCRICAO_QUESTAO'] ?></div>
                             <input id="nome" type="hidden" name="nome" value="<?= htmlentities($dados_produto_edicao['DESCRICAO_QUESTAO']) ?>">
+                            <div id="editor-questao"><?= $dados_produto_edicao['DESCRICAO_QUESTAO'] ?></div>
                         </div>
 
                         <div class="form-group">
                             <?= form_label('Comando', 'editor-comando', $attributes) ?>
+                            <input id="comando" type="hidden" name="comando" value="<?= htmlentities($dados_produto_edicao['COMANDO_QUESTAO']) ?>">
                             <div id="editor-comando"><?= $dados_produto_edicao['COMANDO_QUESTAO'] ?></div>
-                            <input id="comando" type="hidden" name="comando" value="<?= $dados_produto_edicao['COMANDO_QUESTAO'] ?>">
                         </div>
 
                         <?php
@@ -349,8 +349,6 @@ init.push(function() {
         modules: {
             formula: true,
             toolbar: [
-                [{ 'font': [] }],
-                [{ 'size': ['small', false, 'large', 'huge'] }],
 
                 ['bold', 'italic', 'underline', 'strike'],
 

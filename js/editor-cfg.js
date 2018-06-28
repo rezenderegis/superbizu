@@ -1,11 +1,15 @@
 /**
 * Autor: Thiago Luís <thiagoluismo@gmail.com>
 * Objetivo: Controlar o editor de texto QuillJs (https://quilljs.com/).
-* Créditos: TaylorPzreal (https://github.com/quilljs/quill/issues/1089#issuecomment-319567957)
+* Créditos: TaylorPzreal (selectLocalImage, saveToServer, insertToEditor)
+* https://github.com/quilljs/quill/issues/1089#issuecomment-319567957
 */
 var editor = (function() {
 
-    /* Diferença entre arrays. https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript#4026828 */
+    /*
+    * Diferença entre arrays.
+    * https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript#4026828
+    */
     Array.prototype.diff = function(a) {
         return this.filter(function(i) {return a.indexOf(i) < 0;});
     };

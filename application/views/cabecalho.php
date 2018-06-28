@@ -105,7 +105,7 @@ if ($this->session->userdata ( "usuario_logado" )) {
 <body class="theme-default main-menu-animated">
 
 	<script>var init = [];</script>
-    <script src="<?= base_url('js/editor-cfg.js') ?>"></script>
+    <script src="<?= base_url('js/editor-cfg.min.js') ?>"></script>
 	<!-- Demo script -->
 	<script src="<?php echo base_url('assets/demo/demo.js');?>"></script>
 	<!-- / Demo script -->

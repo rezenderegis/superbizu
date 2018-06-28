@@ -590,16 +590,31 @@ class Questoes extends CI_Controller {
                 $local = 'uploads/var';
                 $uploads_dir = dirname(__DIR__) . "/../$local";
                 $rand = time() . rand(0,9);
-                $newname = hash('crc32', $rand, false);
+                $rand_name = hash('crc32', $rand, false);
                 $tmp_name = $file['tmp_name'];
-                $oldname = basename($file['name']);
-                $dot = strrpos($oldname,'.');
-                $ext = substr($oldname, $dot);
-                $newname .= $dot === false ? '' : $ext;
-                $path = "$uploads_dir/$newname";
-                move_uploaded_file($tmp_name, $path);
-                echo json_encode(['url' => base_url("$local/$newname")]);
+                $old_name = basename($file['name']);
+                $dot = strrpos($old_name,'.');
+                $ext = substr($old_name, $dot);
+                $rand_name .= $dot === false ? '' : $ext;
+                $filename = "$uploads_dir/$rand_name";
+                move_uploaded_file($tmp_name, $filename);
+                echo json_encode(['url' => base_url("$local/$rand_name")]);
             }
+        }
+    }
+
+    /**
+    * @return void Exclui um arquivo.
+    */
+    public function deleteFile() {
+        $local = 'uploads/var';
+        $uploads_dir = dirname(__DIR__) . "/../$local";
+        $input = $this->input->post('file');
+        $filename = basename($this->input->post('file'));
+        $filename = "$uploads_dir/$filename";
+
+        if (file_exists($filename)) {
+            unlink($filename);
         }
     }
 

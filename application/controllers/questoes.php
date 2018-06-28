@@ -585,18 +585,22 @@ class Questoes extends CI_Controller {
     * @return string Retorna um json com a url para o arquivo.
     */
     public function upload() {
-        $local = 'uploads/var';
-        $uploads_dir = dirname(__DIR__) . "/../$local";
-        $time = time();
-        if (($file = $_FILES['image']) && isset($file)) {
-            if ($file['error'] == UPLOAD_ERR_OK) {
-                $tmp_name = $file['tmp_name'];
-                $name = "qst-$time-" . basename($file['name']);
-                $url = "$uploads_dir/$name";
-                move_uploaded_file($tmp_name, $url);
-                echo json_encode(['url' => base_url("$local/$name")]);
-            }
-        }
+    	if (($file = $_FILES['image']) && isset($file)) {
+    		if ($file['error'] == UPLOAD_ERR_OK) {
+    			$local = 'uploads/var';
+    			$uploads_dir = dirname(__DIR__) . "/../$local";
+    			$rand = time() . rand(0,9);
+    			$newname = hash('crc32', $rand, false);
+    			$tmp_name = $file['tmp_name'];
+    			$oldname = basename($file['name']);
+    			$dot = strrpos($oldname,'.');
+    			$ext = substr($oldname, $dot);
+    			$filename .= $dot === false ? '' : $ext;
+    			$path = "$uploads_dir/$filename";
+    			move_uploaded_file($tmp_name, $path);
+    			echo json_encode(['url' => base_url("$local/$filename")]);
+    		}
+    	}
     }
 
 }

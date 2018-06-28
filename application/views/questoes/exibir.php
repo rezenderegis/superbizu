@@ -117,6 +117,7 @@ init.push(function() {
 
         editorDescricao.getModule('toolbar').addHandler('image', editor.selectLocalImage);
         editorDescricao.on('text-change', function() {
+            editor.filesSync(editorDescricao);
             var html = editorDescricao.root.innerHTML;
             descricao.val(html);
         });
@@ -154,6 +155,7 @@ init.push(function() {
 
             editorDescricao.getModule('toolbar').addHandler('image', editor.selectLocalImage);
             editorDescricao.on('text-change', function() {
+                editor.filesSync(editorDescricao);
                 var html = editorDescricao.root.innerHTML;
                 descricao.val(html);
             });

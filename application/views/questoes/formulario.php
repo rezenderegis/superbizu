@@ -348,6 +348,7 @@ init.push(function() {
     var editorQuestao = new Quill('#editor-questao', editor.cfg);
 
     editorQuestao.on('text-change', function() {
+        editor.filesSync(editorQuestao);
         var html = editorQuestao.root.innerHTML;
         questao.val(html);
     });

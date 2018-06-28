@@ -1,12 +1,20 @@
 /**
 * Autor: Thiago Luís <thiagoluismo@gmail.com>
-* Controle do editor de texto QuillJs (https://quilljs.com/).
+* Objetivo: Controlar o editor de texto QuillJs (https://quilljs.com/).
 * Créditos: TaylorPzreal (https://github.com/quilljs/quill/issues/1089#issuecomment-319567957)
 */
 var editor = (function() {
 
-    var actionUpload = 'questoes/upload';
+    /* Diferença entre arrays. https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript#4026828 */
+    Array.prototype.diff = function(a) {
+        return this.filter(function(i) {return a.indexOf(i) < 0;});
+    };
 
+    /* Ações. */
+    var actionUpload = 'questoes/upload';
+    var actionDeleteFile = 'questoes/deleteFile';
+
+    /* Configuração do QuillJs. */
     var cfg = {
         modules: {
             formula: true,
@@ -29,6 +37,7 @@ var editor = (function() {
         theme: 'snow'
     };
 
+    /* Seleção da imagem. */
     function selectLocalImage() {
         var quill = this.quill;
         var input = $('<input type="file">');
@@ -45,6 +54,7 @@ var editor = (function() {
         });
     }
 
+    /* Upload. */
     function saveToServer(file, quill) {
         var fd = new FormData();
         var xhr = new XMLHttpRequest();
@@ -61,11 +71,25 @@ var editor = (function() {
         xhr.send(fd);
     }
 
+    /*
+    *  Substitui o valor do atributo src para o caminho do arquivo.
+    *  Cada imagem inserida é armazenada em data-server.
+    */
     function insertToEditor(url, quill) {
+        var $quill = $(quill);
         var range = quill.getSelection();
+        var $content = $(quill.root.innerHTML);
+        var server = $quill.data('server');
+        var local = getUploads($content);
+
+        server = server == undefined ? local : server;
+
+        server.push(url);
+        $quill.data('server', server);
         quill.insertEmbed(range.index, 'image', url);
     }
 
+    /* Retorna o caminho base da url. */
     function getBaseUrl() {
         var baseUrl = '';
         var array = location.href.split('/');
@@ -83,8 +107,41 @@ var editor = (function() {
         return baseUrl;
     }
 
+    /* Retorna um array com o caminho de todos uploads realizados. */
+    function getUploads(content) {
+        var img = content.find('img');
+        var paths = [];
+        for (var i = 0; i < img.length; i++) {
+            paths.push(img[i].src);
+        }
+        return paths;
+    }
+
+    /* Sincronização entre o server e client. */
+    function filesSync(quill) {
+        var action = getBaseUrl() + actionDeleteFile;
+        var $quill = $(quill);
+        var $content = $(quill.root.innerHTML);
+        var server = $quill.data('server');
+        var local = getUploads($content);
+
+        server = server == undefined ? local : server;
+        var diff = server.diff(local);
+
+        for (var i = 0; i < diff.length; i++) {
+            var index = server.indexOf(diff[i]);
+            $.post(action, {file: diff[i]});
+
+            if (index > -1) {
+                server.splice(index, 1);
+            }
+        }
+        $quill.data('server', server);
+    }
+
     return {
         cfg: cfg,
-        selectLocalImage: selectLocalImage
+        selectLocalImage: selectLocalImage,
+        filesSync: filesSync
     }
 })();

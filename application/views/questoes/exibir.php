@@ -90,7 +90,12 @@ init.push(function() {
         },
         "columns": [
             {"data": "LETRA_ITEM"},
-            {"data": "DESCRICAO"},
+            {
+                "data": "DESCRICAO",
+                "createdCell":  function (td, cellData, rowData, row, col) {
+                   $(td).attr('style', 'max-width: 200px; overflow: hidden; text-overflow: ellipsis;');
+                }
+            },
             {
                 "render": function(data, type, row) {
                     var alterar = btnAlterar.clone().attr('data-id', row.ID_ITEM);
@@ -116,7 +121,7 @@ init.push(function() {
         var editorDescricao = new Quill(formCadastrar + ' #editor-descricao', editor.cfg);
 
         editorDescricao.getModule('toolbar').addHandler('image', editor.selectLocalImage);
-        editorDescricao.on('text-change', function() {
+        editorDescricao.on('editor-change', function() {
             editor.filesSync(editorDescricao);
             var html = editorDescricao.root.innerHTML;
             descricao.val(html);
@@ -154,7 +159,7 @@ init.push(function() {
             var editorDescricao = new Quill(formAlterar + ' #editor-descricao', editor.cfg);
 
             editorDescricao.getModule('toolbar').addHandler('image', editor.selectLocalImage);
-            editorDescricao.on('text-change', function() {
+            editorDescricao.on('editor-change', function() {
                 editor.filesSync(editorDescricao);
                 var html = editorDescricao.root.innerHTML;
                 descricao.val(html);

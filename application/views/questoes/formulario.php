@@ -347,7 +347,7 @@ init.push(function() {
 
     var editorQuestao = new Quill('#editor-questao', editor.cfg);
 
-    editorQuestao.on('text-change', function() {
+    editorQuestao.on('editor-change', function() {
         editor.filesSync(editorQuestao);
         var html = editorQuestao.root.innerHTML;
         questao.val(html);
@@ -356,7 +356,7 @@ init.push(function() {
     editorQuestao.getModule('toolbar').addHandler('image', editor.selectLocalImage);
 
     // var editorComando = new Quill('#editor-comando', editorCfg);
-    // editorComando.on('text-change', function() {
+    // editorComando.on('editor-change', function() {
     //     var html = editorComando.root.innerHTML;
     //     comando.val(html);
     // });
